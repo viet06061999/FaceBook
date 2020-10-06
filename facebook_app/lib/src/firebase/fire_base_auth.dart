@@ -5,12 +5,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 class FirAuth {
   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  // Future<void> singIn(String email, String password, Function onSuccess){
-  //   return _firebaseAuth.sendSignInWithEmailLink(email: email, url: null, handleCodeInApp: null, iOSBundleID: null, androidPackageName: null, androidInstallIfNotAvailable: null, androidMinimumVersion: null)
-  // }
-  //
+  Future<void> signIn(String email, String password, Function onSuccess, Function(String) onError){
+    _firebaseAuth.signInWithEmailAndPassword(email: email, password: password)
+        .then((value){
+      onSuccess();})
+        .catchError((err){
+          onError(err.code);});
+  }
+
   Future<void> signUp(String firstName, String lastName, String birthday,
-      String email, String phone, String password, Function onSuccess)  {
+      String email, String phone, String password, Function onSuccess, Function(String code) onError)  {
     return  _firebaseAuth
         .createUserWithEmailAndPassword(email: email, password: password)
         .then((value) {
@@ -18,8 +22,15 @@ class FirAuth {
           User(value.user.uid, firstName, lastName, birthday, email, phone,
               password),
           onSuccess);
-    }).catchError((err){print(err);
+    }).catchError((err){
+      print('$err ${err.code}');
+      onError(err.code);
     });
+  }
+
+  Future<String> curentUser() async {
+    FirebaseUser user = await _firebaseAuth.currentUser();
+    return user.uid;
   }
 
   _createUser(User user, Function onSuccess)  {
@@ -37,9 +48,5 @@ class FirAuth {
       onSuccess();
     });
   }
-  void _onSignUpErr(String code, Function(String) onRegisterError){
-    switch (code){
-      case "ERROR_INVALID_EMAIL":
-    }
-  }
+
 }

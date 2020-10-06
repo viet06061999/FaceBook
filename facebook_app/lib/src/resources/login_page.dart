@@ -1,4 +1,5 @@
 import 'package:facebook_app/src/blocs/login_blocs.dart';
+import 'package:facebook_app/src/resources/progress_dialog.dart';
 import 'package:facebook_app/src/resources/register_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -166,9 +167,16 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void onSignInClicked() {
+    ProgressLoading dialog = ProgressLoading();
+    dialog.showLoading(context, "Loading...");
     if (bloc.isValidInfo(_userController.text, _passController.text)) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
+      bloc.signIn(_userController.text, _passController.text, (){
+        dialog.hideLoading();
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => HomePage()));
+      }, (){
+        dialog.hideLoading();
+      });
     }
   }
 }

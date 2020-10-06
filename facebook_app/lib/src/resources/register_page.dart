@@ -1,7 +1,9 @@
 import 'package:facebook_app/src/blocs/auth_bloc.dart';
 import 'package:facebook_app/src/resources/home_page.dart';
+import 'package:facebook_app/src/resources/progress_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:facebook_app/src/ultils/context_ext.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -257,6 +259,8 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void onSignUpClicked() {
+    ProgressLoading dialog = ProgressLoading();
+    dialog.showLoading(context, "Loading...");
     if (_registerBloc.isValidInfo(
         _firstNameController.text,
         _lastNameController.text,
@@ -271,8 +275,11 @@ class _RegisterPageState extends State<RegisterPage> {
           _emailController.text,
           _phoneController.text,
           _passController.text, () {
+        dialog.hideLoading();
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => HomePage()));
+      },(){
+        dialog.hideLoading();
       });
     }
   }

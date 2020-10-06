@@ -22,6 +22,7 @@ environment:
 
 dependencies:
   toast: ^0.1.5
+  progress_dialog: ^1.2.4
   flutter:
     sdk: flutter
     # Check that you have this dependency (added in the previous step)

@@ -5,8 +5,8 @@ import 'package:facebook_app/src/data/repository/user_repository_impl.dart';
 import 'package:facebook_app/src/validators/user_validation.dart';
 
 class LoginBloc {
-  StreamController _userController = new StreamController();
-  StreamController _passController = new StreamController();
+  StreamController _userController = new StreamController.broadcast();
+  StreamController _passController = new StreamController.broadcast();
 
   Stream get userStream => _userController.stream;
 
@@ -29,7 +29,7 @@ class LoginBloc {
       _passController.sink.add("OK");
       result = result && true;
     }
-    return result && UserRepositoryImpl().isUser(User());
+    return result && UserRepositoryImpl().isUser(User.origin());
   }
 
   void dispose() {

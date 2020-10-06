@@ -1,4 +1,6 @@
 import 'package:facebook_app/src/blocs/login_blocs.dart';
+import 'package:facebook_app/src/resources/register_page.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'home_page.dart';
@@ -21,15 +23,25 @@ class _LoginPageState extends State<LoginPage> {
       child: Scaffold(
         body: Container(
           padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-          child: ListView(
-            children: <Widget>[
-              buildFavicon(),
-              buildTitle(),
-              buildUserInput(),
-              buildPasswordInput(),
-              buildButtonSignIn(),
-              buildBottom()
-            ],
+          color: Colors.white,
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                buildFavicon(),
+                buildTitle(),
+                buildUserInput(),
+                buildPasswordInput(),
+                Align(
+                  alignment: AlignmentDirectional.bottomEnd,
+                  child: Text(
+                    "Quên mật khẩu?",
+                    style: TextStyle(fontSize: 15, color: Colors.blue),
+                  ),
+                ),
+                buildButtonSignIn(),
+                buildBottom()
+              ],
+            ),
           ),
         ),
       ),
@@ -38,29 +50,23 @@ class _LoginPageState extends State<LoginPage> {
 
   Padding buildBottom() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 60, 0, 60),
-      child: Container(
-        width: double.infinity,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "New user? SIGN UP",
-              style: TextStyle(fontSize: 15, color: Color(0xff888888)),
-            ),
-            Text(
-              "Forgot password?",
-              style: TextStyle(fontSize: 15, color: Colors.blue),
-            )
-          ],
-        ),
+      padding: EdgeInsets.all(40),
+      child: RichText(
+        text: TextSpan(
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => RegisterPage()));
+              },
+            text: "Đăng ký tài khoản facebook mới?",
+            style: TextStyle(color: Colors.blue, fontSize: 16)),
       ),
     );
   }
 
   Padding buildButtonSignIn() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
+      padding: const EdgeInsets.fromLTRB(0, 20, 0, 40),
       child: SizedBox(
         width: double.infinity,
         height: 56,
@@ -70,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
               borderRadius: BorderRadius.all((Radius.circular(8)))),
           color: Colors.blue,
           child: Text(
-            "SIGN iN",
+            "Đăng nhập",
             style: TextStyle(color: Colors.white, fontSize: 16),
           ),
         ),
@@ -80,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Padding buildPasswordInput() {
     return Padding(
-        padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
+        padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
         child: StreamBuilder(
             builder: (context, snapshot) => TextField(
                   controller: _passController,
@@ -93,8 +99,8 @@ class _LoginPageState extends State<LoginPage> {
                   obscureText: !_showPass,
                   decoration: InputDecoration(
                     prefixIcon:
-                        Icon(Icons.lock_outlined, color: Color(0xff888888)),
-                    labelText: "Password",
+                        Icon(Icons.lock_outline, color: Color(0xff888888)),
+                    labelText: "Mật khẩu",
                     errorText: snapshot.hasError ? snapshot.error : null,
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12)),
@@ -127,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
             textInputAction: TextInputAction.next,
             style: TextStyle(fontSize: 18, color: Colors.black),
             decoration: InputDecoration(
-                labelText: "Username",
+                labelText: "Email hoặc số điện thoại",
                 errorText: snapshot.hasError ? snapshot.error : null,
                 prefixIcon: Icon(Icons.person, color: Color(0xff888888)),
                 border:

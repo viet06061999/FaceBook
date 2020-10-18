@@ -8,7 +8,6 @@ class User {
   String phone = '';
   String birthday = '';
   String password = '';
-
   User.origin();
 
   User(this.id, this.firstName, this.lastName, this.birthday, this.email,

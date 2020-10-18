@@ -1,6 +1,6 @@
 import 'package:facebook_app/src/blocs/login_blocs.dart';
 import 'package:facebook_app/src/resources/progress_dialog.dart';
-import 'package:facebook_app/src/resources/register_page.dart';
+import 'file:///C:/Users/vietl/Desktop/FaceBook/facebook_app/lib/src/resources/register/register_page_step_one.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -23,24 +23,17 @@ class _LoginPageState extends State<LoginPage> {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
           color: Colors.white,
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                buildFavicon(),
-                buildTitle(),
+                buildTopBackground(),
                 buildUserInput(),
                 buildPasswordInput(),
-                Align(
-                  alignment: AlignmentDirectional.bottomEnd,
-                  child: Text(
-                    "Quên mật khẩu?",
-                    style: TextStyle(fontSize: 15, color: Colors.blue),
-                  ),
-                ),
                 buildButtonSignIn(),
-                buildBottom()
+                buildForgotPassword(),
+                buildDeliver(context),
+                buildButtonSignUp()
               ],
             ),
           ),
@@ -49,25 +42,63 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Padding buildBottom() {
+  Padding buildButtonSignUp() {
     return Padding(
-      padding: EdgeInsets.all(40),
-      child: RichText(
-        text: TextSpan(
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => RegisterPage()));
+      padding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
+      child: SizedBox(
+        child: Wrap(
+          children:[
+            RaisedButton(
+              onPressed: () {
+                Navigator.pushNamed(context,
+                   "/second");
               },
-            text: "Đăng ký tài khoản facebook mới?",
-            style: TextStyle(color: Colors.blue, fontSize: 16)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all((Radius.circular(8)))),
+              color: Colors.green,
+              child: Text(
+                "Tạo tài khoản facebook mới",
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            )
+          ]
+        ),
       ),
     );
   }
 
+  GestureDetector buildForgotPassword() {
+    return GestureDetector(
+      onTap: () {
+      },
+      child: new Text("Quên mật khẩu?",style: TextStyle(fontSize: 16, color: Colors.blue),),
+    );
+  }
+
+  Padding buildDeliver(BuildContext context) {
+    return Padding(
+                padding: const EdgeInsets.fromLTRB(30, 20, 30, 15),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width / 2 - 50,
+                        height: 1,
+                        color: Colors.grey,
+                      ),
+                      Text("HOẶC"),
+                      Container(
+                        width: MediaQuery.of(context).size.width / 2 - 50,
+                        height: 1,
+                        color: Colors.grey,
+                      ),
+                    ]),
+              );
+  }
+
   Padding buildButtonSignIn() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 20, 0, 40),
+      padding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
       child: SizedBox(
         width: double.infinity,
         height: 56,
@@ -87,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Padding buildPasswordInput() {
     return Padding(
-        padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+        padding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
         child: StreamBuilder(
             builder: (context, snapshot) => TextField(
                   controller: _passController,
@@ -127,14 +158,14 @@ class _LoginPageState extends State<LoginPage> {
 
   Padding buildUserInput() {
     return Padding(
-        padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
+        padding: const EdgeInsets.fromLTRB(30, 30, 30, 20),
         child: StreamBuilder(
           builder: (context, snapshot) => TextField(
             controller: _userController,
             textInputAction: TextInputAction.next,
             style: TextStyle(fontSize: 18, color: Colors.black),
             decoration: InputDecoration(
-                labelText: "Email hoặc số điện thoại",
+                labelText: "Số điện thoại hoặc email",
                 errorText: snapshot.hasError ? snapshot.error : null,
                 prefixIcon: Icon(Icons.person, color: Color(0xff888888)),
                 border:
@@ -145,36 +176,21 @@ class _LoginPageState extends State<LoginPage> {
         ));
   }
 
-  Padding buildTitle() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 60),
-      child: Text(
-        "Hello\nWelcome Back",
-        style: TextStyle(
-            fontWeight: FontWeight.bold, color: Colors.black, fontSize: 30),
-      ),
-    );
-  }
-
-  Center buildFavicon() {
-    return Center(
-      child: Container(
-          width: 100,
-          height: 100,
-          padding: EdgeInsets.fromLTRB(15, 40, 15, 15),
-          child: Image.asset('assets/images/fb_favicon.png')),
+  Container buildTopBackground() {
+    return Container(
+      child: Image.asset('assets/images/top_background.jpg'),
     );
   }
 
   void onSignInClicked() {
     ProgressLoading dialog = ProgressLoading();
-    dialog.showLoading(context, "Loading...");
     if (bloc.isValidInfo(_userController.text, _passController.text)) {
-      bloc.signIn(_userController.text, _passController.text, (){
+      dialog.showLoading(context, "Loading...");
+      bloc.signIn(_userController.text, _passController.text, () {
         dialog.hideLoading();
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => HomePage()));
-      }, (){
+      }, () {
         dialog.hideLoading();
       });
     }

@@ -18,6 +18,7 @@ class FirAuth {
     return  _firebaseAuth
         .createUserWithEmailAndPassword(email: email, password: password)
         .then((value) {
+      print(value.user);
       _createUser(
           User(value.user.uid, firstName, lastName, birthday, email, phone,
               password),

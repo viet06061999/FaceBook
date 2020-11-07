@@ -2,7 +2,7 @@ import 'package:facebook_app/data/model/user.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPageConfirm extends StatefulWidget {
-  User _user;
+  UserEntity _user;
 
   RegisterPageConfirm(this._user);
 
@@ -11,7 +11,7 @@ class RegisterPageConfirm extends StatefulWidget {
 }
 
 class _RegisterPageConfirm extends State<RegisterPageConfirm> {
-  User _user;
+  UserEntity _user;
 
   _RegisterPageConfirm(this._user);
 

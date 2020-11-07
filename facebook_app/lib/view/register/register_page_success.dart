@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 class RegisterPageSuccess extends StatefulWidget {
-  User _user;
+  UserEntity _user;
 
   RegisterPageSuccess(this._user);
 
@@ -16,7 +16,7 @@ class RegisterPageSuccess extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPageSuccess>
     with TickerProviderStateMixin {
-  User _user;
+  UserEntity _user;
 
   _RegisterPageState(this._user);
 

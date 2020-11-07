@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 class RegisterPageCreate extends StatefulWidget {
-  User _user;
+  UserEntity _user;
 
   RegisterPageCreate(this._user);
 
@@ -20,7 +20,7 @@ class RegisterPageCreate extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPageCreate>
     with TickerProviderStateMixin {
-  User _user;
+  UserEntity _user;
   RegisterBloc _registerBloc = RegisterBloc();
 
   _RegisterPageState(this._user);

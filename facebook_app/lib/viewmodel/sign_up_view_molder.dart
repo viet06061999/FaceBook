@@ -14,7 +14,7 @@ class RegisterBloc {
 
   Stream get emailStream => _emailController.stream;
 
-  void signUp(User user, Function onSuccess, Function onError) {
+  void signUp(UserEntity user, Function onSuccess, Function onError) {
     _userRepositoryImpl.signUp(user, onSuccess, (code) {
       _onSignUpErr(code);
       onError();

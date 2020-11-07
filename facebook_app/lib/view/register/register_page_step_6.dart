@@ -12,7 +12,7 @@ class RegisterPageSix extends StatefulWidget {
   RegisterPageSix(
       this.firstName, this.lastName, this.birthday, this.gender, this.phone);
 
-  RegisterPageSix.origin(User user) {
+  RegisterPageSix.origin(UserEntity user) {
     this.user = user;
   }
 
@@ -32,7 +32,7 @@ class _RegisterPageState extends State<RegisterPageSix> {
   _RegisterPageState(
       this.firstName, this.lastName, this.birthday, this.gender, this.phone);
 
-  _RegisterPageState.origin(User user) {
+  _RegisterPageState.origin(UserEntity user) {
     this.user = user;
     _emailController.text = user.email;
   }
@@ -161,7 +161,7 @@ class _RegisterPageState extends State<RegisterPageSix> {
               builder: (context) => RegisterPageSeven(firstName, lastName,
                   birthday, gender, phone, _emailController.text)));
     } else{
-      (user as User).email = _emailController.text;
+      (user as UserEntity).email = _emailController.text;
       Navigator.push(
           context,
           MaterialPageRoute(

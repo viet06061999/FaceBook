@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class RegisterPageComplete extends StatefulWidget {
-  User _user;
+  UserEntity _user;
 
   RegisterPageComplete(this._user);
 
@@ -13,7 +13,7 @@ class RegisterPageComplete extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPageComplete> {
-  User _user;
+  UserEntity _user;
 
   _RegisterPageState(this._user);
 

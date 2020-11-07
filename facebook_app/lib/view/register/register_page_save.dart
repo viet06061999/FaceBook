@@ -6,7 +6,7 @@ import 'package:facebook_app/view/home/home_page.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPageSave extends StatefulWidget {
-  User _user;
+  UserEntity _user;
 
   RegisterPageSave(this._user);
 
@@ -15,7 +15,7 @@ class RegisterPageSave extends StatefulWidget {
 }
 
 class _RegisterPageSave extends State<RegisterPageSave> {
-  User _user;
+  UserEntity _user;
 
   _RegisterPageSave(this._user);
 

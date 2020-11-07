@@ -13,13 +13,13 @@ class UserRepositoryImpl implements UserRepository {
   UserRepositoryImpl(this._firAuth, this._spUtil);
 
   @override
-  void signUp(User user, Function onSuccess, Function(String code) onError) {
-    _firAuth.signUp(user.firstName, user.lastName, user.birthday, user.email,
-        user.phone, user.password, onSuccess, onError);
+  void signUp(UserEntity user, Function onSuccess, Function(String code) onError) {
+    _firAuth.signUp(user.firstName, user.lastName, user.avatar, user.birthday,
+        user.email, user.phone, user.password, user.genre, onSuccess, onError);
   }
 
   @override
-  Observable<AuthResult> signIn(String email, String password) {
+  Observable<UserCredential> signIn(String email, String password) {
     return _firAuth.signIn(email, password);
   }
 

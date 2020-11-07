@@ -4,19 +4,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rxdart/rxdart.dart';
 
 class FirAuth {
-  final FirebaseAuth _firebaseAuth ;
+  final FirebaseAuth _firebaseAuth;
 
   FirAuth(this._firebaseAuth);
 
-  Observable<AuthResult> signIn(String email, String password) {
-    // _firebaseAuth
-    //     .signInWithEmailAndPassword(email: email, password: password)
-    //     .then((value) {
-    //   onSuccess();
-    // }).catchError((err) {
-    //   onError(err.code);
-    // });
-    return Observable.fromFuture(_firebaseAuth.signInWithEmailAndPassword(email: email, password: password));
+  Observable<UserCredential> signIn(String email, String password) {
+    return Observable.fromFuture(_firebaseAuth.signInWithEmailAndPassword(
+        email: email, password: password));
   }
 
   Future<void> signOut(Function signOut) {
@@ -28,40 +22,42 @@ class FirAuth {
   Future<void> signUp(
       String firstName,
       String lastName,
+      String avatar,
       String birthday,
       String email,
       String phone,
       String password,
+      String genre,
       Function onSuccess,
       Function(String code) onError) {
+    print('$email $password');
     return _firebaseAuth
         .createUserWithEmailAndPassword(email: email, password: password)
         .then((value) {
-      print(value.user);
       _createUser(
-          User(value.user.uid, firstName, lastName, birthday, email, phone,
-              password),
+          UserEntity(value.user.uid, firstName, lastName, '', birthday, email, phone,
+              password, genre),
           onSuccess);
     }).catchError((err) {
-      print('$err ${err.code}');
-      onError(err.code);
+      print(err);
+       onError(err.code);
     });
   }
 
   Future<String> curentUser() async {
-    FirebaseUser user = await _firebaseAuth.currentUser();
+    User user = await _firebaseAuth.currentUser;
     return user.email;
   }
 
-  _createUser(User user, Function onSuccess) {
-    var userInfo = {
-      "first_name": user.firstName,
-      "last_name": user.lastName,
-      "phone": user.phone,
-      "birthday": user.birthday
-    };
-    var db = Firestore.instance;
-    db.collection("users").add(userInfo).catchError((onError) {}).then((value) {
+  _createUser(UserEntity user, Function onSuccess) {
+    var db = FirebaseFirestore.instance;
+    db
+        .collection("users")
+        .add(user.userToMap())
+        .catchError((onError) {
+      print(onError);
+    })
+        .then((value) {
       onSuccess();
     });
   }

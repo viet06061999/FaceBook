@@ -4,9 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rxdart/rxdart.dart';
 
 abstract class UserRepository {
-  Observable<AuthResult> signIn(String email, String password);
+  Observable<UserCredential> signIn(String email, String password);
 
-  void signUp(User user, Function onSuccess, Function(String code) onError);
+  void signUp(UserEntity user, Function onSuccess, Function(String code) onError);
 
   Future<String> currentUser();
 

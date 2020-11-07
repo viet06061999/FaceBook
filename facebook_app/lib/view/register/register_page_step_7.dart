@@ -90,50 +90,57 @@ class _RegisterPageState extends State<RegisterPageSeven> {
     return Padding(
         padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
         child: TextField(
-                  onChanged: (text) {
-                    setState(() {
-                      _isTextNull = text.isEmpty;
-                      if(text.isValidPassword()) setState(() {
-                        error = null;
-                      });
-                    });
-                  },
-                  controller: _passController,
-                  style: TextStyle(fontSize: 18, color: Colors.black),
-                  obscureText: !_showPass,
-                  decoration: InputDecoration(
-                    labelText: "Mật khẩu",
-                    errorText: error,
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                    labelStyle:
-                        TextStyle(color: Color(0xff888888), fontSize: 15),
-                    suffixIcon: Visibility(
-                      visible: !_isTextNull,
-                      child: new GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _showPass = !_showPass;
-                          });
-                        },
-                        child: new Icon(_showPass
-                            ? Icons.visibility
-                            : Icons.visibility_off),
-                      ),
-                    ),
-                  ),
-                ));
+          onChanged: (text) {
+            setState(() {
+              _isTextNull = text.isEmpty;
+              if (text.isValidPassword())
+                setState(() {
+                  error = null;
+                });
+            });
+          },
+          controller: _passController,
+          style: TextStyle(fontSize: 18, color: Colors.black),
+          obscureText: !_showPass,
+          decoration: InputDecoration(
+            labelText: "Mật khẩu",
+            errorText: error,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+            labelStyle: TextStyle(color: Color(0xff888888), fontSize: 15),
+            suffixIcon: Visibility(
+              visible: !_isTextNull,
+              child: new GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _showPass = !_showPass;
+                  });
+                },
+                child: new Icon(
+                    _showPass ? Icons.visibility : Icons.visibility_off),
+              ),
+            ),
+          ),
+        ));
   }
 
   onContinueClick() {
-    if(_passController.text.isValidPassword()){
-      print('$firstName $lastName $birthday $email $phone ${_passController.text.toSha256()}');
+    if (_passController.text.isValidPassword()) {
+      print(
+          '$firstName $lastName $birthday $email $phone ${_passController.text.toSha256()}');
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => RegisterPageComplete(User("-1", firstName,
-                  lastName, birthday, email, phone, _passController.text.toSha256()))));
-    }else{
+              builder: (context) => RegisterPageComplete(UserEntity(
+                  "-1",
+                  firstName,
+                  lastName,
+                  '',
+                  birthday,
+                  email,
+                  phone,
+                  _passController.text.toSha256(),
+                  gender))));
+    } else {
       setState(() {
         error = "Mật khẩu phải trên 8 ký tự";
       });

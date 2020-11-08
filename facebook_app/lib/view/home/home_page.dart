@@ -5,12 +5,11 @@ import 'package:facebook_app/data/model/post.dart';
 import 'package:facebook_app/data/source/remote/fire_base_auth.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:path/path.dart' as path;
 
 class HomePage extends PageProvideNode<HomeProvide> {
   @override
@@ -22,7 +21,7 @@ class HomePage extends PageProvideNode<HomeProvide> {
 class HomePageTmp extends StatefulWidget {
   final HomeProvide provide;
 
-  const HomePageTmp( this.provide);
+  const HomePageTmp(this.provide);
 
   @override
   State<StatefulWidget> createState() => _HomePage();
@@ -31,7 +30,6 @@ class HomePageTmp extends StatefulWidget {
 class _HomePage extends State<HomePageTmp>
     with TickerProviderStateMixin<HomePageTmp>
     implements Presenter {
-
   HomeProvide _provide;
 
   //demo upload image: sửa lại khi create post
@@ -64,43 +62,47 @@ class _HomePage extends State<HomePageTmp>
             child: Column(
               children: [
                 buildButtonContinue(),
+                //khi lam thì bỏ mấy cái demo này đi thay view mình làm vào
+
                 //demo upload image
                 Text('Selected Image'),
                 _image != null
                     ? Image.asset(
-                  _image.path,
-                  height: 150,
-                )
+                        _image.path,
+                        height: 150,
+                      )
                     : Container(height: 150),
                 _image == null
                     ? RaisedButton(
-                  child: Text('Choose File'),
-                  onPressed: chooseFile,
-                  color: Colors.cyan,
-                )
+                        child: Text('Choose File'),
+                        onPressed: chooseFile,
+                        color: Colors.cyan,
+                      )
                     : Container(),
                 _image != null
                     ? RaisedButton(
-                  child: Text('Create Post'),
-                  onPressed: uploadFile,
-                  color: Colors.cyan,
-                )
+                        child: Text('Create Post'),
+                        onPressed: uploadFile,
+                        color: Colors.cyan,
+                      )
                     : Container(),
                 _image != null
                     ? RaisedButton(
-                  child: Text('Clear Selection'),
-                  onPressed: clearSelection,
-                )
+                        child: Text('Clear Selection'),
+                        onPressed: clearSelection,
+                      )
                     : Container(),
                 Text('Create Post'),
                 _uploadedFileURL != null
                     ? Image.network(
-                  _uploadedFileURL,
-                  height: 150,
-                )
+                        _uploadedFileURL,
+                        height: 150,
+                      )
                     : Container(),
-                // Khi nào làm thì xem cái này và custom lại để post thêm cả ảnh ok.
-                //tao method create view cua home roi goi vao day
+                //demo get list post
+            Consumer<HomeProvide>(builder: (context, value, child) {
+              return Text(value.listPost.length.toString());
+            })
               ],
             ),
           ),
@@ -117,10 +119,9 @@ class _HomePage extends State<HomePageTmp>
         width: double.infinity,
         height: 56,
         child: RaisedButton(
-          onPressed:() {
-            FirAuth(FirebaseAuth.instance).signOut((){
-              SystemChannels.platform
-                  .invokeMethod('SystemNavigator.pop');
+          onPressed: () {
+            FirAuth(FirebaseAuth.instance).signOut(() {
+              SystemChannels.platform.invokeMethod('SystemNavigator.pop');
               SharedPreferences.getInstance().then((value) {
                 value.clear();
               });
@@ -140,29 +141,27 @@ class _HomePage extends State<HomePageTmp>
 
   Future<bool> _onWillPop() {
     return showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text('Confirm Exit?',
-            style: new TextStyle(color: Colors.black, fontSize: 20.0)),
-        content: new Text(
-            'Bạn chắc chắn muốn thoát ứng dụng?'),
-        actions: <Widget>[
-          new FlatButton(
-            onPressed: () {
-              // this line exits the app.
-              SystemChannels.platform
-                  .invokeMethod('SystemNavigator.pop');
-            },
-            child:
-            new Text('Thoát', style: new TextStyle(fontSize: 18.0)),
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Confirm Exit?',
+                style: new TextStyle(color: Colors.black, fontSize: 20.0)),
+            content: new Text('Bạn chắc chắn muốn thoát ứng dụng?'),
+            actions: <Widget>[
+              new FlatButton(
+                onPressed: () {
+                  // this line exits the app.
+                  SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                },
+                child: new Text('Thoát', style: new TextStyle(fontSize: 18.0)),
+              ),
+              new FlatButton(
+                onPressed: () => Navigator.pop(context),
+                // this line dismisses the dialog
+                child: new Text('Đóng', style: new TextStyle(fontSize: 18.0)),
+              )
+            ],
           ),
-          new FlatButton(
-            onPressed: () => Navigator.pop(context), // this line dismisses the dialog
-            child: new Text('Đóng', style: new TextStyle(fontSize: 18.0)),
-          )
-        ],
-      ),
-    ) ??
+        ) ??
         false;
   }
 
@@ -172,18 +171,17 @@ class _HomePage extends State<HomePageTmp>
   }
 
   // demo upload image
-  void clearSelection() {
-  }
+  void clearSelection() {}
 
   Future uploadFile() async {
-    _provide.uploadPost(Post.origin(), _image.path);
+   _provide.uploadPost(Post.origin(), _image.path);
   }
 
   Future chooseFile() async {
-   await ImagePicker().getImage(source:  ImageSource.gallery).then((value){
-     setState(() {
-       _image = File(value.path);
-     });
+    await ImagePicker().getImage(source: ImageSource.gallery).then((value) {
+      setState(() {
+        _image = File(value.path);
+      });
     });
   }
 }

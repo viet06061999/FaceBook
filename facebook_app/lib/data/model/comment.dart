@@ -6,12 +6,17 @@ class Comment {
 
   Comment.origin();
 
-  Comment( this.user, this.comment);
+  Comment(this.user, this.comment);
+
+  Comment.fromJson(Map map) {
+    this.user = UserEntity.fromJson(map['user']);
+    this.comment = map['comment'];
+  }
 
   Map toMap() => new Map<String, dynamic>.from({
-    "user": this.user.userToMap(),
-    "comment": this.comment,
-  });
+        "user": this.user.userToMap(),
+        "comment": this.comment,
+      });
 
   static List<Map> toListMap(List<Comment> comments) {
     List<Map> maps = [];
@@ -20,5 +25,13 @@ class Comment {
       maps.add(step);
     });
     return maps;
+  }
+
+  static List<Comment> fromListMap(List<Map> maps) {
+    List<Comment> comments = [];
+    maps.forEach((element) {
+      comments.add(Comment.fromJson(element));
+    });
+    return comments;
   }
 }

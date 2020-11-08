@@ -12,5 +12,8 @@ class PostRepositoryImpl implements PostRepository {
   PostRepositoryImpl(this._firPost, this._spUtil);
 
   @override
-  Observable<DocumentReference> createPost(Post post) => _firPost.createPost(post);
+  Observable<void> createPost(Post post) => _firPost.createPost(post);
+
+  @override
+  Stream<QuerySnapshot> getListPost() => _firPost.getListPost();
 }

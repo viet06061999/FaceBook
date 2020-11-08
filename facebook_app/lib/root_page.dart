@@ -20,7 +20,6 @@ class _RootPage extends State<RootPage> {
   void initState() {
     super.initState();
     var email = inject<SpUtil>().getString(KEY_CURRENT_USER);
-    print(email);
     setState(() {
       status = email != null ? AuthStatus.signIn : AuthStatus.notSignedIn;
     });

@@ -7,7 +7,14 @@ class FirPost {
 
   FirPost(this._firestore);
 
- Observable<DocumentReference> createPost(Post post){
-   return Observable.fromFuture(_firestore.collection("posts").add(post.postToMap()));
+  Observable<void> createPost(Post post) {
+    Future<void> future =
+    _firestore.collection("posts").add(post.postToMap()).then((value) {
+      value.update({"post_id": value.id});
+    });
+    return Observable.fromFuture(future);
   }
+
+ Stream<QuerySnapshot> getListPost() =>
+   _firestore.collection('posts').snapshots(includeMetadataChanges: true);
 }

@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:facebook_app/ultils/context_ext.dart';
-import '../home/home_page.dart';
+import 'package:facebook_app/view/home/home_page.dart';
 
 class LoginPage extends PageProvideNode<LoginProvide> {
   @override

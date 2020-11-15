@@ -1,5 +1,5 @@
-import 'file:///C:/Users/vietl/Desktop/FaceBook/facebook_app/lib/view/home/home_page.dart';
-import 'file:///C:/Users/vietl/Desktop/FaceBook/facebook_app/lib/view/login/login_page.dart';
+import 'package:facebook_app/view/home/home_page.dart';
+import 'package:facebook_app/view/login/login_page.dart';
 import 'package:dartin/dartin.dart';
 import 'package:facebook_app/helper/constants.dart';
 import 'package:facebook_app/helper/share_prefs.dart';

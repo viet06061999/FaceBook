@@ -21,6 +21,8 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  font_awesome_flutter: ^8.10.0
+  youtube_player_flutter: ^7.0.0+7
   toast: ^0.1.5
   progress_dialog: ^1.2.4
   webview_flutter: ^0.3.14+1

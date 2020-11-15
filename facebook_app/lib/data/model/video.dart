@@ -7,6 +7,12 @@ class Video {
 
   Video(this.id, this.url, this.thumb);
 
+  Video.fromJson(Map map){
+    this.id = map['id'];
+    this.url = map['url'];
+    this.thumb = map['thumb'];
+  }
+
   Map toMap() => new Map<String, dynamic>.from({
     "id": this.id,
     "url": this.url,
@@ -20,5 +26,13 @@ class Video {
       maps.add(step);
     });
     return maps;
+  }
+
+  static List<Video> fromListMap(List<Map> maps) {
+    List<Video> videos = [];
+    maps.forEach((element) {
+      videos.add(Video.fromJson(element));
+    });
+    return videos;
   }
 }

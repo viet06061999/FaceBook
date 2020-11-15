@@ -3,5 +3,7 @@ import 'package:facebook_app/data/model/post.dart';
 import 'package:rxdart/rxdart.dart';
 
 abstract class PostRepository {
-  Observable<DocumentReference> createPost(Post post);
+  Observable<void> createPost(Post post);
+
+  Stream<QuerySnapshot> getListPost();
 }

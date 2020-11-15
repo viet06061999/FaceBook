@@ -35,29 +35,40 @@ class FirAuth {
         .createUserWithEmailAndPassword(email: email, password: password)
         .then((value) {
       _createUser(
-          UserEntity(value.user.uid, firstName, lastName, '', birthday, email, phone,
-              password, genre),
+          UserEntity(value.user.uid, firstName, lastName, '', birthday, email,
+              phone, password, genre),
+          value.user.uid,
           onSuccess);
     }).catchError((err) {
       print(err);
-       onError(err.code);
+      onError(err.code);
     });
   }
 
-  Future<User> curentUser() async {
+  Future<UserEntity> curentUser() async {
     User user = await _firebaseAuth.currentUser;
-    return user;
+    print('vao day roi');
+    UserEntity userEntity;
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    if (user != null) {
+      await users.doc(user.uid).get().then((value) {
+        userEntity = UserEntity.fromJson(value.data());
+      }).catchError((onError){
+        print(onError);
+      });
+    }
+    return userEntity;
   }
 
-  _createUser(UserEntity user, Function onSuccess) {
+  _createUser(UserEntity user, String document, Function onSuccess) {
     var db = FirebaseFirestore.instance;
     db
         .collection("users")
-        .add(user.userToMap())
+        .doc(document)
+        .set(user.userToMap())
         .catchError((onError) {
       print(onError);
-    })
-        .then((value) {
+    }).then((value) {
       onSuccess();
     });
   }

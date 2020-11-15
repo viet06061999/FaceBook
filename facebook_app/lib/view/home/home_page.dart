@@ -1,15 +1,22 @@
-import 'dart:io';
-
 import 'package:facebook_app/base/base.dart';
-import 'package:facebook_app/data/model/post.dart';
-import 'package:facebook_app/data/source/remote/fire_base_auth.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:facebook_app/view/tabs/home_tab.dart';
+import 'package:facebook_app/view/tabs/friends_tab.dart';
+import 'package:facebook_app/view/tabs/watch_tab.dart';
+import 'package:facebook_app/view/tabs/profile_tab.dart';
+import 'package:facebook_app/view/tabs/notifications_tab.dart';
+import 'package:facebook_app/view/tabs/menu_tab.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:facebook_app/view/post/create_post.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+
+// class HomePage extends StatefulWidget {
+//   @override
+//   _HomePageState createState() => _HomePageState();
+// }
 
 class HomePage extends PageProvideNode<HomeProvide> {
   @override
@@ -24,173 +31,81 @@ class HomePageTmp extends StatefulWidget {
   const HomePageTmp(this.provide);
 
   @override
-  State<StatefulWidget> createState() => _HomePage();
+  State<StatefulWidget> createState() => _HomePageState();
 }
 
-class _HomePage extends State<HomePageTmp>
-    with TickerProviderStateMixin<HomePageTmp>
-    implements Presenter {
-  HomeProvide _provide;
+class _HomePageState extends State<HomePageTmp> with SingleTickerProviderStateMixin {
 
-  //demo upload image: sửa lại khi create post
-  File _image;
-  String _uploadedFileURL;
+  TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _provide = widget.provide;
+    _tabController = TabController(vsync: this, length: 6);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          title: Text(
-            'Home',
-            style: TextStyle(fontSize: 20, color: Colors.black),
-          ),
-          elevation: 0,
-        ),
-        body: Container(
-          padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-          constraints: BoxConstraints.expand(),
-          color: Colors.white,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                buildButtonContinue(),
-                //khi lam thì bỏ mấy cái demo này đi thay view mình làm vào
-
-                //demo upload image
-                Text('Selected Image'),
-                _image != null
-                    ? Image.asset(
-                        _image.path,
-                        height: 150,
-                      )
-                    : Container(height: 150),
-                _image == null
-                    ? RaisedButton(
-                        child: Text('Choose File'),
-                        onPressed: chooseFile,
-                        color: Colors.cyan,
-                      )
-                    : Container(),
-                _image != null
-                    ? RaisedButton(
-                        child: Text('Create Post'),
-                        onPressed: uploadFile,
-                        color: Colors.cyan,
-                      )
-                    : Container(),
-                _image != null
-                    ? RaisedButton(
-                        child: Text('Clear Selection'),
-                        onPressed: clearSelection,
-                      )
-                    : Container(),
-                Text('Create Post'),
-                _uploadedFileURL != null
-                    ? Image.network(
-                        _uploadedFileURL,
-                        height: 150,
-                      )
-                    : Container(),
-                //demo get list post
-            Consumer<HomeProvide>(builder: (context, value, child) {
-              return ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  itemCount: value.listPost.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      height: 50,
-                      child: Center(child: Text('Entry ${value.listPost[index].postId}')),
-                    );
-                  }
-              );
-            })
+    return Scaffold(
+      appBar: AppBar(
+        brightness: Brightness.light,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Text('facebook', style: TextStyle(color: Colors.blueAccent, fontSize: 27.0, fontWeight: FontWeight.bold)),
               ],
             ),
-          ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Icon(Icons.search, color: Colors.black),
+
+                SizedBox(width: 15.0),
+
+                Icon(FontAwesomeIcons.facebookMessenger, color: Colors.black)
+              ]
+            ),
+          ],
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0.0,
+        bottom: TabBar(
+          indicatorColor: Colors.blueAccent,
+          controller: _tabController,
+          unselectedLabelColor: Colors.grey,
+          labelColor: Colors.blueAccent,
+          tabs: [
+            Tab(icon: Icon(Icons.home, size: 30.0)),
+            Tab(icon: Icon(Icons.people, size: 30.0)),
+            Tab(icon: Icon(Icons.ondemand_video, size: 30.0)),
+            Tab(icon: Icon(Icons.account_circle, size: 30.0)),
+            Tab(icon: Icon(Icons.notifications, size: 30.0)),
+            Tab(icon: Icon(Icons.menu, size: 30.0))
+          ],
         ),
       ),
-      onWillPop: _onWillPop,
-    );
-  }
-
-  Padding buildButtonContinue() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-      child: SizedBox(
-        width: double.infinity,
-        height: 56,
-        child: RaisedButton(
-          onPressed: () {
-            FirAuth(FirebaseAuth.instance).signOut(() {
-              SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-              SharedPreferences.getInstance().then((value) {
-                value.clear();
-              });
-            });
-          },
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all((Radius.circular(8)))),
-          color: Colors.blue,
-          child: Text(
-            "Đăng xuất",
-            style: TextStyle(color: Colors.white, fontSize: 16),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Future<bool> _onWillPop() {
-    return showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-            title: new Text('Confirm Exit?',
-                style: new TextStyle(color: Colors.black, fontSize: 20.0)),
-            content: new Text('Bạn chắc chắn muốn thoát ứng dụng?'),
-            actions: <Widget>[
-              new FlatButton(
-                onPressed: () {
-                  // this line exits the app.
-                  SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-                },
-                child: new Text('Thoát', style: new TextStyle(fontSize: 18.0)),
-              ),
-              new FlatButton(
-                onPressed: () => Navigator.pop(context),
-                // this line dismisses the dialog
-                child: new Text('Đóng', style: new TextStyle(fontSize: 18.0)),
-              )
-            ],
-          ),
-        ) ??
-        false;
-  }
-
-  @override
-  void onClick(String action) {
-    // TODO: implement onClick
-  }
-
-  // demo upload image
-  void clearSelection() {}
-
-  Future uploadFile() async {
-   _provide.uploadPost(Post.origin(), _image.path);
-  }
-
-  Future chooseFile() async {
-    await ImagePicker().getImage(source: ImageSource.gallery).then((value) {
-      setState(() {
-        _image = File(value.path);
-      });
-    });
+      body:
+      Consumer<HomeProvide>(builder: (context, value, child){
+        return TabBarView(
+            controller: _tabController,
+            children: [
+              HomeTab(value),
+              FriendsTab(),
+              WatchTab(),
+              ProfileTab(),
+              NotificationsTab(),
+              MenuTab()
+            ]
+        );
+      }));
   }
 }

@@ -1,14 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facebook_app/base/base.dart';
 import 'package:facebook_app/data/model/post.dart';
+import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/data/repository/photo_repository.dart';
 import 'package:facebook_app/data/repository/post_repository.dart';
-import 'package:flutter/material.dart';
+import 'package:facebook_app/data/repository/user_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
 class HomeProvide extends BaseProvide {
   final PostRepository _repository;
   final PhotoRepository _photoRepository;
+  final UserRepository _userRepository;
+  UserEntity _userEntity;
+
   List<Post> _listPost = [];
 
   bool _loading = false;
@@ -22,8 +26,18 @@ class HomeProvide extends BaseProvide {
     notifyListeners();
   }
 
-  HomeProvide(this._repository, this._photoRepository) {
+  UserEntity get userEntity => _userEntity;
+
+  set userEntity(UserEntity userEntity) {
+    _userEntity = userEntity;
+    notifyListeners();
+  }
+
+  HomeProvide(this._repository, this._photoRepository, this._userRepository) {
     _getListPost();
+    _userRepository.getCurrentUser().then((value) {
+      userEntity = value;
+    });
   }
 
   Observable<void> _createPost(Post post) => _repository

@@ -1,10 +1,11 @@
-import 'file:///C:/Users/vietl/Desktop/FaceBook/facebook_app/lib/view/home/home_page.dart';
-import 'file:///C:/Users/vietl/Desktop/FaceBook/facebook_app/lib/view/login/login_page.dart';
+import 'package:facebook_app/data/source/local/user_local_data.dart';
+import 'package:facebook_app/data/source/remote/fire_base_auth.dart';
+import 'package:facebook_app/view/home/home_page.dart';
+import 'package:facebook_app/view/login/login_page.dart';
 import 'package:dartin/dartin.dart';
-import 'package:facebook_app/helper/constants.dart';
-import 'package:facebook_app/helper/share_prefs.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import 'data/repository/user_repository_impl.dart';
 
 class RootPage extends StatefulWidget {
   @override
@@ -19,9 +20,13 @@ class _RootPage extends State<RootPage> {
   @override
   void initState() {
     super.initState();
-    var email = inject<SpUtil>().getString(KEY_CURRENT_USER);
-    setState(() {
-      status = email != null ? AuthStatus.signIn : AuthStatus.notSignedIn;
+    var userRepo =
+        UserRepositoryImpl(inject<FirAuth>(), inject<UserLocalDatasource>());
+    userRepo.getCurrentUser().then((value) {
+      setState(() {
+        status =
+            value != null ? AuthStatus.signIn : AuthStatus.notSignedIn;
+      });
     });
   }
 
@@ -33,6 +38,8 @@ class _RootPage extends State<RootPage> {
       case AuthStatus.signIn:
         return new HomePage();
       case AuthStatus.none:
+        return new Container();
+      default:
         return new Container();
     }
   }

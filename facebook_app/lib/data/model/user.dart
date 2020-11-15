@@ -16,8 +16,8 @@ class UserEntity {
 
   UserEntity.fromJson(Map map) {
     this.id = map['id'];
-    this.firstName = map['firstName'];
-    this.lastName = map['lastName'];
+    this.firstName = map['first_name'];
+    this.lastName = map['last_name'];
     this.avatar = map['avatar'];
     this.birthday = map['birthday'];
     this.email = map['email'];

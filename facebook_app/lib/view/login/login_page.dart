@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:facebook_app/ultils/context_ext.dart';
-import '../home/home_page.dart';
+import 'package:facebook_app/view/home/home_page.dart';
 
 class LoginPage extends PageProvideNode<LoginProvide> {
   @override
@@ -31,6 +31,7 @@ class _LoginPageState extends State<LoginPageTmp>
   static const ACTION_LOGIN = "login";
 
   bool _showPass = false;
+  bool _visible = false;
 
   @override
   void initState() {
@@ -130,23 +131,25 @@ class _LoginPageState extends State<LoginPageTmp>
           child: TextField(
             onChanged: (text) {
               value.password = text;
-              print(value.errPassword);
+              setState(() {
+                _visible = text.isNotEmpty;
+              });
             },
             style: TextStyle(fontSize: 18, color: Colors.black),
             obscureText: !_showPass,
             decoration: InputDecoration(
               prefixIcon: Icon(Icons.lock_outline, color: Color(0xff888888)),
               labelText: "Mật khẩu",
-              // errorText: snapshot.hasError ? snapshot.error : null,
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               labelStyle: TextStyle(color: Color(0xff888888), fontSize: 15),
               errorText: value.errPassword,
               suffixIcon: Visibility(
-                visible: value.password.isNotEmpty,
+                visible: _visible,
                 child: new GestureDetector(
                   onTap: () {
                     setState(() {
+                      print(value.password.isNotEmpty);
                       _showPass = !_showPass;
                     });
                   },
@@ -213,7 +216,7 @@ class _LoginPageState extends State<LoginPageTmp>
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => HomePage()));
           },
-          onError: (e) => value.dispatchFailure(e.code),
+          onError: (e) => value.dispatchFailure(e),
         );
         value.addSubscription(s);
       }
@@ -225,7 +228,7 @@ class _LoginPageState extends State<LoginPageTmp>
   @override
   void onClick(String action) {
     if (ACTION_LOGIN == action) {
-     // onSignInClicked();
+      // onSignInClicked();
     }
   }
 }

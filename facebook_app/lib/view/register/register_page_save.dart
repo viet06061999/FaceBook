@@ -1,5 +1,6 @@
 import 'package:dartin/dartin.dart';
 import 'package:facebook_app/data/model/user.dart';
+import 'package:facebook_app/data/source/local/user_local_data.dart';
 import 'package:facebook_app/helper/constants.dart';
 import 'package:facebook_app/helper/share_prefs.dart';
 import 'package:facebook_app/view/home/home_page.dart';
@@ -77,7 +78,7 @@ class _RegisterPageSave extends State<RegisterPageSave> {
           GestureDetector(
             onTap: () async {
               onContinueClick();
-              inject<SpUtil>().putString(KEY_CURRENT_USER, _user.email);
+              inject<UserLocalDatasource>().setCurrentUser(_user);
             },
             child: new Text(
               "Ok",

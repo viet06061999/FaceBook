@@ -1,19 +1,20 @@
 import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/data/repository/user_repository.dart';
+import 'package:facebook_app/data/source/local/user_local_data.dart';
 import 'package:facebook_app/data/source/remote/fire_base_auth.dart';
-import 'package:facebook_app/helper/constants.dart';
-import 'package:facebook_app/helper/share_prefs.dart';
+import 'package:facebook_app/helper/connect.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rxdart/rxdart.dart';
 
 class UserRepositoryImpl implements UserRepository {
   final FirAuth _firAuth;
-  final SpUtil _spUtil;
+  final UserLocalDatasource _localDatasource;
 
-  UserRepositoryImpl(this._firAuth, this._spUtil);
+  UserRepositoryImpl(this._firAuth, this._localDatasource);
 
   @override
-  void signUp(UserEntity user, Function onSuccess, Function(String code) onError) {
+  void signUp(
+      UserEntity user, Function onSuccess, Function(String code) onError) {
     _firAuth.signUp(user.firstName, user.lastName, user.avatar, user.birthday,
         user.email, user.phone, user.password, user.genre, onSuccess, onError);
   }
@@ -24,17 +25,24 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<User> currentUser() {
-    return _firAuth.curentUser();
+  Future<UserEntity> getCurrentUser() async {
+    bool isNetworkAvailable = await isAvailableInternet();
+    if (isNetworkAvailable) {
+      UserEntity entity = await _firAuth.curentUser();
+      if (entity != null) setCurrentUser(entity);
+      return entity;
+    }
+    return Future.value(_localDatasource.getCurrentUserLocal());
   }
 
   @override
-  Future<String> getCurrentUserLocal() {
-    return _spUtil.getString(KEY_CURRENT_USER);
+  Future<void> setCurrentUser(UserEntity userEntity) {
+    return _localDatasource.setCurrentUser(userEntity);
   }
 
   @override
-  Future<void> setCurrentUser(String email) {
-    return _spUtil.putString(KEY_CURRENT_USER, email);
+  void logOut() {
+    _localDatasource.clearUser();
+    _firAuth.signOut(() {});
   }
 }

@@ -206,7 +206,6 @@ class _LoginPageState extends State<LoginPageTmp>
 
   void onSignInClicked(LoginProvide value) async {
     bool isAvailableConnect = await isAvailableInternet();
-    print(value.errPassword);
     if (isAvailableConnect) {
       if (value.isValidInfo()) {
         final s = value.login().doOnListen(() {}).doOnDone(() {}).listen(

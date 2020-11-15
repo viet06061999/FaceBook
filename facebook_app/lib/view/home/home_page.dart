@@ -101,7 +101,16 @@ class _HomePage extends State<HomePageTmp>
                     : Container(),
                 //demo get list post
             Consumer<HomeProvide>(builder: (context, value, child) {
-              return Text(value.listPost.length.toString());
+              return ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: value.listPost.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      height: 50,
+                      child: Center(child: Text('Entry ${value.listPost[index]}')),
+                    );
+                  }
+              );
             })
               ],
             ),

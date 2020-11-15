@@ -107,7 +107,7 @@ class _HomePage extends State<HomePageTmp>
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
                       height: 50,
-                      child: Center(child: Text('Entry ${value.listPost[index]}')),
+                      child: Center(child: Text('Entry ${value.listPost[index].postId}')),
                     );
                   }
               );

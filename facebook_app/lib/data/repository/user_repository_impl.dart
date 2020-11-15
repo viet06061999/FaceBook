@@ -24,7 +24,7 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<String> currentUser() {
+  Future<User> currentUser() {
     return _firAuth.curentUser();
   }
 

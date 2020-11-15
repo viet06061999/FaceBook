@@ -8,7 +8,7 @@ abstract class UserRepository {
 
   void signUp(UserEntity user, Function onSuccess, Function(String code) onError);
 
-  Future<String> currentUser();
+  Future<User> currentUser();
 
   Future<void> setCurrentUser(String email);
 

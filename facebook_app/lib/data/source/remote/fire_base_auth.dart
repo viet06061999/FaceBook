@@ -44,9 +44,9 @@ class FirAuth {
     });
   }
 
-  Future<String> curentUser() async {
+  Future<User> curentUser() async {
     User user = await _firebaseAuth.currentUser;
-    return user.email;
+    return user;
   }
 
   _createUser(UserEntity user, Function onSuccess) {

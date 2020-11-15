@@ -2,8 +2,6 @@ import 'package:facebook_app/data/model/user.dart';
 import 'package:flutter/material.dart';
 
 class WriteSomethingWidget extends StatelessWidget {
-  @override
-
   final UserEntity user;
   WriteSomethingWidget({
     this.user
@@ -20,10 +18,10 @@ class WriteSomethingWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                CircleAvatar(
-                  radius: 28.0,
-                  backgroundImage: NetworkImage(user.avatar),
-                ),
+                // CircleAvatar(
+                //   radius: 28.0,
+                //   backgroundImage: NetworkImage(user.avatar),
+                // ),
 
                 SizedBox(width: 7.0),
 

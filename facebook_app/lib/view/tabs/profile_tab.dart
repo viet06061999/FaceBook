@@ -1,7 +1,12 @@
+import 'package:facebook_app/data/model/user.dart';
+import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:facebook_app/widgets/separator_widget.dart';
 import 'package:flutter/material.dart';
 
 class ProfileTab extends StatelessWidget {
+  final HomeProvide provide;
+  const ProfileTab(this.provide) ;
+
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +22,7 @@ class ProfileTab extends StatelessWidget {
                 height: 180.0,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage('assets/cover.jpg'),
+                        image: NetworkImage(provide.userEntity.avatar),
                         fit: BoxFit.cover),
                     borderRadius: BorderRadius.circular(10.0)),
               ),
@@ -25,11 +30,11 @@ class ProfileTab extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   CircleAvatar(
-                    backgroundImage: AssetImage('assets/Mike Tyler.jpg'),
+                    backgroundImage: NetworkImage(provide.userEntity.avatar),
                     radius: 70.0,
                   ),
                   SizedBox(height: 20.0),
-                  Text('Mike Tyler',
+                  Text(provide.userEntity.firstName,
                       style: TextStyle(
                           fontSize: 24.0, fontWeight: FontWeight.bold)),
                   SizedBox(height: 20.0),
@@ -76,7 +81,7 @@ class ProfileTab extends StatelessWidget {
                 children: <Widget>[
                   Icon(Icons.home, color: Colors.grey, size: 30.0),
                   SizedBox(width: 10.0),
-                  Text('Lives in New York', style: TextStyle(fontSize: 16.0))
+                  Text(provide.userEntity.lastName, style: TextStyle(fontSize: 16.0))
                 ],
               ),
               SizedBox(height: 15.0),

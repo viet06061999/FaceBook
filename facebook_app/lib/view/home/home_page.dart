@@ -9,13 +9,8 @@ import 'package:facebook_app/view/tabs/profile_tab.dart';
 import 'package:facebook_app/view/tabs/notifications_tab.dart';
 import 'package:facebook_app/view/tabs/menu_tab.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:facebook_app/view/post/create_post.dart';
 import 'package:provider/provider.dart';
 
-// class HomePage extends StatefulWidget {
-//   @override
-//   _HomePageState createState() => _HomePageState();
-// }
 
 class HomePage extends PageProvideNode<HomeProvide> {
   @override
@@ -113,7 +108,7 @@ class _HomePageState extends State<HomePageTmp>
             HomeTab(value, _controller),
             FriendsTab(),
             WatchTab(),
-            ProfileTab(),
+            ProfileTab(value),
             NotificationsTab(),
             MenuTab()
           ]);

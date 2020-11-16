@@ -7,8 +7,8 @@ class WriteSomethingWidget extends StatelessWidget {
     this.user
   });
 
-
   Widget build(BuildContext context) {
+    print("Ten user =====================   ${user.firstName}");
     return Container(
       child: Column(
         children: <Widget>[
@@ -18,10 +18,10 @@ class WriteSomethingWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                // CircleAvatar(
-                //   radius: 28.0,
-                //   backgroundImage: NetworkImage(user.avatar),
-                // ),
+                CircleAvatar(
+                  radius: 28.0,
+                  backgroundImage: NetworkImage(user.avatar),
+                ),
 
                 SizedBox(width: 7.0),
 
@@ -36,7 +36,7 @@ class WriteSomethingWidget extends StatelessWidget {
                     ),
                     borderRadius: BorderRadius.circular(30.0)
                   ),
-                  child: Text('Tạo post...'),
+                  child: Text('Bạn đang nghĩ gì?'),
                 )
               ],
             ),

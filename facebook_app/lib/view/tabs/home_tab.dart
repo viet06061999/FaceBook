@@ -15,11 +15,11 @@ final HomeProvide provide;
 
 @override
   Widget build(BuildContext context) {
-
+  print("Du lieu current user ================= ${provide.userEntity}");
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          WriteSomethingWidget(),
+          WriteSomethingWidget(user: provide.userEntity),
           SeparatorWidget(),
           OnlineWidget(),
           SeparatorWidget(),

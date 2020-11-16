@@ -13,11 +13,6 @@ import 'package:facebook_app/view/post/create_post.dart';
 import 'package:provider/provider.dart';
 
 
-// class HomePage extends StatefulWidget {
-//   @override
-//   _HomePageState createState() => _HomePageState();
-// }
-
 class HomePage extends PageProvideNode<HomeProvide> {
   @override
   Widget buildContent(BuildContext context) {
@@ -101,7 +96,7 @@ class _HomePageState extends State<HomePageTmp> with SingleTickerProviderStateMi
               HomeTab(value),
               FriendsTab(),
               WatchTab(),
-              ProfileTab(),
+              ProfileTab(value),
               NotificationsTab(),
               MenuTab()
             ]

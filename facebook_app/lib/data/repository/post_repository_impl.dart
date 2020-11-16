@@ -16,4 +16,7 @@ class PostRepositoryImpl implements PostRepository {
 
   @override
   Stream<QuerySnapshot> getListPost() => _firPost.getListPost();
+
+  @override
+  Observable<void> updatePost(Post post) => _firPost.updatePost(post);
 }

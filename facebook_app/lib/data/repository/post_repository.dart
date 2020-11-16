@@ -5,5 +5,7 @@ import 'package:rxdart/rxdart.dart';
 abstract class PostRepository {
   Observable<void> createPost(Post post);
 
+  Observable<void> updatePost(Post post);
+
   Stream<QuerySnapshot> getListPost();
 }

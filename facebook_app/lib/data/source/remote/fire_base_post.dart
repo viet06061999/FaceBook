@@ -9,12 +9,21 @@ class FirPost {
 
   Observable<void> createPost(Post post) {
     Future<void> future =
-    _firestore.collection("posts").add(post.postToMap()).then((value) {
+        _firestore.collection("posts").add(post.postToMap()).then((value) {
       value.update({"post_id": value.id});
     });
     return Observable.fromFuture(future);
   }
 
- Stream<QuerySnapshot> getListPost() =>
-   _firestore.collection('posts').snapshots(includeMetadataChanges: true);
+  Observable<void> updatePost(Post post) {
+    Future<void> future = _firestore
+        .collection("posts")
+        .doc(post.postId)
+        .update(post.postToMap());
+
+    return Observable.fromFuture(future);
+  }
+
+  Stream<QuerySnapshot> getListPost() =>
+      _firestore.collection('posts').snapshots(includeMetadataChanges: true);
 }

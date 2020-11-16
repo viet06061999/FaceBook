@@ -9,7 +9,6 @@ import 'package:facebook_app/view/tabs/profile_tab.dart';
 import 'package:facebook_app/view/tabs/notifications_tab.dart';
 import 'package:facebook_app/view/tabs/menu_tab.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:facebook_app/view/post/create_post.dart';
 import 'package:provider/provider.dart';
 
 
@@ -29,14 +28,32 @@ class HomePageTmp extends StatefulWidget {
   State<StatefulWidget> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePageTmp> with SingleTickerProviderStateMixin {
-
+class _HomePageState extends State<HomePageTmp>
+    with SingleTickerProviderStateMixin {
+  HomeProvide _provide;
   TabController _tabController;
+  var _controller = ScrollController();
 
   @override
   void initState() {
     super.initState();
+    _provide = widget.provide;
     _tabController = TabController(vsync: this, length: 6);
+    // set up listener here
+    _controller.addListener(() {
+      if (_controller.position.pixels != 0) {
+        _provide.isTop = false;
+      }
+      if (_controller.position.atEdge) {
+        if (_controller.position.pixels == 0) {
+          // you are at top position
+          _provide.isTop = true;
+        } else {
+          // you are at bottom position
+          print('bottom');
+        }
+      }
+    });
   }
 
   @override
@@ -48,59 +65,53 @@ class _HomePageState extends State<HomePageTmp> with SingleTickerProviderStateMi
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        brightness: Brightness.light,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Text('facebook', style: TextStyle(color: Colors.blueAccent, fontSize: 27.0, fontWeight: FontWeight.bold)),
-              ],
-            ),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
+        appBar: AppBar(
+          brightness: Brightness.light,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Text('facebook',
+                      style: TextStyle(
+                          color: Colors.blueAccent,
+                          fontSize: 27.0,
+                          fontWeight: FontWeight.bold)),
+                ],
+              ),
+              Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
                 Icon(Icons.search, color: Colors.black),
-
                 SizedBox(width: 15.0),
-
                 Icon(FontAwesomeIcons.facebookMessenger, color: Colors.black)
-              ]
-            ),
-          ],
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0.0,
-        bottom: TabBar(
-          indicatorColor: Colors.blueAccent,
-          controller: _tabController,
-          unselectedLabelColor: Colors.grey,
-          labelColor: Colors.blueAccent,
-          tabs: [
-            Tab(icon: Icon(Icons.home, size: 30.0)),
-            Tab(icon: Icon(Icons.people, size: 30.0)),
-            Tab(icon: Icon(Icons.ondemand_video, size: 30.0)),
-            Tab(icon: Icon(Icons.account_circle, size: 30.0)),
-            Tab(icon: Icon(Icons.notifications, size: 30.0)),
-            Tab(icon: Icon(Icons.menu, size: 30.0))
-          ],
-        ),
-      ),
-      body:
-      Consumer<HomeProvide>(builder: (context, value, child){
-        return TabBarView(
+              ]),
+            ],
+          ),
+          backgroundColor: Colors.white,
+          elevation: 0.0,
+          bottom: TabBar(
+            indicatorColor: Colors.blueAccent,
             controller: _tabController,
-            children: [
-              HomeTab(value),
-              FriendsTab(),
-              WatchTab(),
-              ProfileTab(value),
-              NotificationsTab(),
-              MenuTab()
-            ]
-        );
-      }));
+            unselectedLabelColor: Colors.grey,
+            labelColor: Colors.blueAccent,
+            tabs: [
+              Tab(icon: Icon(Icons.home, size: 30.0)),
+              Tab(icon: Icon(Icons.people, size: 30.0)),
+              Tab(icon: Icon(Icons.ondemand_video, size: 30.0)),
+              Tab(icon: Icon(Icons.account_circle, size: 30.0)),
+              Tab(icon: Icon(Icons.notifications, size: 30.0)),
+              Tab(icon: Icon(Icons.menu, size: 30.0))
+            ],
+          ),
+        ),
+        body: Consumer<HomeProvide>(builder: (context, value, child) {
+          return TabBarView(controller: _tabController, children: [
+            HomeTab(value, _controller),
+            FriendsTab(),
+            WatchTab(),
+            ProfileTab(value),
+            NotificationsTab(),
+            MenuTab()
+          ]);
+        }));
   }
 }

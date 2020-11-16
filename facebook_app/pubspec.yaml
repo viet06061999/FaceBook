@@ -68,6 +68,7 @@ flutter:
     - assets/images/fb_favicon.png
     - assets/images/top_background.jpg
     - assets/images/image_signup.png
+    - assets/
   fonts:
     - family: AppIcons
       fonts:

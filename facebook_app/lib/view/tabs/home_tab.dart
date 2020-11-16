@@ -1,4 +1,3 @@
-import 'package:facebook_app/data/model/post.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:facebook_app/widgets/write_something_widget.dart';
 import 'package:facebook_app/widgets/separator_widget.dart';
@@ -8,15 +7,16 @@ import 'package:facebook_app/widgets/online_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomeTab extends StatelessWidget {
+  final HomeProvide provide;
+  final ScrollController _controller;
 
-final HomeProvide provide;
+  const HomeTab(this.provide, this._controller);
 
-  const HomeTab(this.provide) ;
-
-@override
+  @override
   Widget build(BuildContext context) {
-  print("Du lieu current user ================= ${provide.userEntity}");
     return SingleChildScrollView(
+      controller: _controller,
+      physics: ScrollPhysics(),
       child: Column(
         children: <Widget>[
           WriteSomethingWidget(user: provide.userEntity),
@@ -24,12 +24,13 @@ final HomeProvide provide;
           OnlineWidget(),
           SeparatorWidget(),
           StoriesWidget(),
-            for(Post post in provide.listPost  ) Column(
-              children: <Widget>[
-                SeparatorWidget(),
-                PostWidget(post: post),
-              ],
-            ),
+          ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: provide.listPost.length,
+              itemBuilder: (context, index) {
+                return PostWidget(post: provide.listPost[index]);
+              }),
           SeparatorWidget(),
         ],
       ),

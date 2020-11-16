@@ -57,9 +57,7 @@ class HomeProvide extends BaseProvide {
   }
 
   void _getListPost() => _repository.getListPost().listen((event) {
-        print('${event.docChanges.length} ${event.docChanges}');
         event.docChanges.forEach((element) {
-          print(element.type);
           if (element.type == DocumentChangeType.added) {
             _listPost.insert(0, Post.fromMap(element.doc.data()));
           }

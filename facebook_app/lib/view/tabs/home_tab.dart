@@ -8,15 +8,14 @@ import 'package:facebook_app/widgets/online_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomeTab extends StatelessWidget {
+  final HomeProvide provide;
 
-final HomeProvide provide;
+  const HomeTab(this.provide);
 
-  const HomeTab(this.provide) ;
-
-@override
+  @override
   Widget build(BuildContext context) {
-
     return SingleChildScrollView(
+      physics: ScrollPhysics(),
       child: Column(
         children: <Widget>[
           WriteSomethingWidget(),
@@ -24,12 +23,13 @@ final HomeProvide provide;
           OnlineWidget(),
           SeparatorWidget(),
           StoriesWidget(),
-            for(Post post in provide.listPost  ) Column(
-              children: <Widget>[
-                SeparatorWidget(),
-                PostWidget(post: post),
-              ],
-            ),
+          ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: provide.listPost.length,
+              itemBuilder: (context, index) {
+                return PostWidget(post: provide.listPost[index]);
+              }),
           SeparatorWidget(),
         ],
       ),

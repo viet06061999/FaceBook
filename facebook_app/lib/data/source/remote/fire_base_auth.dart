@@ -47,12 +47,12 @@ class FirAuth {
 
   Future<UserEntity> curentUser() async {
     User user = await _firebaseAuth.currentUser;
-    print('vao day roi');
     UserEntity userEntity;
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     if (user != null) {
       await users.doc(user.uid).get().then((value) {
         userEntity = UserEntity.fromJson(value.data());
+        print(userEntity);
       }).catchError((onError){
         print(onError);
       });

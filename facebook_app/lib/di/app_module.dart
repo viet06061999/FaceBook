@@ -10,6 +10,7 @@ import 'package:facebook_app/data/source/local/user_local_data.dart';
 import 'package:facebook_app/data/source/remote/fire_base_auth.dart';
 import 'package:facebook_app/data/source/remote/fire_base_post.dart';
 import 'package:facebook_app/data/source/remote/fire_base_storage.dart';
+import 'package:facebook_app/data/source/remote/fire_base_user_storage.dart';
 import 'package:facebook_app/helper/share_prefs.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:facebook_app/viewmodel/login_view_model.dart';
@@ -32,7 +33,7 @@ final viewModelModule = Module([
 final repoModule = Module([
   factory<UserRepository>(({params}) => UserRepositoryImpl(get(), get())),
   factory<PostRepository>(({params}) => PostRepositoryImpl(get(), get())),
-  factory<PhotoRepository>(({params}) => PhotoRepositoryImpl(get())),
+  factory<PhotoRepository>(({params}) => PhotoRepositoryImpl(get(), get())),
 ]);
 
 //remote
@@ -40,6 +41,7 @@ final remoteModule = Module([
   factory<FirAuth>(({params}) => FirAuth(get())),
   factory<FirPost>(({params}) => FirPost(get())),
   factory<FirUploadPhoto>(({params}) => FirUploadPhoto(get())),
+  factory<FirUserUpload>(({params}) => FirUserUpload(get())),
 ]);
 
 final firebase = Module([

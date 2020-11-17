@@ -1,33 +1,32 @@
 import 'package:facebook_app/data/model/user.dart';
+import 'package:facebook_app/viewmodel/home_view_model.dart';
+import 'package:facebook_app/widgets/create_post.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class WriteSomethingWidget extends StatelessWidget {
-  final UserEntity user;
+  final HomeProvide provide;
   WriteSomethingWidget({
-    this.user
+    this.provide
   });
 
   Widget build(BuildContext context) {
-    print("Ten user =====================   ${user.firstName}");
     return Container(
       child: Column(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            padding: EdgeInsets.fromLTRB(10, 5, 10, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 CircleAvatar(
                   radius: 28.0,
-                  backgroundImage: NetworkImage(user.avatar),
+                  backgroundImage: NetworkImage(provide.userEntity.avatar),
                 ),
-
-                SizedBox(width: 7.0),
 
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                  height: 70.0,
                   width: MediaQuery.of(context).size.width/1.5,
                   decoration: BoxDecoration(
                     border: Border.all(
@@ -36,7 +35,16 @@ class WriteSomethingWidget extends StatelessWidget {
                     ),
                     borderRadius: BorderRadius.circular(30.0)
                   ),
-                  child: Text('Bạn đang nghĩ gì?'),
+                  child: GestureDetector(
+                    onTap: (){
+                      showMaterialModalBottomSheet(
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => CreatePostWidget(provide: provide,),
+                      );
+                      },
+                      child:Text('Bạn đang nghĩ gì?')
+                  ),
                 )
               ],
             ),

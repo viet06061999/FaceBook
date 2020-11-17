@@ -19,7 +19,7 @@ class HomeTab extends StatelessWidget {
       physics: ScrollPhysics(),
       child: Column(
         children: <Widget>[
-          WriteSomethingWidget(user: provide.userEntity),
+          WriteSomethingWidget(provide: provide,),
           SeparatorWidget(),
           OnlineWidget(),
           SeparatorWidget(),
@@ -31,7 +31,6 @@ class HomeTab extends StatelessWidget {
               itemBuilder: (context, index) {
                 return PostWidget(post: provide.listPost[index]);
               }),
-          SeparatorWidget(),
         ],
       ),
     );

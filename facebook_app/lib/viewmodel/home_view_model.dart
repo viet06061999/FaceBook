@@ -71,9 +71,6 @@ class HomeProvide extends BaseProvide {
 
   HomeProvide(this._repository, this._photoRepository, this._userRepository) {
     _getListPost();
-    _userRepository.getCurrentUser().then((value) {
-      userEntity = value;
-    });
   }
 
   Observable<void> _createPost(Post post) => _repository
@@ -118,10 +115,11 @@ class HomeProvide extends BaseProvide {
     }
   }
 
-  void _getListPost() => _repository.getListPost().listen((event) {
+  void _getListPost() => _repository.getListPost().listen((event) async {
+        userEntity = await _userRepository.getCurrentUser();
         event.docChanges.forEach((element) {
           Post postRoot = Post.fromMap(element.doc.data());
-          postRoot.isLiked = postRoot.likes.contains(userEntity);
+          postRoot.isLiked = _checkLiked(postRoot.likes);
           if (element.type == DocumentChangeType.added) {
             _insertPost(postRoot);
           } else if (element.type == DocumentChangeType.modified) {
@@ -153,22 +151,25 @@ class HomeProvide extends BaseProvide {
         }
       }, onError: (e) => {print("xu ly fail o day")});
 
-  void updateLike(Post post){
-    if(post.likes.contains(userEntity)){
+  void updateLike(Post post) {
+    print(post);
+    print(post.likes);
+    if (post.isLiked) {
       post.likes.removeWhere((element) => element.id == userEntity.id);
-    }else{
+    } else {
       post.likes.add(userEntity);
     }
+    post.isLiked = !post.isLiked;
     _updatePost(post);
   }
 
-  void addComment(Post post, String content){
+  void addComment(Post post, String content) {
     Comment comment = Comment(userEntity, content);
     post.comments.add(comment);
     _updatePost(post);
   }
 
-  void _updatePost(Post post){
+  void _updatePost(Post post) {
     _repository.updatePost(post);
   }
 
@@ -178,5 +179,10 @@ class HomeProvide extends BaseProvide {
     } else {
       _tmpPosts.add(post);
     }
+  }
+
+  bool _checkLiked(List<UserEntity> users) {
+    if (users.length == 0) return false;
+    return users.firstWhere((element) => element.id == userEntity.id, orElse: ()=> null) != null;
   }
 }

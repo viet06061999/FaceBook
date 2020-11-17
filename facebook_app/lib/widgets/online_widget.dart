@@ -11,7 +11,7 @@ class OnlineWidget extends StatelessWidget {
         children: <Widget>[
           SizedBox(width: 15.0),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 2.0),
+            padding: EdgeInsets.fromLTRB(10, 5, 10, 0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(40.0),
               border: Border.all(

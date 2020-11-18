@@ -5,7 +5,7 @@ import 'package:facebook_app/ultils/app_icons.dart';
 import 'package:facebook_app/view/register/register_page_save.dart';
 import 'package:facebook_app/view/register/register_page_step_6.dart';
 import 'package:facebook_app/view/register/register_page_success.dart';
-import 'package:facebook_app/viewmodel/sign_up_view_molder.dart';
+import 'package:facebook_app/viewmodel/sign_up_view_moldel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 

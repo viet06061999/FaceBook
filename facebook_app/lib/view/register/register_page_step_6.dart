@@ -1,7 +1,7 @@
 import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/view/register/register_page_create.dart';
 import 'package:facebook_app/view/register/register_page_step_7.dart';
-import 'package:facebook_app/viewmodel/sign_up_view_molder.dart';
+import 'package:facebook_app/viewmodel/sign_up_view_moldel.dart';
 import 'package:flutter/material.dart';
 import 'package:facebook_app/ultils/string_ext.dart';
 

@@ -12,11 +12,11 @@ class PostRepositoryImpl implements PostRepository {
   PostRepositoryImpl(this._firPost, this._spUtil);
 
   @override
-  Observable<void> createPost(Post post) => _firPost.createPost(post);
+  Observable<void> createPost(Post post, String userId) => _firPost.createPost(post, userId);
 
   @override
   Stream<QuerySnapshot> getListPost() => _firPost.getListPost();
 
   @override
-  Observable<void> updatePost(Post post) => _firPost.updatePost(post);
+  Observable<void> updatePost(Post post, String userId) => _firPost.updatePost(post, userId);
 }

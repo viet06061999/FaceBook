@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartin/dartin.dart';
+import 'package:facebook_app/data/repository/friend_repository.dart';
+import 'package:facebook_app/data/repository/friend_repository_impl.dart';
 import 'package:facebook_app/data/repository/photo_repository.dart';
 import 'package:facebook_app/data/repository/photo_repository_impl.dart';
 import 'package:facebook_app/data/repository/post_repository.dart';
@@ -8,6 +10,7 @@ import 'package:facebook_app/data/repository/user_repository.dart';
 import 'package:facebook_app/data/repository/user_repository_impl.dart';
 import 'package:facebook_app/data/source/local/user_local_data.dart';
 import 'package:facebook_app/data/source/remote/fire_base_auth.dart';
+import 'package:facebook_app/data/source/remote/fire_base_friend.dart';
 import 'package:facebook_app/data/source/remote/fire_base_post.dart';
 import 'package:facebook_app/data/source/remote/fire_base_storage.dart';
 import 'package:facebook_app/data/source/remote/fire_base_user_storage.dart';
@@ -34,6 +37,7 @@ final repoModule = Module([
   factory<UserRepository>(({params}) => UserRepositoryImpl(get(), get())),
   factory<PostRepository>(({params}) => PostRepositoryImpl(get(), get())),
   factory<PhotoRepository>(({params}) => PhotoRepositoryImpl(get(), get())),
+  factory<FriendRepository>(({params}) => FriendRepositoryImpl(get())),
 ]);
 
 //remote
@@ -42,6 +46,7 @@ final remoteModule = Module([
   factory<FirPost>(({params}) => FirPost(get())),
   factory<FirUploadPhoto>(({params}) => FirUploadPhoto(get())),
   factory<FirUserUpload>(({params}) => FirUserUpload(get())),
+  factory<FirFriend>(({params}) => FirFriend(get())),
 ]);
 
 final firebase = Module([

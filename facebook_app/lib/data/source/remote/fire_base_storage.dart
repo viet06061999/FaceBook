@@ -1,39 +1,53 @@
 import 'dart:io';
 import 'dart:math';
-
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart' as path;
 
 class FirUploadPhoto {
   final FirebaseStorage _firebaseStorage;
 
   FirUploadPhoto(this._firebaseStorage);
 
-  Future<void> uploadFile(String filePath, Function(String urlPath) onSuccess, Function onError) async {
+  Future<void> uploadFile(String filePath, Function(String urlPath) onSuccess,
+      Function onError, Function(double progress) onProgress) async {
     File file = File(filePath);
-    Reference storageReference = _firebaseStorage
-        .ref('images/${path.basename(filePath)}');
+    Reference storageReference =
+        _firebaseStorage.ref('images/${Random.secure().nextDouble()}.jpg');
     try {
-      await storageReference.putFile(file);
+      UploadTask uploadTask = storageReference.putFile(file);
+      uploadTask.snapshotEvents.listen((event) {
+        print('progress ${event.bytesTransferred.toDouble()}');
+        onProgress(
+            event.bytesTransferred.toDouble() / event.totalBytes.toDouble());
+      });
+      uploadTask.whenComplete(() => {
+            storageReference.getDownloadURL().then((fileURL) {
+              onSuccess(fileURL);
+            })
+          });
     } on FirebaseException catch (e) {
       onError();
     }
-    storageReference.getDownloadURL().then((fileURL) {
-      onSuccess(fileURL);
-    });
   }
 
-  Future<void> uploadVideo(String filePath, Function(String urlPath) onSuccess, Function onError) async {
+  uploadVideo(String filePath, Function(String urlPath) onSuccess,
+      Function onError, Function(double progress) onProgress) {
     File file = File(filePath);
-    Reference storageReference = _firebaseStorage
-        .ref('videos/${Random.secure().nextDouble()}.mp4');
+    Reference storageReference =
+        _firebaseStorage.ref('videos/${Random.secure().nextDouble()}.mp4');
     try {
-      await storageReference.putFile(file);
+      UploadTask uploadTask = storageReference.putFile(file);
+      uploadTask.snapshotEvents.listen((event) {
+        print('progress ${event.bytesTransferred.toDouble()}');
+        onProgress(
+            event.bytesTransferred.toDouble() / event.totalBytes.toDouble());
+      });
+      uploadTask.whenComplete(() => {
+            storageReference.getDownloadURL().then((fileURL) {
+              onSuccess(fileURL);
+            })
+          });
     } on FirebaseException catch (e) {
       onError();
     }
-    storageReference.getDownloadURL().then((fileURL) {
-      onSuccess(fileURL);
-    });
   }
 }

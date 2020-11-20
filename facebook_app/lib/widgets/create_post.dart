@@ -8,9 +8,11 @@ class CreatePostWidget extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return   _CreatePostState(this.provide);
+    return _CreatePostState(this.provide);
   }
-}class _CreatePostState extends State<CreatePostWidget> {
+}
+
+class _CreatePostState extends State<CreatePostWidget> {
   String content = "";
   final HomeProvide provide;
 
@@ -43,23 +45,21 @@ class CreatePostWidget extends StatefulWidget {
                     SizedBox(width: 7.0),
                     Text(
                         '${provide.userEntity.firstName} ${provide.userEntity.lastName}',
-
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 17.0)),
                     SizedBox(height: 5.0),
                   ],
                 ),
                 TextButton(
-                  onPressed: (){
-                    provide.uploadPost(content);
-                    Navigator.pop(context);
+                    onPressed: () {
+                      provide.uploadPost(content,);
+                      Navigator.pop(context);
                     },
                     child: Text(
                       'ĐĂNG',
                       style: TextStyle(
                           fontSize: 20,
-                          color: content.isEmpty? Colors.grey : Colors.blue
-                      ),
+                          color: content.isEmpty ? Colors.grey : Colors.blue),
                     )),
               ],
             ),
@@ -70,7 +70,7 @@ class CreatePostWidget extends StatefulWidget {
             minLines: 4,
             textInputAction: TextInputAction.next,
             style: TextStyle(fontSize: 18, color: Colors.black),
-            onChanged: (text){
+            onChanged: (text) {
               setState(() {
                 content = text;
               });
@@ -84,5 +84,4 @@ class CreatePostWidget extends StatefulWidget {
       ),
     );
   }
-
 }

@@ -34,6 +34,9 @@ class FirAuth {
     return _firebaseAuth
         .createUserWithEmailAndPassword(email: email, password: password)
         .then((value) {
+      FirebaseFirestore.instance.collection("images").doc(value.user.uid).set({
+        'my_images':[]
+      });
       _createUser(
           UserEntity(value.user.uid, firstName, lastName, '', birthday, email,
               phone, password, genre),

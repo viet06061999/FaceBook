@@ -8,17 +8,26 @@ class FirUserUpload {
   FirUserUpload(this._firestore);
 
   Observable<void> uploadImage(String idOwner, String url) {
-    Future<void> future = _firestore
-        .collection("images")
-        .add({"id_owner": idOwner, "image_url": url});
+    Future<void> future = _firestore.collection("images").doc(idOwner).update({
+      'my_images': FieldValue.arrayUnion([url])
+    }).catchError((onError) => {print(onError)});
     return Observable.fromFuture(future);
   }
 
   Observable<void> uploadVideo(String idOwner, Video video) {
-    Future<void> future = _firestore.collection("videos").add({
-      "id_owner": idOwner,
-      "video": video.toMap()
+    Future<void> future = _firestore.collection("videos").doc(idOwner).update({
+      'my_videos': FieldValue.arrayUnion([video.toMap()])
     });
     return Observable.fromFuture(future);
+  }
+
+  Observable<DocumentSnapshot> getImagesByUserId(String userId) {
+    return Observable.fromFuture(
+        _firestore.collection("images").doc(userId).get());
+  }
+
+  Observable<DocumentSnapshot> getVideos(String userId) {
+    return Observable.fromFuture(
+        _firestore.collection("videos").doc(userId).get());
   }
 }

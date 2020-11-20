@@ -2,7 +2,7 @@ class UserEntity {
   String id = '-1';
   String firstName = '';
   String lastName = '';
-  String avatar = '';
+  String avatar = " ";
   String email = '';
   String phone = '';
   String birthday = '';

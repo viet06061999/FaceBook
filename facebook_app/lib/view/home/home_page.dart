@@ -11,6 +11,7 @@ import 'package:facebook_app/view/tabs/notifications_tab.dart';
 import 'package:facebook_app/view/tabs/menu_tab.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:facebook_app/chat.dart';
 
 
 class HomePage extends PageProvideNode<HomeProvide> {
@@ -82,7 +83,15 @@ class _HomePageState extends State<HomePageTmp>
               Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
                 Icon(Icons.search, color: Colors.black),
                 SizedBox(width: 15.0),
-                Icon(FontAwesomeIcons.facebookMessenger, color: Colors.black)
+                IconButton(
+                    icon: Icon(FontAwesomeIcons.facebookMessenger),
+                    color: Colors.black,
+                    onPressed: (){
+                    Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => App()),
+                    );
+                    },
+                ), // xu ly tai day
               ]),
             ],
           ),

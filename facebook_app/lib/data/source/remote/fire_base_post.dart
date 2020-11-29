@@ -40,4 +40,11 @@ class FirPost {
   Stream<QuerySnapshot> getPostsWithVideo() =>
       _firestore.collection('posts').where('videos',
           isNotEqualTo: []).snapshots(includeMetadataChanges: true);
+
+  Stream<QuerySnapshot> getMyPost(String id){
+    return _firestore
+        .collection('posts')
+        .where('id', isEqualTo: id)
+        .snapshots(includeMetadataChanges: true);
+  }
 }

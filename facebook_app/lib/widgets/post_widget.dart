@@ -1,4 +1,5 @@
 import 'package:facebook_app/data/model/post.dart';
+import 'package:facebook_app/data/model/video.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -46,6 +47,7 @@ class PostWidget extends StatelessWidget {
           SizedBox(height: 20.0),
           Text(post.described, style: TextStyle(fontSize: 15.0)),
           SizedBox(height: 10.0),
+          // Image(image: null,),
           Container(
             padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
             child: Row(

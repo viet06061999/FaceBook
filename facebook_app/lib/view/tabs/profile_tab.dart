@@ -1,12 +1,17 @@
 import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
+import 'package:facebook_app/viewmodel/profile_view_model.dart';
+import 'package:facebook_app/widgets/create_post.dart';
+import 'package:facebook_app/widgets/post_widget.dart';
 import 'package:facebook_app/widgets/separator_widget.dart';
+import 'package:facebook_app/widgets/user_post_widget.dart';
+import 'package:facebook_app/widgets/write_something_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ProfileTab extends StatelessWidget {
   final HomeProvide provide;
-  const ProfileTab(this.provide) ;
-
+  const ProfileTab(this.provide);
 
   @override
   Widget build(BuildContext context) {
@@ -14,27 +19,282 @@ class ProfileTab extends StatelessWidget {
         child: Column(
       children: <Widget>[
         Container(
-          height: 360.0,
+          height: 400.0,
           child: Stack(
             children: <Widget>[
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
-                height: 180.0,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: NetworkImage(provide.userEntity.avatar),
-                        fit: BoxFit.cover),
-                    borderRadius: BorderRadius.circular(10.0)),
+              Padding(
+                padding: EdgeInsets.only(top: 15.0, left: 10, right: 10),
+                child: new Stack(fit: StackFit.loose, children: <Widget>[
+                  new Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      new GestureDetector(
+                        onTap: () {
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (builder) {
+                                return new Container(
+                                  // height: 350.0,
+                                  color: Color(0xFF737373),
+                                  child: new Container(
+                                      decoration: new BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: new BorderRadius.only(
+                                              topLeft:
+                                                  const Radius.circular(10.0),
+                                              topRight:
+                                                  const Radius.circular(10.0))),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          _createTile(
+                                              context,
+                                              'Xem ảnh bìa',
+                                              Icon(
+                                                Icons.image,
+                                                color: Colors.black,
+                                              ),
+                                              _action1),
+                                          _createTile(
+                                              context,
+                                              'Tải ảnh lên',
+                                              Icon(
+                                                Icons.upload_sharp,
+                                                color: Colors.black,
+                                              ),
+                                              _action2),
+                                        ],
+                                      )),
+                                );
+                              });
+                        },
+                        child: Container(
+                            width: MediaQuery.of(context).size.width - 30,
+                            height: 200.0,
+                            decoration: new BoxDecoration(
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                        provide.userEntity.coverImage),
+                                    fit: BoxFit.cover),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10.0),
+                                    topRight: Radius.circular(10.0)))),
+                      )
+                    ],
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(top: 150.0, left: 320.0),
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          new GestureDetector(
+                              onTap: () {
+                                showModalBottomSheet(
+                                    context: context,
+                                    builder: (builder) {
+                                      return new Container(
+                                        // height: 350.0,
+                                        color: Color(0xFF737373),
+                                        child: new Container(
+                                            decoration: new BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: new BorderRadius
+                                                        .only(
+                                                    topLeft:
+                                                        const Radius.circular(
+                                                            10.0),
+                                                    topRight:
+                                                        const Radius.circular(
+                                                            10.0))),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: <Widget>[
+                                                _createTile(
+                                                    context,
+                                                    'Xem ảnh bìa',
+                                                    Icon(
+                                                      Icons.image,
+                                                      color: Colors.black,
+                                                    ),
+                                                    _action1),
+                                                _createTile(
+                                                    context,
+                                                    'Tải ảnh lên',
+                                                    Icon(
+                                                      Icons.upload_sharp,
+                                                      color: Colors.black,
+                                                    ),
+                                                    _action2),
+                                              ],
+                                            )),
+                                      );
+                                    });
+                              },
+                              child: CircleAvatar(
+                                backgroundColor: Colors.grey[300],
+                                radius: 21.0,
+                                child: new Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.black,
+                                  size: 20.0,
+                                ),
+                              ))
+                        ],
+                      )),
+                ]),
               ),
+              // Container(
+              //   margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+              //   height: 200.0,
+              //   decoration: BoxDecoration(
+              //       image: DecorationImage(
+              //           image: NetworkImage(provide.userEntity.coverImage),
+              //           fit: BoxFit.cover),
+              //       borderRadius: BorderRadius.only(
+              //           topLeft: Radius.circular(10.0),
+              //           topRight: Radius.circular(10.0))),
+              // ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(provide.userEntity.avatar),
-                    radius: 70.0,
+                  // CircleAvatar(
+                  //   backgroundImage: NetworkImage(provide.userEntity.avatar),
+                  //   radius: 70.0,
+                  // ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20.0),
+                    child: new Stack(fit: StackFit.loose, children: <Widget>[
+                      new Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          new GestureDetector(
+                            onTap: () {
+                              showModalBottomSheet(
+                                  context: context,
+                                  builder: (builder) {
+                                    return new Container(
+                                      // height: 350.0,
+                                      color: Color(0xFF737373),
+                                      child: new Container(
+                                          decoration: new BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  new BorderRadius.only(
+                                                      topLeft:
+                                                          const Radius.circular(
+                                                              10.0),
+                                                      topRight:
+                                                          const Radius.circular(
+                                                              10.0))),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              _createTile(
+                                                  context,
+                                                  'Xem ảnh đại diện',
+                                                  Icon(
+                                                    Icons.image,
+                                                    color: Colors.black,
+                                                  ),
+                                                  _action1),
+                                              _createTile(
+                                                  context,
+                                                  'Chọn ảnh đại diện',
+                                                  Icon(
+                                                    Icons.upload_sharp,
+                                                    color: Colors.black,
+                                                  ),
+                                                  _action2),
+                                            ],
+                                          )),
+                                    );
+                                  });
+                            },
+                            child: Container(
+                                width: 200.0,
+                                height: 200.0,
+                                margin: EdgeInsets.only(top: 50.0),
+                                decoration: new BoxDecoration(
+                                  border: Border.all(
+                                      width: 5,
+                                      color: Theme.of(context)
+                                          .scaffoldBackgroundColor),
+                                  shape: BoxShape.circle,
+                                  image: new DecorationImage(
+                                    image:
+                                        NetworkImage(provide.userEntity.avatar),
+                                    fit: BoxFit.cover,
+                                  ),
+                                )),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                          padding: EdgeInsets.only(top: 200.0, left: 140.0),
+                          child: new Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              new GestureDetector(
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                        context: context,
+                                        builder: (builder) {
+                                          return new Container(
+                                            // height: 350.0,
+                                            color: Color(0xFF737373),
+                                            child: new Container(
+                                                decoration: new BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius: new BorderRadius
+                                                            .only(
+                                                        topLeft: const Radius
+                                                            .circular(10.0),
+                                                        topRight: const Radius
+                                                            .circular(10.0))),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: <Widget>[
+                                                    _createTile(
+                                                        context,
+                                                        'Xem ảnh đại diện',
+                                                        Icon(
+                                                          Icons.image,
+                                                          color: Colors.black,
+                                                        ),
+                                                        _action1),
+                                                    _createTile(
+                                                        context,
+                                                        'Chọn ảnh đại diện',
+                                                        Icon(
+                                                          Icons.upload_sharp,
+                                                          color: Colors.black,
+                                                        ),
+                                                        _action2),
+                                                  ],
+                                                )),
+                                          );
+                                        });
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.grey[300],
+                                    radius: 21.0,
+                                    child: new Icon(
+                                      Icons.camera_alt,
+                                      color: Colors.black,
+                                      size: 20.0,
+                                    ),
+                                  )),
+                            ],
+                          )),
+                    ]),
                   ),
                   SizedBox(height: 20.0),
-                  Text(provide.userEntity.firstName,
+                  Text(
+                      provide.userEntity.firstName +
+                          provide.userEntity.lastName,
                       style: TextStyle(
                           fontSize: 24.0, fontWeight: FontWeight.bold)),
                   SizedBox(height: 20.0),
@@ -48,7 +308,7 @@ class ProfileTab extends StatelessWidget {
                             color: Colors.blue,
                             borderRadius: BorderRadius.circular(5.0)),
                         child: Center(
-                            child: Text('Add to Story',
+                            child: Text('Thêm vào tin',
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -81,7 +341,10 @@ class ProfileTab extends StatelessWidget {
                 children: <Widget>[
                   Icon(Icons.home, color: Colors.grey, size: 30.0),
                   SizedBox(width: 10.0),
-                  Text(provide.userEntity.lastName, style: TextStyle(fontSize: 16.0))
+                  Text("Sống tại ", style: TextStyle(fontSize: 16.0)),
+                  Text(provide.userEntity.city,
+                      style: TextStyle(
+                          fontSize: 16.0, fontWeight: FontWeight.bold))
                 ],
               ),
               SizedBox(height: 15.0),
@@ -89,7 +352,10 @@ class ProfileTab extends StatelessWidget {
                 children: <Widget>[
                   Icon(Icons.location_on, color: Colors.grey, size: 30.0),
                   SizedBox(width: 10.0),
-                  Text('From New York', style: TextStyle(fontSize: 16.0))
+                  Text("Đến từ ", style: TextStyle(fontSize: 16.0)),
+                  Text(provide.userEntity.city,
+                      style: TextStyle(
+                          fontSize: 16.0, fontWeight: FontWeight.bold))
                 ],
               ),
               SizedBox(height: 15.0),
@@ -97,7 +363,7 @@ class ProfileTab extends StatelessWidget {
                 children: <Widget>[
                   Icon(Icons.more_horiz, color: Colors.grey, size: 30.0),
                   SizedBox(width: 10.0),
-                  Text('See your About Info', style: TextStyle(fontSize: 16.0))
+                  Text('Xem thêm thông tin', style: TextStyle(fontSize: 16.0))
                 ],
               ),
               SizedBox(height: 15.0),
@@ -108,7 +374,7 @@ class ProfileTab extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5.0),
                 ),
                 child: Center(
-                    child: Text('Edit Public Details',
+                    child: Text('Chỉnh sửa trang cá nhân',
                         style: TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,
@@ -129,16 +395,16 @@ class ProfileTab extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text('Friends',
+                      Text('Bạn bè',
                           style: TextStyle(
                               fontSize: 22.0, fontWeight: FontWeight.bold)),
                       SizedBox(height: 6.0),
-                      Text('536 friends',
+                      Text('69 người bạn',
                           style: TextStyle(
                               fontSize: 16.0, color: Colors.grey[800])),
                     ],
                   ),
-                  Text('Find Friends',
+                  Text('Tìm bạn bè',
                       style: TextStyle(fontSize: 16.0, color: Colors.blue)),
                 ],
               ),
@@ -270,7 +536,7 @@ class ProfileTab extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5.0),
                 ),
                 child: Center(
-                    child: Text('See All Friends',
+                    child: Text('Xem tất cả bạn bè',
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -279,8 +545,43 @@ class ProfileTab extends StatelessWidget {
             ],
           ),
         ),
-        SeparatorWidget()
+        SeparatorWidget(),
+        WriteSomethingWidget(
+          provide: provide,
+        ),
+        ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: provide.userListPost.length,
+            itemBuilder: (context, index) {
+              return PostWidget(
+                  post: provide.userListPost[index], provide: provide);
+            }),
       ],
     ));
+  }
+
+  ListTile _createTile(
+      BuildContext context, String name, Icon icon, Function action) {
+    return ListTile(
+      leading: icon,
+      title: Text(name),
+      onTap: () {
+        Navigator.pop(context);
+        action();
+      },
+    );
+  }
+
+  _action1() {
+    print('action 1');
+  }
+
+  _action2() {
+    print('action 2');
+  }
+
+  _action3() {
+    print('action 3');
   }
 }

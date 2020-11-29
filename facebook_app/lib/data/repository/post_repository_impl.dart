@@ -18,5 +18,8 @@ class PostRepositoryImpl implements PostRepository {
   Stream<QuerySnapshot> getListPost() => _firPost.getListPost();
 
   @override
+  Stream<QuerySnapshot> getUserListPost(String userId) => _firPost.getUserListPost(userId);
+
+  @override
   Observable<void> updatePost(Post post, String userId) => _firPost.updatePost(post, userId);
 }

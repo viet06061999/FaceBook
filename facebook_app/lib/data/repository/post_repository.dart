@@ -8,4 +8,6 @@ abstract class PostRepository {
   Observable<void> updatePost(Post post, String userId);
 
   Stream<QuerySnapshot> getListPost();
+
+  Stream<QuerySnapshot> getUserListPost(String userId);
 }

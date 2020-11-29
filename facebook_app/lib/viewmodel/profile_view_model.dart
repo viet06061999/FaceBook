@@ -9,7 +9,7 @@ import 'package:facebook_app/data/repository/post_repository.dart';
 import 'package:facebook_app/data/repository/user_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
-class HomeProvide extends BaseProvide {
+class ProfileProvide extends BaseProvide {
   final PostRepository _repository;
   final PhotoRepository _photoRepository;
   final UserRepository _userRepository;
@@ -35,10 +35,6 @@ class HomeProvide extends BaseProvide {
     notifyListeners();
   }
 
-  List<Post> _listPost = [];
-
-  List<Post> get listPost => _listPost;
-
   List<Post> _userListPost = [];
 
   List<Post> get userListPost => _userListPost;
@@ -52,7 +48,6 @@ class HomeProvide extends BaseProvide {
   set isTop(bool isTop) {
     _isTop = isTop;
     if (_isTop) {
-      _listPost.insertAll(0, _tmpPosts);
       _userListPost.insertAll(0, _tmpPosts);
       _tmpPosts.clear();
     }
@@ -93,12 +88,8 @@ class HomeProvide extends BaseProvide {
     notifyListeners();
   }
 
-  HomeProvide(this._repository, this._photoRepository, this._userRepository) {
-    _userRepository.getCurrentUser().then((value) {
-      userEntity = value;
-      _getListPost();
-      getUserListPost(userEntity.id);
-    });
+  ProfileProvide(this._repository, this._photoRepository, this._userRepository) {
+    _getUserListPost(userEntity.id);
   }
 
   Observable<void> _createPost(Post post) => _repository
@@ -150,86 +141,45 @@ class HomeProvide extends BaseProvide {
     }
   }
 
-  _getListPost() => _repository.getListPost().listen((event) async {
-        event.docChanges.forEach((element) async {
-          DocumentReference documentReference = element.doc.data()['owner'];
-          documentReference.get().then((value) {
-            UserEntity userPost = UserEntity.fromJson(value.data());
-            Post postRoot = Post.fromMap(element.doc.data(), userPost);
-            postRoot.isLiked = _checkLiked(postRoot.likes);
-            if (element.type == DocumentChangeType.added) {
-              _insertPost(postRoot);
-            } else if (element.type == DocumentChangeType.modified) {
-              Post post = postRoot;
-              int position = -1;
-              position = _listPost.indexWhere(
+  _getUserListPost(String userId) => _repository.getUserListPost(userId).listen((event) async {
+    userEntity = await _userRepository.getCurrentUser();
+    event.docChanges.forEach((element) async {
+      DocumentReference documentReference = element.doc.data()['owner'];
+      documentReference.get().then((value) {
+        UserEntity userPost = UserEntity.fromJson(value.data());
+        Post postRoot = Post.fromMap(element.doc.data(), userPost);
+        postRoot.isLiked = _checkLiked(postRoot.likes);
+        if (element.type == DocumentChangeType.added) {
+          _insertPost(postRoot);
+        } else if (element.type == DocumentChangeType.modified) {
+          Post post = postRoot;
+          int position = -1;
+          position = _userListPost.indexWhere(
                 (element) =>
-                    (element.postId == post.postId) || element.postId == '-1',
-              );
-              int positionTmp = -1;
-              positionTmp = _tmpPosts.indexWhere(
+            (element.postId == post.postId) || element.postId == '-1',
+          );
+          int positionTmp = -1;
+          positionTmp = _tmpPosts.indexWhere(
                 (element) =>
-                    (element.postId == post.postId) || element.postId == '-1',
-              );
+            (element.postId == post.postId) || element.postId == '-1',
+          );
 
-              if (position != -1)
-                _listPost[position] = post;
-              else if (positionTmp != -1)
-                _tmpPosts[positionTmp] = post;
-              else
-                _insertPost(postRoot);
-            } else if (element.type == DocumentChangeType.removed) {
-              Post post = postRoot;
-              _listPost.removeWhere((element) => element.postId == post.postId);
-            }
-          });
-          if (event.docChanges.length != 0) {
-            notifyListeners();
-          }
-        });
-      }, onError: (e) => {print("xu ly fail o day")});
-
-  getUserListPost(String userId) =>
-      _repository.getUserListPost(userId).listen((event) async {
-        print(event.docs.toString());
-        event.docChanges.forEach((element) async {
-          DocumentReference documentReference = element.doc.data()['owner'];
-          documentReference.get().then((value) {
-            UserEntity userPost = UserEntity.fromJson(value.data());
-            Post postRoot = Post.fromMap(element.doc.data(), userPost);
-            postRoot.isLiked = _checkLiked(postRoot.likes);
-            if (element.type == DocumentChangeType.added) {
-              _insertUserPost(postRoot);
-            } else if (element.type == DocumentChangeType.modified) {
-              Post post = postRoot;
-              int position = -1;
-              position = _userListPost.indexWhere(
-                (element) =>
-                    (element.postId == post.postId) || element.postId == '-1',
-              );
-              int positionTmp = -1;
-              positionTmp = _tmpPosts.indexWhere(
-                (element) =>
-                    (element.postId == post.postId) || element.postId == '-1',
-              );
-
-              if (position != -1)
-                _userListPost[position] = post;
-              else if (positionTmp != -1)
-                _tmpPosts[positionTmp] = post;
-              else
-                _insertUserPost(postRoot);
-            } else if (element.type == DocumentChangeType.removed) {
-              Post post = postRoot;
-              _userListPost
-                  .removeWhere((element) => element.postId == post.postId);
-            }
-          });
-          if (event.docChanges.length != 0) {
-            notifyListeners();
-          }
-        });
-      }, onError: (e) => {print("xu ly fail o day")});
+          if (position != -1)
+            _userListPost[position] = post;
+          else if (positionTmp != -1)
+            _tmpPosts[positionTmp] = post;
+          else
+            _insertPost(postRoot);
+        } else if (element.type == DocumentChangeType.removed) {
+          Post post = postRoot;
+          _userListPost.removeWhere((element) => element.postId == post.postId);
+        }
+      });
+      if (event.docChanges.length != 0) {
+        notifyListeners();
+      }
+    });
+  }, onError: (e) => {print("xu ly fail o day")});
 
   void updateLike(Post post) {
     print(post);
@@ -256,16 +206,6 @@ class HomeProvide extends BaseProvide {
   _insertPost(Post post) {
     print(post);
     if (isTop) {
-      _listPost.insert(0, post);
-    } else {
-      _tmpPosts.add(post);
-    }
-    notifyListeners();
-  }
-
-  _insertUserPost(Post post) {
-    print(post);
-    if (isTop) {
       _userListPost.insert(0, post);
     } else {
       _tmpPosts.add(post);
@@ -276,7 +216,7 @@ class HomeProvide extends BaseProvide {
   bool _checkLiked(List<UserEntity> users) {
     if (users.length == 0) return false;
     return users.firstWhere((element) => element.id == userEntity.id,
-            orElse: () => null) !=
+        orElse: () => null) !=
         null;
   }
 }

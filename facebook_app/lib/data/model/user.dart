@@ -3,11 +3,13 @@ class UserEntity {
   String firstName = '';
   String lastName = '';
   String avatar = " ";
+  String coverImage = " ";
   String email = '';
   String phone = '';
   String birthday = '';
   String password = '';
   String genre = '';
+  String city = '';
 
   UserEntity.origin();
 
@@ -19,11 +21,13 @@ class UserEntity {
     this.firstName = map['first_name'];
     this.lastName = map['last_name'];
     this.avatar = map['avatar'];
+    this.coverImage = map['cover_image'];
     this.birthday = map['birthday'];
     this.email = map['email'];
     this.phone = map['phone'];
     this.password = map['password'];
     this.genre = map['genre'];
+    this.city = map['city'];
   }
 
   Map userToMap() => new Map<String, dynamic>.from({
@@ -31,11 +35,13 @@ class UserEntity {
         "first_name": this.firstName,
         "last_name": this.lastName,
         "avatar": this.avatar,
+        "cover_image": this.coverImage,
         "email": this.email,
         "phone": this.phone,
         "password": this.password,
         "birthday": this.birthday,
-        "genre": this.genre
+        "genre": this.genre,
+        "city": this.city
       });
 
   static List<Map> userToListMap(List<UserEntity> users) {

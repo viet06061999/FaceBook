@@ -1,5 +1,6 @@
 import 'package:facebook_app/base/base.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
+import 'package:facebook_app/viewmodel/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:facebook_app/view/tabs/home_tab.dart';
@@ -21,7 +22,6 @@ class HomePage extends PageProvideNode<HomeProvide> {
 
 class HomePageTmp extends StatefulWidget {
   final HomeProvide provide;
-
   const HomePageTmp(this.provide);
 
   @override

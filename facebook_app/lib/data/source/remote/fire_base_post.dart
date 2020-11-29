@@ -25,8 +25,17 @@ class FirPost {
     return Observable.fromFuture(future);
   }
 
-  Stream<QuerySnapshot> getListPost() =>
-      _firestore.collection('posts').snapshots(includeMetadataChanges: true);
+  Stream<QuerySnapshot> getListPost() => _firestore
+      .collection('posts')
+      .snapshots(includeMetadataChanges: true);
+
+  Stream<QuerySnapshot> getUserListPost(String userId) {
+    var doc = _firestore.collection('users').doc(userId);
+    return _firestore
+        .collection('posts')
+        .where('owner', isEqualTo: doc)
+        .snapshots(includeMetadataChanges: true);
+  }
 
   Stream<QuerySnapshot> getPostsWithVideo() =>
       _firestore.collection('posts').where('videos',

@@ -1,9 +1,11 @@
+
 import 'package:facebook_app/data/model/post.dart';
 import 'package:facebook_app/data/model/video.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:facebook_app/widgets/photo_grid.dart';
 
 class PostWidget extends StatelessWidget {
   final Post post;
@@ -47,7 +49,8 @@ class PostWidget extends StatelessWidget {
           SizedBox(height: 20.0),
           Text(post.described, style: TextStyle(fontSize: 15.0)),
           SizedBox(height: 10.0),
-          // Image(image: null,),
+          buildImages(context),
+          SizedBox(height: 10.0),
           Container(
             padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
             child: Row(
@@ -117,5 +120,54 @@ class PostWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Visibility buildImages(BuildContext context) {
+    if (post.images.length == 1) {
+      return Visibility(visible: true, child: Image.network(post.images[0]));
+    } else if (post.images.length % 2 == 0) {
+      return Visibility(
+        visible: post.images.length > 0,
+        child: PhotoGrid(
+          imageUrls: post.images,
+          onImageClicked: (i) => print('Image $i was clicked!'),
+          onExpandClicked: () => print('Expand Image was clicked'),
+          maxImages: 4,
+        ),
+      );
+    } else {
+      return Visibility(
+        visible: true,
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Container(
+                  height: MediaQuery.of(context).size.height/2,
+                  width:  MediaQuery.of(context).size.width/2-4,
+                  child: Image.network(post.images[0], fit: BoxFit.cover),
+                ),
+              ),
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height/4,
+                      width:  MediaQuery.of(context).size.width/2-4,
+                      child: Image.network(post.images[1], fit: BoxFit.cover),
+                    ),
+                  ),
+                  Container(
+                    height: MediaQuery.of(context).size.height/4,
+                    width:  MediaQuery.of(context).size.width/2-4,
+                    child: Image.network(post.images[2], fit: BoxFit.cover),
+                  ),
+                ],
+              )
+            ],
+          )
+      );
+    }
   }
 }

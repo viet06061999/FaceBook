@@ -9,10 +9,13 @@ class FirUploadPhoto {
 
   Future<void> uploadFile(String filePath, Function(String urlPath) onSuccess,
       Function onError, Function(double progress) onProgress) async {
+    print('upload $filePath');
     File file = File(filePath);
+    print(file);
     Reference storageReference =
         _firebaseStorage.ref('images/${Random.secure().nextDouble()}.jpg');
     try {
+      print('vao day roi');
       UploadTask uploadTask = storageReference.putFile(file);
       uploadTask.snapshotEvents.listen((event) {
         print('progress ${event.bytesTransferred.toDouble()}');
@@ -25,6 +28,7 @@ class FirUploadPhoto {
             })
           });
     } on FirebaseException catch (e) {
+      print('loi gi v $e');
       onError();
     }
   }

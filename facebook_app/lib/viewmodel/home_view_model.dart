@@ -112,16 +112,19 @@ class HomeProvide extends BaseProvide {
 
   Future<void> uploadPost(String content,
       {List<String> pathImages, String pathVideos}) async {
+    print(pathImages);
     Post post = Post("-1", content, DateTime.now().toString(),
         DateTime.now().toString(), [], [], [], Video.origin(), userEntity);
     if (pathImages != null && pathImages.isNotEmpty) {
+      print('ko null');
       loadingImage = true;
       _progressPhoto = new List(pathImages.length);
-      pathImages.asMap().forEach((index, element) {
-        photoRepository.uploadPhoto(userEntity.id, element, (urlPath) {
+      pathImages.asMap().forEach((index, element) async {
+       await photoRepository.uploadPhoto(userEntity.id, element, (urlPath) {
           loadingImage = false;
+          print(urlPath);
           post.images.add(urlPath);
-          if (index == 0) {
+          if (index == pathImages.length-1) {
             _createPost(post).listen((event) {
               print("xu ly upload post success o day");
             }, onError: (e) => {print("xu ly upload post fail o day")});

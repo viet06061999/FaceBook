@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facebook_app/data/model/post.dart';
 import 'package:facebook_app/data/model/user.dart';
+import 'package:facebook_app/data/model/video.dart';
+import 'package:facebook_app/data/repository/friend_repository.dart';
 import 'package:facebook_app/data/repository/photo_repository.dart';
 import 'package:facebook_app/data/repository/post_repository.dart';
 import 'package:facebook_app/data/repository/user_repository.dart';
@@ -11,24 +13,22 @@ class ProfileProvide extends HomeProvide {
 
   List<Post> get userListPost => _userListPost;
 
-  bool _isTop = true;
+  List<String> _photos = [];
 
-  bool get isTop => _isTop;
+  List<String> get photos => _photos;
 
-  set isTop(bool isTop) {
-    _isTop = isTop;
-    if (_isTop) {
-      userListPost.insertAll(0, tmpPosts);
-    }
-    notifyListeners();
-  }
+  List<Video> _videos = [];
+
+  List<Video> get videos => _videos;
 
   ProfileProvide(PostRepository repository, PhotoRepository photoRepository,
-      UserRepository userRepository)
-      : super(repository, photoRepository, userRepository) {
+      UserRepository userRepository, FriendRepository friendRepository)
+      : super(repository, photoRepository, userRepository, friendRepository) {
     userRepository.getCurrentUser().then((value) {
       userEntity = value;
       getUserListPost(userEntity.id);
+      getUserPhotos(userEntity.id);
+      getUserVideos(userEntity.id);
     });
   }
 
@@ -46,13 +46,13 @@ class ProfileProvide extends HomeProvide {
               Post post = postRoot;
               int position = -1;
               position = _userListPost.indexWhere(
-                    (element) =>
-                (element.postId == post.postId) || element.postId == '-1',
+                (element) =>
+                    (element.postId == post.postId) || element.postId == '-1',
               );
               if (position != -1)
                 _userListPost[position] = post;
               else
-               _userListPost.insert(0, post);
+                _userListPost.insert(0, post);
             } else if (element.type == DocumentChangeType.removed) {
               Post post = postRoot;
               _userListPost
@@ -64,4 +64,26 @@ class ProfileProvide extends HomeProvide {
           }
         });
       }, onError: (e) => {print("xu ly fail o day")});
+
+  updateAvatar(String pathAvatar) {
+    userRepository.updateAvatar(pathAvatar, userEntity, () {});
+    notifyListeners();
+  }
+
+  updateCover(String pathCoverImage) {
+    userRepository.updateCoverImage(pathCoverImage, userEntity, () {});
+    notifyListeners();
+  }
+
+  getUserPhotos(String userId) =>
+      photoRepository.getImagesByUser(userId).listen((event) {
+        _photos.addAll(event);
+        notifyListeners();
+      });
+
+  getUserVideos(String userId) =>
+      photoRepository.getVideosByUser(userId).listen((event) {
+        _videos.addAll(event);
+        notifyListeners();
+      });
 }

@@ -37,11 +37,15 @@ class PhotoRepositoryImpl extends PhotoRepository {
 
   @override
   Observable<List<String>> getImagesByUser(String userId) {
-   return firUserUpload.getImagesByUserId(userId).map((event) => event.data()['my_images']);
+    return firUserUpload.getImagesByUserId(userId).map((event) =>
+        ((event.data()['my_images']) as List)
+            .map((e) => e.toString())
+            .toList());
   }
 
   @override
   Observable<List<Video>> getVideosByUser(String userId) {
-   return firUserUpload.getVideos(userId).map((event) => Video.fromListMap(event.data()['my_videos']));
+    return firUserUpload.getVideos(userId).map((map) =>
+        (map['my_videos'] as List).map((e) => Video.fromJson(e)).toList());
   }
 }

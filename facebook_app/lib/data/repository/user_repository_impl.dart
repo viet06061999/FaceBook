@@ -5,12 +5,17 @@ import 'package:facebook_app/data/source/remote/fire_base_auth.dart';
 import 'package:facebook_app/helper/connect.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:facebook_app/data/source/remote/fire_base_storage.dart';
+import 'package:facebook_app/data/source/remote/fire_base_user_storage.dart';
 
 class UserRepositoryImpl implements UserRepository {
   final FirAuth _firAuth;
+  final FirUploadPhoto firPhoto;
+  final FirUserUpload firUserUpload;
+
   final UserLocalDatasource _localDatasource;
 
-  UserRepositoryImpl(this._firAuth, this._localDatasource);
+  UserRepositoryImpl(this._firAuth, this._localDatasource, this.firPhoto, this.firUserUpload);
 
   @override
   void signUp(
@@ -44,5 +49,25 @@ class UserRepositoryImpl implements UserRepository {
   void logOut() {
     _localDatasource.clearUser();
     _firAuth.signOut(() {});
+  }
+
+  @override
+  Future<void> updateAvatar(
+      String pathAvatar, UserEntity userEntity, Function onError) {
+    return firPhoto.uploadFile(pathAvatar, (urlPath) {
+      userEntity.avatar = urlPath;
+      _firAuth.updateUser(userEntity);
+      firUserUpload.uploadImage(userEntity.id, urlPath);
+    }, onError, (progress) => null);
+  }
+
+  @override
+  Future<void> updateCoverImage(
+      String pathCover, UserEntity userEntity, Function onError) {
+    return firPhoto.uploadFile(pathCover, (urlPath) {
+      userEntity.avatar = urlPath;
+      _firAuth.updateUser(userEntity);
+      firUserUpload.uploadImage(userEntity.id, urlPath);
+    }, onError, (progress) => null);
   }
 }

@@ -1,6 +1,8 @@
 import 'package:dartin/dartin.dart';
 import 'package:facebook_app/data/repository/user_repository_impl.dart';
 import 'package:facebook_app/data/source/local/user_local_data.dart';
+import 'package:facebook_app/data/source/remote/fire_base_storage.dart';
+import 'package:facebook_app/data/source/remote/fire_base_user_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:facebook_app/data/source/remote/fire_base_auth.dart';
@@ -280,7 +282,10 @@ class MenuTab extends StatelessWidget {
               child: RaisedButton(
                 onPressed:() {
                   UserRepositoryImpl(
-                      inject<FirAuth>(), inject<UserLocalDatasource>())
+                      inject<FirAuth>(),
+                      inject<UserLocalDatasource>(),
+                      inject<FirUploadPhoto>(),
+                      inject<FirUserUpload>())
                       .logOut();
                   SystemChannels.platform
                       .invokeMethod('SystemNavigator.pop');

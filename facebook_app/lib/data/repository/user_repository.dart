@@ -8,10 +8,13 @@ abstract class UserRepository {
   void signUp(
       UserEntity user, Function onSuccess, Function(String code) onError);
 
-
   Future<void> setCurrentUser(UserEntity userEntity);
 
   Future<UserEntity> getCurrentUser();
+
+  Future<void> updateAvatar(String pathAvatar, UserEntity userEntity, Function onError);
+
+  Future<void> updateCoverImage(String pathCover, UserEntity userEntity, Function onError);
 
   void logOut();
 }

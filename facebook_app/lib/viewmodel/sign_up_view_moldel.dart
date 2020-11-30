@@ -5,10 +5,15 @@ import 'package:facebook_app/data/repository/user_repository.dart';
 import 'package:facebook_app/data/repository/user_repository_impl.dart';
 import 'package:facebook_app/data/source/local/user_local_data.dart';
 import 'package:facebook_app/data/source/remote/fire_base_auth.dart';
+import 'package:facebook_app/data/source/remote/fire_base_storage.dart';
+import 'package:facebook_app/data/source/remote/fire_base_user_storage.dart';
 
 class RegisterBloc {
-  UserRepository _userRepositoryImpl =
-      UserRepositoryImpl(inject<FirAuth>(), inject<UserLocalDatasource>());
+  UserRepository _userRepositoryImpl = UserRepositoryImpl(
+      inject<FirAuth>(),
+      inject<UserLocalDatasource>(),
+      inject<FirUploadPhoto>(),
+      inject<FirUserUpload>());
 
   StreamController _emailController = StreamController.broadcast();
 

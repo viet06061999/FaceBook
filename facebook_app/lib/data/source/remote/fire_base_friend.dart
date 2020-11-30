@@ -8,10 +8,12 @@ class FirFriend {
 
   FirFriend(this._firestore);
 
-  createRequestFriend(
-      String idUserFirst, String idUserSecond, Function onError) {
-    _createRequest(idUserFirst, idUserSecond).catchError((error) => onError());
-    _createRequest(idUserSecond, idUserFirst).catchError((error) => onError());
+  createRequestFriend(String idUserFirst, String idUserSecond,
+      Function onError) {
+    _createRequest(idUserFirst, idUserSecond, FriendStatus.pendingConfirm.index)
+        .catchError((error) => onError());
+    _createRequest(idUserSecond, idUserFirst, FriendStatus.pending.index)
+        .catchError((error) => onError());
   }
 
   acceptRequest(Friend friend, Function onError) {
@@ -26,6 +28,7 @@ class FirFriend {
     return _firestore
         .collection('friends')
         .where('first_user', isEqualTo: first)
+        .where('status', isEqualTo: FriendStatus.accepted.index)
         .snapshots(includeMetadataChanges: true);
   }
 
@@ -45,11 +48,12 @@ class FirFriend {
     return _firestore
         .collection('friends')
         .where('first_user', isEqualTo: first)
-        .where('status', isEqualTo: FriendStatus.pending.index)
+        .where('status', isEqualTo: FriendStatus.pendingConfirm.index)
         .snapshots(includeMetadataChanges: true);
   }
 
-  Future<void> _createRequest(String idUserFirst, String idUserSecond) {
+  Future<void> _createRequest(String idUserFirst, String idUserSecond,
+      int status) {
     return _firestore
         .collection("friends")
         .doc(idUserFirst.xorString(idUserSecond))
@@ -58,7 +62,7 @@ class FirFriend {
       'second_user': _firestore.doc('users/' + idUserSecond),
       'created': DateTime.now().toString(),
       'modified': DateTime.now().toString(),
-      'status': FriendStatus.pending.index
+      'status': status
     });
   }
 

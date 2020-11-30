@@ -15,6 +15,7 @@ import 'package:facebook_app/data/source/remote/fire_base_post.dart';
 import 'package:facebook_app/data/source/remote/fire_base_storage.dart';
 import 'package:facebook_app/data/source/remote/fire_base_user_storage.dart';
 import 'package:facebook_app/helper/share_prefs.dart';
+import 'package:facebook_app/viewmodel/friend_view_model.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:facebook_app/viewmodel/profile_view_model.dart';
 import 'package:facebook_app/viewmodel/login_view_model.dart';
@@ -27,17 +28,16 @@ const testScope = DartInScope('test');
 
 final viewModelModule = Module([
   factory<LoginProvide>(({params}) => LoginProvide(get())),
-  factory<HomeProvide>(({params}) => HomeProvide(get(), get(), get())),
-  factory<ProfileProvide>(({params}) => ProfileProvide(get(), get(), get())),
-])
-  ..withScope(testScope, [
-    factory<LoginProvide>(({params}) => LoginProvide(get())),
-    factory<HomeProvide>(({params}) => HomeProvide(get(), get(), get())),
-    factory<ProfileProvide>(({params}) => ProfileProvide(get(), get(), get())),
-  ]);
+  single<HomeProvide>(({params}) => HomeProvide(get(), get(), get(), get())),
+  single<ProfileProvide>(
+      ({params}) => ProfileProvide(get(), get(), get(), get())),
+  single<FriendProvide>(
+          ({params}) => FriendProvide(get(), get(), get(), get())),
+]);
 
 final repoModule = Module([
-  factory<UserRepository>(({params}) => UserRepositoryImpl(get(), get())),
+  factory<UserRepository>(
+      ({params}) => UserRepositoryImpl(get(), get(), get(), get())),
   factory<PostRepository>(({params}) => PostRepositoryImpl(get(), get())),
   factory<PhotoRepository>(({params}) => PhotoRepositoryImpl(get(), get())),
   factory<FriendRepository>(({params}) => FriendRepositoryImpl(get())),

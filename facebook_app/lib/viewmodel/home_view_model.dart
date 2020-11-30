@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facebook_app/base/base.dart';
 import 'package:facebook_app/data/model/comment.dart';
+import 'package:facebook_app/data/model/friend.dart';
 import 'package:facebook_app/data/model/post.dart';
 import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/data/model/video.dart';
+import 'package:facebook_app/data/repository/friend_repository.dart';
 import 'package:facebook_app/data/repository/photo_repository.dart';
 import 'package:facebook_app/data/repository/post_repository.dart';
 import 'package:facebook_app/data/repository/user_repository.dart';
@@ -13,6 +15,7 @@ class HomeProvide extends BaseProvide {
   final PostRepository repository;
   final PhotoRepository photoRepository;
   final UserRepository userRepository;
+  final FriendRepository friendRepository;
 
   UserEntity _userEntity = UserEntity.origin();
 
@@ -41,6 +44,10 @@ class HomeProvide extends BaseProvide {
   List<Post> get listPost => _listPost;
 
   List<Post> tmpPosts = [];
+
+  List<Friend> _friends = [];
+
+  List<Friend> get friends => _friends;
 
   bool _isTop = true;
 
@@ -89,10 +96,12 @@ class HomeProvide extends BaseProvide {
     notifyListeners();
   }
 
-  HomeProvide(this.repository, this.photoRepository, this.userRepository) {
+  HomeProvide(this.repository, this.photoRepository, this.userRepository,
+      this.friendRepository) {
     userRepository.getCurrentUser().then((value) {
       userEntity = value;
       _getListPost();
+      getFriends(userEntity);
     });
   }
 
@@ -176,6 +185,36 @@ class HomeProvide extends BaseProvide {
             } else if (element.type == DocumentChangeType.removed) {
               Post post = postRoot;
               _listPost.removeWhere((element) => element.postId == post.postId);
+            }
+          });
+          if (event.docChanges.length != 0) {
+            notifyListeners();
+          }
+        });
+      }, onError: (e) => {print("xu ly fail o day")});
+
+  getFriends(UserEntity entity) =>
+      friendRepository.getFriends(entity.id).listen((event) async {
+        event.docChanges.forEach((element) async {
+          DocumentReference documentReference =
+              element.doc.data()['second_user'];
+          await documentReference.get().then((value) {
+            UserEntity second = UserEntity.fromJson(value.data());
+            Friend friend = Friend.fromJson(element.doc.data(), entity, second);
+            if (element.type == DocumentChangeType.added) {
+              _friends.insert(0, friend);
+            } else if (element.type == DocumentChangeType.modified) {
+              int position = -1;
+              position = _friends.indexWhere(
+                  (element) => (element.userSecond == friend.userSecond));
+
+              if (position != -1)
+                _friends[position] = friend;
+              else
+                _friends.insert(0, friend);
+            } else if (element.type == DocumentChangeType.removed) {
+              _friends.removeWhere(
+                  (element) => element.userSecond == friend.userSecond);
             }
           });
           if (event.docChanges.length != 0) {

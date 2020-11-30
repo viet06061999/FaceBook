@@ -47,6 +47,14 @@ class FirAuth {
     });
   }
 
+  Observable<void> updateUser(UserEntity userEntity) {
+    Future<void> future = FirebaseFirestore.instance
+        .collection("users")
+        .doc(userEntity.id)
+        .update(userEntity.userToMap());
+    return Observable.fromFuture(future);
+  }
+
   Future<UserEntity> curentUser() async {
     User user = await _firebaseAuth.currentUser;
     UserEntity userEntity;

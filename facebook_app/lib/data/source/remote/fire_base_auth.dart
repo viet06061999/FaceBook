@@ -30,19 +30,18 @@ class FirAuth {
       String genre,
       Function onSuccess,
       Function(String code) onError) {
-    print('$email $password');
     return _firebaseAuth
         .createUserWithEmailAndPassword(email: email, password: password)
         .then((value) {
-      FirebaseFirestore.instance.collection("images").doc(value.user.uid).set({
-        'my_images':[]
-      });
+      print('vao day roi');
+      print(value.user.uid);
       _createUser(
           UserEntity(value.user.uid, firstName, lastName, '', birthday, email,
               phone, password, genre),
           value.user.uid,
           onSuccess);
     }).catchError((err) {
+      print('vào lỗi rồi');
       print(err);
       onError(err.code);
     });
@@ -73,6 +72,12 @@ class FirAuth {
       print(onError);
     }).then((value) {
       onSuccess();
+      FirebaseFirestore.instance.collection("images").doc(document).set({
+        'my_images':[]
+      });
+      FirebaseFirestore.instance.collection("videos").doc(document).set({
+        'my_videos':[]
+      });
     });
   }
 }

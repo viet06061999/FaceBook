@@ -21,7 +21,7 @@ class FriendRepositoryImpl extends FriendRepository {
   }
 
   @override
-  Stream<QuerySnapshot> getListFriend(String id) {
+  Stream<QuerySnapshot> getFriends(String id) {
     return _firFriend.getFriends(id);
   }
 

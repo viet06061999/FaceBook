@@ -1,6 +1,5 @@
 import 'package:facebook_app/base/base.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
-import 'package:facebook_app/viewmodel/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:facebook_app/view/tabs/home_tab.dart';
@@ -117,7 +116,7 @@ class _HomePageState extends State<HomePageTmp>
             HomeTab(value, _controller),
             FriendsTab(),
             WatchTab(),
-            ProfileTab(value),
+            ProfileTab(),
             NotificationsTab(),
             MenuTab()
           ]);

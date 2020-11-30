@@ -1,17 +1,35 @@
-import 'package:facebook_app/data/model/user.dart';
-import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:facebook_app/viewmodel/profile_view_model.dart';
-import 'package:facebook_app/widgets/create_post.dart';
+import 'package:facebook_app/base/base.dart';
 import 'package:facebook_app/widgets/post_widget.dart';
 import 'package:facebook_app/widgets/separator_widget.dart';
-import 'package:facebook_app/widgets/user_post_widget.dart';
 import 'package:facebook_app/widgets/write_something_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-class ProfileTab extends StatelessWidget {
-  final HomeProvide provide;
-  const ProfileTab(this.provide);
+class ProfileTab extends PageProvideNode<ProfileProvide> {
+  @override
+  Widget buildContent(BuildContext context) {
+    return ProfilePageTmp(mProvider);
+  }
+}
+
+class ProfilePageTmp extends StatefulWidget {
+  final ProfileProvide provide;
+
+  const ProfilePageTmp(this.provide);
+
+  @override
+  State<StatefulWidget> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePageTmp>
+    with SingleTickerProviderStateMixin {
+  ProfileProvide provide;
+
+  @override
+  void initState() {
+    super.initState();
+    provide = widget.provide;
+  }
 
   @override
   Widget build(BuildContext context) {

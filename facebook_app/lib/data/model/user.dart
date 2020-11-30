@@ -3,7 +3,7 @@ class UserEntity {
   String firstName = '';
   String lastName = '';
   String avatar = " ";
-  String coverImage = " ";
+  String coverImage = "";
   String email = '';
   String phone = '';
   String birthday = '';

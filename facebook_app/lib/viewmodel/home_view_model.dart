@@ -10,9 +10,10 @@ import 'package:facebook_app/data/repository/user_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
 class HomeProvide extends BaseProvide {
-  final PostRepository _repository;
-  final PhotoRepository _photoRepository;
-  final UserRepository _userRepository;
+  final PostRepository repository;
+  final PhotoRepository photoRepository;
+  final UserRepository userRepository;
+
   UserEntity _userEntity = UserEntity.origin();
 
   //lay % tien trinh upload anh
@@ -39,11 +40,7 @@ class HomeProvide extends BaseProvide {
 
   List<Post> get listPost => _listPost;
 
-  List<Post> _userListPost = [];
-
-  List<Post> get userListPost => _userListPost;
-
-  List<Post> _tmpPosts = [];
+  List<Post> tmpPosts = [];
 
   bool _isTop = true;
 
@@ -52,9 +49,8 @@ class HomeProvide extends BaseProvide {
   set isTop(bool isTop) {
     _isTop = isTop;
     if (_isTop) {
-      _listPost.insertAll(0, _tmpPosts);
-      _userListPost.insertAll(0, _tmpPosts);
-      _tmpPosts.clear();
+      listPost.insertAll(0, tmpPosts);
+      tmpPosts.clear();
     }
     notifyListeners();
   }
@@ -93,15 +89,14 @@ class HomeProvide extends BaseProvide {
     notifyListeners();
   }
 
-  HomeProvide(this._repository, this._photoRepository, this._userRepository) {
-    _userRepository.getCurrentUser().then((value) {
+  HomeProvide(this.repository, this.photoRepository, this.userRepository) {
+    userRepository.getCurrentUser().then((value) {
       userEntity = value;
       _getListPost();
-      getUserListPost(userEntity.id);
     });
   }
 
-  Observable<void> _createPost(Post post) => _repository
+  Observable<void> _createPost(Post post) => repository
       .createPost(post, userEntity.id)
       .doOnListen(() => loading = true)
       .doOnDone(() => loading = false);
@@ -114,7 +109,7 @@ class HomeProvide extends BaseProvide {
       loadingImage = true;
       _progressPhoto = new List(pathImages.length);
       pathImages.asMap().forEach((index, element) {
-        _photoRepository.uploadPhoto(userEntity.id, element, (urlPath) {
+        photoRepository.uploadPhoto(userEntity.id, element, (urlPath) {
           loadingImage = false;
           post.images.add(urlPath);
           if (index == 0) {
@@ -133,7 +128,7 @@ class HomeProvide extends BaseProvide {
       });
     } else if (pathVideos != null && pathVideos.isNotEmpty) {
       loadingVideo = true;
-      _photoRepository.uploadVideo(userEntity.id, pathVideos, (urlPath) {
+      photoRepository.uploadVideo(userEntity.id, pathVideos, (urlPath) {
         loadingVideo = false;
         post.video.url = urlPath;
         _createPost(post).listen((event) {
@@ -150,13 +145,13 @@ class HomeProvide extends BaseProvide {
     }
   }
 
-  _getListPost() => _repository.getListPost().listen((event) async {
+  _getListPost() => repository.getListPost().listen((event) async {
         event.docChanges.forEach((element) async {
           DocumentReference documentReference = element.doc.data()['owner'];
           documentReference.get().then((value) {
             UserEntity userPost = UserEntity.fromJson(value.data());
             Post postRoot = Post.fromMap(element.doc.data(), userPost);
-            postRoot.isLiked = _checkLiked(postRoot.likes);
+            postRoot.isLiked = checkLiked(postRoot.likes);
             if (element.type == DocumentChangeType.added) {
               _insertPost(postRoot);
             } else if (element.type == DocumentChangeType.modified) {
@@ -167,7 +162,7 @@ class HomeProvide extends BaseProvide {
                     (element.postId == post.postId) || element.postId == '-1',
               );
               int positionTmp = -1;
-              positionTmp = _tmpPosts.indexWhere(
+              positionTmp = tmpPosts.indexWhere(
                 (element) =>
                     (element.postId == post.postId) || element.postId == '-1',
               );
@@ -175,7 +170,7 @@ class HomeProvide extends BaseProvide {
               if (position != -1)
                 _listPost[position] = post;
               else if (positionTmp != -1)
-                _tmpPosts[positionTmp] = post;
+                tmpPosts[positionTmp] = post;
               else
                 _insertPost(postRoot);
             } else if (element.type == DocumentChangeType.removed) {
@@ -189,51 +184,7 @@ class HomeProvide extends BaseProvide {
         });
       }, onError: (e) => {print("xu ly fail o day")});
 
-  getUserListPost(String userId) =>
-      _repository.getUserListPost(userId).listen((event) async {
-        print(event.docs.toString());
-        event.docChanges.forEach((element) async {
-          DocumentReference documentReference = element.doc.data()['owner'];
-          documentReference.get().then((value) {
-            UserEntity userPost = UserEntity.fromJson(value.data());
-            Post postRoot = Post.fromMap(element.doc.data(), userPost);
-            postRoot.isLiked = _checkLiked(postRoot.likes);
-            if (element.type == DocumentChangeType.added) {
-              _insertUserPost(postRoot);
-            } else if (element.type == DocumentChangeType.modified) {
-              Post post = postRoot;
-              int position = -1;
-              position = _userListPost.indexWhere(
-                (element) =>
-                    (element.postId == post.postId) || element.postId == '-1',
-              );
-              int positionTmp = -1;
-              positionTmp = _tmpPosts.indexWhere(
-                (element) =>
-                    (element.postId == post.postId) || element.postId == '-1',
-              );
-
-              if (position != -1)
-                _userListPost[position] = post;
-              else if (positionTmp != -1)
-                _tmpPosts[positionTmp] = post;
-              else
-                _insertUserPost(postRoot);
-            } else if (element.type == DocumentChangeType.removed) {
-              Post post = postRoot;
-              _userListPost
-                  .removeWhere((element) => element.postId == post.postId);
-            }
-          });
-          if (event.docChanges.length != 0) {
-            notifyListeners();
-          }
-        });
-      }, onError: (e) => {print("xu ly fail o day")});
-
   void updateLike(Post post) {
-    print(post);
-    print(post.likes);
     if (post.isLiked) {
       post.likes.removeWhere((element) => element.id == userEntity.id);
     } else {
@@ -250,30 +201,19 @@ class HomeProvide extends BaseProvide {
   }
 
   void _updatePost(Post post) {
-    _repository.updatePost(post, userEntity.id);
+    repository.updatePost(post, userEntity.id);
   }
 
   _insertPost(Post post) {
-    print(post);
     if (isTop) {
       _listPost.insert(0, post);
     } else {
-      _tmpPosts.add(post);
+      tmpPosts.add(post);
     }
     notifyListeners();
   }
 
-  _insertUserPost(Post post) {
-    print(post);
-    if (isTop) {
-      _userListPost.insert(0, post);
-    } else {
-      _tmpPosts.add(post);
-    }
-    notifyListeners();
-  }
-
-  bool _checkLiked(List<UserEntity> users) {
+  bool checkLiked(List<UserEntity> users) {
     if (users.length == 0) return false;
     return users.firstWhere((element) => element.id == userEntity.id,
             orElse: () => null) !=

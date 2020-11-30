@@ -80,6 +80,7 @@ class _CreatePostState extends State<CreatePostWidget> {
           ),
           SizedBox(height: 10.0),
           Divider(height: 30.0),
+
         ],
       ),
     );

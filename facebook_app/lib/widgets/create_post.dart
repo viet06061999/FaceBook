@@ -1,5 +1,6 @@
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CreatePostWidget extends StatefulWidget {
   final HomeProvide provide;
@@ -17,7 +18,7 @@ class _CreatePostState extends State<CreatePostWidget> {
   final HomeProvide provide;
 
   _CreatePostState(this.provide);
-
+  List<String> pathImages = [];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -52,7 +53,7 @@ class _CreatePostState extends State<CreatePostWidget> {
                 ),
                 TextButton(
                     onPressed: () {
-                      provide.uploadPost(content,);
+                      provide.uploadPost(content,pathImages: pathImages);
                       Navigator.pop(context);
                     },
                     child: Text(
@@ -80,7 +81,25 @@ class _CreatePostState extends State<CreatePostWidget> {
           ),
           SizedBox(height: 10.0),
           Divider(height: 30.0),
-
+          Container(
+            height: 40.0,
+            decoration: BoxDecoration(
+              color: Colors.lightBlueAccent.withOpacity(0.25),
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            child: Center(
+                child: GestureDetector(
+                    onTap: (){
+                      ImagePicker().getImage(source: ImageSource.gallery).then((path) {
+                        pathImages.add(path.path);
+                      });
+                    },
+                    child: Text('Tải ảnh lên',
+                        style: TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0)))),
+          ),
         ],
       ),
     );

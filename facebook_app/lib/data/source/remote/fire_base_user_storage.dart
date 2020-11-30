@@ -10,7 +10,7 @@ class FirUserUpload {
   Observable<void> uploadImage(String idOwner, String url) {
     Future<void> future = _firestore.collection("images").doc(idOwner).update({
       'my_images': FieldValue.arrayUnion([url])
-    }).catchError((onError) => {print(onError)});
+    }).catchError((onError) => {print('loi o day $onError')});
     return Observable.fromFuture(future);
   }
 

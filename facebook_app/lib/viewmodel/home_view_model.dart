@@ -119,12 +119,14 @@ class HomeProvide extends BaseProvide {
       print('ko null');
       loadingImage = true;
       _progressPhoto = new List(pathImages.length);
-      pathImages.asMap().forEach((index, element) async {
-       await photoRepository.uploadPhoto(userEntity.id, element, (urlPath) {
+       pathImages.asMap().forEach((index, element) async {
+        print('index1 $index');
+        await photoRepository.uploadPhoto(userEntity.id, element, (urlPath) {
+          print('index $index');
           loadingImage = false;
           print(urlPath);
           post.images.add(urlPath);
-          if (index == pathImages.length-1) {
+          if(index == pathImages.length-1){
             _createPost(post).listen((event) {
               print("xu ly upload post success o day");
             }, onError: (e) => {print("xu ly upload post fail o day")});

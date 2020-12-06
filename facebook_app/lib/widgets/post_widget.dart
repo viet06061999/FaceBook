@@ -36,7 +36,7 @@ class PostWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(post.owner.firstName,
+                    Text(post.owner.firstName + ' ' + post.owner.lastName,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 17.0)),
                     SizedBox(height: 5.0),

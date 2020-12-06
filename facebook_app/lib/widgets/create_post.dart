@@ -1,4 +1,5 @@
 import 'package:facebook_app/viewmodel/home_view_model.dart';
+import 'package:facebook_app/widgets/photo_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -80,6 +81,7 @@ class _CreatePostState extends State<CreatePostWidget> {
                 border: InputBorder.none, hintText: 'Bạn đang nghĩ gì?'),
           ),
           SizedBox(height: 10.0),
+          buildImages(context),
           Divider(height: 30.0),
           Container(
             height: 40.0,
@@ -103,5 +105,71 @@ class _CreatePostState extends State<CreatePostWidget> {
         ],
       ),
     );
+  }
+  Visibility buildImages(BuildContext context) {
+    if (pathImages.length == 1) {
+      return Visibility(visible: true, child: Image.network(pathImages[0]));
+    } else if (pathImages.length % 2 == 0) {
+      return Visibility(
+        visible: pathImages.length > 0,
+        child: PhotoGrid(
+          imageUrls: pathImages,
+          onImageClicked: (i) => print('Image $i was clicked!'),
+          onExpandClicked: () => print('Expand Image was clicked'),
+          maxImages: 4,
+        ),
+      );
+    } else {
+      return Visibility(
+          visible: true,
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Container(
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height / 2,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width / 2 - 4,
+                  child: Image.network(pathImages[0], fit: BoxFit.cover),
+                ),
+              ),
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Container(
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height / 4,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width / 2 - 4,
+                      child: Image.network(pathImages[1], fit: BoxFit.cover),
+                    ),
+                  ),
+                  Container(
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height / 4,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width / 2 - 4,
+                    child: Image.network(pathImages[2], fit: BoxFit.cover),
+                  ),
+                ],
+              )
+            ],
+          )
+      );
+    }
   }
 }

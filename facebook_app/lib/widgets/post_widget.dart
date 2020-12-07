@@ -1,9 +1,10 @@
-
 import 'package:facebook_app/data/model/post.dart';
 import 'package:facebook_app/data/model/video.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
+import 'package:facebook_app/widgets/comment_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:facebook_app/widgets/photo_grid.dart';
 
@@ -20,7 +21,10 @@ class PostWidget extends StatelessWidget {
         children: <Widget>[
           Container(
             color: Colors.grey[400],
-            width: MediaQuery.of(context).size.width,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
             height: 11.0,
           ),
           Container(
@@ -36,7 +40,7 @@ class PostWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(post.owner.firstName,
+                    Text(post.owner.firstName + ' ' + post.owner.lastName,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 17.0)),
                     SizedBox(height: 5.0),
@@ -95,14 +99,24 @@ class PostWidget extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: 14,
                                 color:
-                                    !post.isLiked ? Colors.grey : Colors.blue),
+                                !post.isLiked ? Colors.grey : Colors.blue),
                           ));
                     }),
                   ],
                 ),
                 Row(
                   children: <Widget>[
-                    Icon(FontAwesomeIcons.commentAlt, size: 20.0),
+                    //FontAwesomeIcons.commentAlt, size: 20.0,
+                    IconButton(
+                        icon: new Icon(FontAwesomeIcons.commentAlt, size: 20.0),
+                        // onPressed: () {
+                        //   showMaterialModalBottomSheet(
+                        //     context: context,
+                        //     backgroundColor: Colors.transparent,
+                        //     builder: (context) => CreateCommentWidget(provide: provide,),
+                        //   );
+                        // },
+                    ),
                     SizedBox(width: 5.0),
                     Text('Comment', style: TextStyle(fontSize: 14.0)),
                   ],
@@ -137,14 +151,20 @@ class PostWidget extends StatelessWidget {
       );
     } else {
       return Visibility(
-        visible: true,
+          visible: true,
           child: Row(
             children: [
               Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: Container(
-                  height: MediaQuery.of(context).size.height/2,
-                  width:  MediaQuery.of(context).size.width/2-4,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height / 2,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width / 2 - 4,
                   child: Image.network(post.images[0], fit: BoxFit.cover),
                 ),
               ),
@@ -153,14 +173,26 @@ class PostWidget extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(2.0),
                     child: Container(
-                      height: MediaQuery.of(context).size.height/4,
-                      width:  MediaQuery.of(context).size.width/2-4,
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height / 4,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width / 2 - 4,
                       child: Image.network(post.images[1], fit: BoxFit.cover),
                     ),
                   ),
                   Container(
-                    height: MediaQuery.of(context).size.height/4,
-                    width:  MediaQuery.of(context).size.width/2-4,
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height / 4,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width / 2 - 4,
                     child: Image.network(post.images[2], fit: BoxFit.cover),
                   ),
                 ],

@@ -15,6 +15,7 @@ class Message {
   Message.origin();
 
   Message(
+    this.id,
     this.from,
     this.to,
     this.message,

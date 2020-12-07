@@ -12,16 +12,19 @@ import 'package:facebook_app/data/repository/user_repository.dart';
 import 'package:facebook_app/data/repository/user_repository_impl.dart';
 import 'package:facebook_app/data/source/local/user_local_data.dart';
 import 'package:facebook_app/data/source/remote/fire_base_auth.dart';
+import 'package:facebook_app/data/source/remote/fire_base_chat.dart';
 import 'package:facebook_app/data/source/remote/fire_base_friend.dart';
 import 'package:facebook_app/data/source/remote/fire_base_post.dart';
 import 'package:facebook_app/data/source/remote/fire_base_storage.dart';
 import 'package:facebook_app/data/source/remote/fire_base_user_storage.dart';
 import 'package:facebook_app/helper/share_prefs.dart';
+import 'package:facebook_app/viewmodel/chat_view_model.dart';
 import 'package:facebook_app/viewmodel/friend_view_model.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:facebook_app/viewmodel/profile_view_model.dart';
 import 'package:facebook_app/viewmodel/login_view_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 const testScope = DartInScope('test');
@@ -35,6 +38,8 @@ final viewModelModule = Module([
       ({params}) => ProfileProvide(get(), get(), get(), get())),
   single<FriendProvide>(
           ({params}) => FriendProvide(get(), get(), get(), get())),
+  single<ChatProvide>(
+          ({params}) => ChatProvide(get())),
 ]);
 
 final repoModule = Module([
@@ -53,6 +58,7 @@ final remoteModule = Module([
   factory<FirUploadPhoto>(({params}) => FirUploadPhoto(get())),
   factory<FirUserUpload>(({params}) => FirUserUpload(get())),
   factory<FirFriend>(({params}) => FirFriend(get())),
+  factory<FirChat>(({params}) => FirChat(get())),
 ]);
 
 final firebase = Module([

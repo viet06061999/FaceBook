@@ -14,7 +14,7 @@ class _SearchBarState extends State<SearchBar> {
     return Container(
       height: 45.0,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(21),
         color: Colors.grey.shade200,
       ),
       child: Row(
@@ -26,7 +26,7 @@ class _SearchBarState extends State<SearchBar> {
             child: TextField(
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: 'Search'
+                hintText: 'Tìm kiếm'
               ),
             ),
           )

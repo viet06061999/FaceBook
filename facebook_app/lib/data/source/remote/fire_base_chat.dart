@@ -19,7 +19,10 @@ class FirChat {
           message.toMap(_firestore.doc('users/' + userIdFrom),
               _firestore.doc('users/' + userIdTo))
         ])
-      }).then((value) {});
+      }).then((value) {
+        _updateCurrentMessage(message, _firestore.doc('users/' + userIdFrom),
+            _firestore.doc('users/' + userIdTo));
+      });
     } else {
       future = _firestore.collection("chats").doc(message.id).set({
         'id': message.id,
@@ -41,13 +44,15 @@ class FirChat {
         await _firestore.collection('conservations').doc(message.id).get();
     Future<void> future = null;
     if (usersRef.exists) {
+      print('exits');
       future = _firestore
-          .collection("posts")
+          .collection("conservations")
           .doc(message.id)
           .update({'current_message': message.toMap(from, to)});
     } else {
+      print('non exists');
       future = future = _firestore
-          .collection("posts")
+          .collection("conservations")
           .doc(message.id)
           .set({'current_message': message.toMap(from, to)});
     }

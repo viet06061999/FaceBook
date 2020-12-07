@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePageTmp>
                     color: Colors.black,
                     onPressed: (){
                     Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => App()),
+                      MaterialPageRoute(builder: (context) => App(_provide)),
                     );
                     },
                 ), // xu ly tai day

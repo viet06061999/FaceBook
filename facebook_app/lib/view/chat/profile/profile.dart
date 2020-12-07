@@ -1,18 +1,27 @@
+import 'package:facebook_app/base/base.dart';
+import 'package:facebook_app/viewmodel/chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:facebook_app/models/account_user.dart';
 import 'package:facebook_app/routes/routes.dart';
 
-class Profile extends StatefulWidget {
-  Profile({Key key}) : super(key: key);
+class ProfilePage extends PageProvideNode<ChatProvide> {
+  @override
+  Widget buildContent(BuildContext context) {
+    return ProfilePageTmp(mProvider);
+  }
+}
+class ProfilePageTmp extends StatefulWidget {
+  final ChatProvide provide;
+  const ProfilePageTmp(this.provide);
 
-  _ProfileState createState() => _ProfileState();
+  @override
+  State<StatefulWidget> createState() => _ProfilePageState();
 }
 
-const ListYourFriendChat = ['Hello', 'Nice to meet you!'];
-const ListYourChat = ['Hi', 'Nice to meet you!'];
 
-class _ProfileState extends State<Profile> {
+class _ProfilePageState extends State<ProfilePageTmp>
+    with SingleTickerProviderStateMixin {
+  ChatProvide provide;
   bool _isScroll = false;
   ScrollController _controller;
 
@@ -32,6 +41,7 @@ class _ProfileState extends State<Profile> {
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
     super.initState();
+    provide = widget.provide;
   }
 
   @override
@@ -59,7 +69,7 @@ class _ProfileState extends State<Profile> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(80.0),
                             image: DecorationImage(
-                              image: AssetImage(yourAccount.avatarImg),
+                              image: NetworkImage(provide.userEntity.avatar),
                               fit: BoxFit.cover,
                             ),
                           ),

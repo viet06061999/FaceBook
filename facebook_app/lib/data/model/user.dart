@@ -10,6 +10,7 @@ class UserEntity {
   String password = '';
   String genre = '';
   String city = '';
+  String description = '';
 
   UserEntity.origin();
 
@@ -28,6 +29,7 @@ class UserEntity {
     this.password = map['password'];
     this.genre = map['genre'];
     this.city = map['city'];
+    this.description = map['description'];
   }
 
   Map userToMap() => new Map<String, dynamic>.from({
@@ -41,7 +43,8 @@ class UserEntity {
         "password": this.password,
         "birthday": this.birthday,
         "genre": this.genre,
-        "city": this.city
+        "city": this.city,
+        "description": this.description
       });
 
   static List<Map> userToListMap(List<UserEntity> users) {

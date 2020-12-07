@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:facebook_app/view/chat/chat_detail/chat_detail.dart';
@@ -9,11 +10,12 @@ import 'package:facebook_app/widgets/app_theme.dart';
 var routes = <String, WidgetBuilder>{
   "/": (BuildContext context) => HomeScreen(),
   "/chatDetail": (BuildContext context) => ChatDetail(),
-  "/profile": (BuildContext context) => Profile(),
+  "/profile": (BuildContext context) => ProfilePage(),
 };
 
 class App extends StatefulWidget {
-  App({Key key}) : super(key: key);
+  final HomeProvide provide;
+  App(this.provide);
 
   _AppState createState() => _AppState();
 }

@@ -57,30 +57,30 @@ class _ListFriendState extends State<ListFriend> {
       isScroll: _isScroll,
       title: 'Chat',
       actions: <Widget>[
-        Container(
-          width: 40.0,
-          height: 40.0,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.grey.shade200,
-          ),
-          child: Icon(
-            FontAwesomeIcons.camera,
-            size: 18.0,
-          ),
-        ),
-        Container(
-          width: 40.0,
-          height: 40.0,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.grey.shade200,
-          ),
-          child: Icon(
-            FontAwesomeIcons.pen,
-            size: 18.0,
-          ),
-        ),
+        // Container(
+        //   width: 40.0,
+        //   height: 40.0,
+        //   decoration: BoxDecoration(
+        //     borderRadius: BorderRadius.circular(20),
+        //     color: Colors.grey.shade200,
+        //   ),
+        //   child: Icon(
+        //     FontAwesomeIcons.camera,
+        //     size: 18.0,
+        //   ),
+        // ),
+        // Container(
+        //   width: 40.0,
+        //   height: 40.0,
+        //   decoration: BoxDecoration(
+        //     borderRadius: BorderRadius.circular(20),
+        //     color: Colors.grey.shade200,
+        //   ),
+        //   child: Icon(
+        //     FontAwesomeIcons.pen,
+        //     size: 18.0,
+        //   ),
+        // ),
       ],
     ));
   }

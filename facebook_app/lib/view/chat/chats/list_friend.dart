@@ -55,7 +55,7 @@ class _ListFriendState extends State<ListFriend> {
   _buildMessengerAppBar(_isScroll) {
     return (MessengerAppBar(
       isScroll: _isScroll,
-      title: 'Chats',
+      title: 'Chat',
       actions: <Widget>[
         Container(
           width: 40.0,

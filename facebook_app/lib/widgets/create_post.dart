@@ -52,11 +52,11 @@ class _CreatePostState extends State<CreatePostWidget> {
                     SizedBox(height: 5.0),
                   ],
                 ),
-                TextButton(
-                    onPressed: () {
-                      provide.uploadPost(content,pathImages: pathImages);
-                      Navigator.pop(context);
-                    },
+                FlatButton(
+                    // onPressed: () {uj
+                    //   provide.uploadPost(content,pathImages: pathImages);
+                    //   Navigator.pop(context);
+                    // },
                     child: Text(
                       'ĐĂNG',
                       style: TextStyle(
@@ -72,11 +72,11 @@ class _CreatePostState extends State<CreatePostWidget> {
             minLines: 4,
             textInputAction: TextInputAction.next,
             style: TextStyle(fontSize: 18, color: Colors.black),
-            onChanged: (text) {
-              setState(() {
-                content = text;
-              });
-            },
+            // onChanged: (text) {
+            //   setState(() {
+            //     content = text;
+            //   });
+            // },
             decoration: InputDecoration(
                 border: InputBorder.none, hintText: 'Bạn đang nghĩ gì?'),
           ),
@@ -91,11 +91,11 @@ class _CreatePostState extends State<CreatePostWidget> {
             ),
             child: Center(
                 child: GestureDetector(
-                    onTap: (){
-                      ImagePicker().getImage(source: ImageSource.gallery).then((path) {
-                        pathImages.add(path.path);
-                      });
-                    },
+                    // onTap: (){
+                    //   ImagePicker().getImage(source: ImageSource.gallery).then((path) {
+                    //     pathImages.add(path.path);
+                    //   });
+                    // },
                     child: Text('Tải ảnh lên',
                         style: TextStyle(
                             color: Colors.blue,

@@ -7,10 +7,11 @@ import 'package:facebook_app/widgets/messenger_app_bar_action/messenger_app_bar.
 const ListYourFriendChat = [
   'Nice to meet you!',
   'Hello',
+  " zzz",
 ];
 const ListYourChat = [
   'Nice to meet you!',
-  'Hi',
+  'Hiaaaaaaaaaaa',
 ];
 
 class ChatDetail extends StatefulWidget {

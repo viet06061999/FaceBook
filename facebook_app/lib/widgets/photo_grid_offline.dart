@@ -1,15 +1,16 @@
 import 'dart:math';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class PhotoGrid extends StatefulWidget {
+class PhotoGridOffline extends StatefulWidget {
   final int maxImages;
   final List<String> imageUrls;
   final Function(int) onImageClicked;
   final Function onExpandClicked;
 
-  PhotoGrid(
+  PhotoGridOffline(
       {@required this.imageUrls,
         @required this.onImageClicked,
         @required this.onExpandClicked,
@@ -21,7 +22,7 @@ class PhotoGrid extends StatefulWidget {
   createState() => _PhotoGridState();
 }
 
-class _PhotoGridState extends State<PhotoGrid> {
+class _PhotoGridState extends State<PhotoGridOffline> {
   @override
   Widget build(BuildContext context) {
     var images = buildImages();
@@ -51,11 +52,10 @@ class _PhotoGridState extends State<PhotoGrid> {
         // If no more are remaining return a simple image widget
         if (remaining == 0) {
           return GestureDetector(
-            child: Image.network(
-              imageUrl,
+            child: Image.file(
+              File(imageUrl),
               fit: BoxFit.cover,
-            )
-            ,
+            ),
             onTap: () => widget.onImageClicked(index),
           );
         } else {
@@ -65,8 +65,10 @@ class _PhotoGridState extends State<PhotoGrid> {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                Image.network(imageUrl, fit: BoxFit.cover),
-                Positioned.fill(
+                Image.file(
+                  File(imageUrl),
+                  fit: BoxFit.cover,
+                ),                Positioned.fill(
                   child: Container(
                     alignment: Alignment.center,
                     color: Colors.black54,
@@ -83,8 +85,8 @@ class _PhotoGridState extends State<PhotoGrid> {
       }
       else {
         return GestureDetector(
-          child: Image.network(
-            imageUrl,
+          child: Image.file(
+            File(imageUrl),
             fit: BoxFit.cover,
           ),
           onTap: () => widget.onImageClicked(index),

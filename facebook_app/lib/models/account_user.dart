@@ -6,5 +6,5 @@ class AccountUser {
 
 var yourAccount = new AccountUser(
   avatarImg: "assets/images/user_account/me.jpg",
-  name: 'Wanda Upton',
+  name: 'Kdroid',
 );

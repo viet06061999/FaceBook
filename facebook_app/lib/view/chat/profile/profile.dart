@@ -68,7 +68,7 @@ class _ProfileState extends State<Profile> {
                       SizedBox(height: 10.0),
                       Center(
                         child: Text(
-                          'fb.com/hungdalat',
+                          'duynk',
                           style: TextStyle(
                             fontSize: 22.0,
                             color: Colors.black,
@@ -80,10 +80,10 @@ class _ProfileState extends State<Profile> {
                         height: 10.0,
                       ),
                       _buildTitleSetting('Account'),
-                      _buildSettingItem('Username', '@hungdalat', true),
+                      _buildSettingItem('Username', '@abc', true),
                       _buildSettingItem('Gender', 'Male', true),
                       _buildSettingItem(
-                          'Email', 'flutterforsale@gmail.com', false),
+                          'Email', 'duy@gmail.com', false),
                       _buildTitleSetting('Setting'),
                       _buildSettingItem('Notification', '', true),
                       _buildSettingItem('Privacy and Security', '', true),

@@ -29,7 +29,7 @@ class HomeTab extends StatelessWidget {
               physics: NeverScrollableScrollPhysics(),
               itemCount: provide.listPost.length,
               itemBuilder: (context, index) {
-                return PostWidget(post: provide.listPost[index]);
+                return PostWidget(post: provide.listPost[index], provide: provide,);
               }),
         ],
       ),

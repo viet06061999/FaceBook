@@ -2,8 +2,11 @@ import 'package:facebook_app/data/model/post.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:facebook_app/widgets/photo_grid.dart';
+
+import 'comment_widget.dart';
 
 class PostWidget extends StatelessWidget {
   final Post post;
@@ -106,13 +109,13 @@ class PostWidget extends StatelessWidget {
                     //FontAwesomeIcons.commentAlt, size: 20.0,
                     IconButton(
                         icon: new Icon(FontAwesomeIcons.commentAlt, size: 20.0),
-                        // onPressed: () {
-                        //   showMaterialModalBottomSheet(
-                        //     context: context,
-                        //     backgroundColor: Colors.transparent,
-                        //     builder: (context) => CreateCommentWidget(provide: provide,),
-                        //   );
-                        // },
+                        onPressed: () {
+                          showMaterialModalBottomSheet(
+                            context: context,
+                            backgroundColor: Colors.transparent,
+                            builder: (context) => CreateCommentWidget(provide: provide, post: post,),
+                          );
+                        },
                     ),
                     SizedBox(width: 5.0),
                     Text('Comment', style: TextStyle(fontSize: 14.0)),

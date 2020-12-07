@@ -2,6 +2,7 @@ import 'package:facebook_app/viewmodel/profile_view_model.dart';
 import 'package:facebook_app/base/base.dart';
 import 'package:facebook_app/widgets/post_widget.dart';
 import 'package:facebook_app/widgets/separator_widget.dart';
+import 'package:facebook_app/widgets/setting_profile.dart';
 import 'package:facebook_app/widgets/write_something_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -40,7 +41,7 @@ class _ProfilePageState extends State<ProfilePageTmp>
       return Column(
         children: <Widget>[
           Container(
-            height: 400.0,
+            height: 450.0,
             child: Stack(
               children: <Widget>[
                 Padding(
@@ -77,14 +78,14 @@ class _ProfilePageState extends State<ProfilePageTmp>
                                                   color: Colors.black,
                                                 ),
                                                 _action1),
-                                            // _createTile(
-                                            //     context,
-                                            //     'Tải ảnh lên',
-                                            //     Icon(
-                                            //       Icons.upload_sharp,
-                                            //       color: Colors.black,
-                                            //     ),
-                                            //     _action2(value)),
+                                            _createTile(
+                                                context,
+                                                'Tải ảnh lên',
+                                                Icon(
+                                                  Icons.upload_sharp,
+                                                  color: Colors.black,
+                                                ),
+                                                _changeCoverImage),
                                           ],
                                         )),
                                   );
@@ -137,14 +138,14 @@ class _ProfilePageState extends State<ProfilePageTmp>
                                                         color: Colors.black,
                                                       ),
                                                       _action1),
-                                                  // _createTile(
-                                                  //     context,
-                                                  //     'Tải ảnh lên',
-                                                  //     Icon(
-                                                  //       Icons.upload_sharp,
-                                                  //       color: Colors.black,
-                                                  //     ),
-                                                  //     _action2(value)),
+                                                  _createTile(
+                                                      context,
+                                                      'Tải ảnh lên',
+                                                      Icon(
+                                                        Icons.upload_sharp,
+                                                        color: Colors.black,
+                                                      ),
+                                                      _changeCoverImage),
                                                 ],
                                               )),
                                         );
@@ -163,24 +164,9 @@ class _ProfilePageState extends State<ProfilePageTmp>
                         )),
                   ]),
                 ),
-                // Container(
-                //   margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-                //   height: 200.0,
-                //   decoration: BoxDecoration(
-                //       image: DecorationImage(
-                //           image: NetworkImage(value.userEntity.coverImage),
-                //           fit: BoxFit.cover),
-                //       borderRadius: BorderRadius.only(
-                //           topLeft: Radius.circular(10.0),
-                //           topRight: Radius.circular(10.0))),
-                // ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    // CircleAvatar(
-                    //   backgroundImage: NetworkImage(value.userEntity.avatar),
-                    //   radius: 70.0,
-                    // ),
                     Padding(
                       padding: EdgeInsets.only(top: 20.0),
                       child: new Stack(fit: StackFit.loose, children: <Widget>[
@@ -218,14 +204,14 @@ class _ProfilePageState extends State<ProfilePageTmp>
                                                       color: Colors.black,
                                                     ),
                                                     _action1),
-                                                // _createTile(
-                                                //     context,
-                                                //     'Chọn ảnh đại diện',
-                                                //     Icon(
-                                                //       Icons.upload_sharp,
-                                                //       color: Colors.black,
-                                                //     ),
-                                                //     _action2(value)),
+                                                _createTile(
+                                                    context,
+                                                    'Chọn ảnh đại diện',
+                                                    Icon(
+                                                      Icons.upload_sharp,
+                                                      color: Colors.black,
+                                                    ),
+                                                    _changeAvatar),
                                               ],
                                             )),
                                       );
@@ -284,14 +270,14 @@ class _ProfilePageState extends State<ProfilePageTmp>
                                                             color: Colors.black,
                                                           ),
                                                           _action1),
-                                                      // _createTile(
-                                                      //     context,
-                                                      //     'Chọn ảnh đại diện',
-                                                      //     Icon(
-                                                      //       Icons.upload_sharp,
-                                                      //       color: Colors.black,
-                                                      //     ),
-                                                      //     _action2(value)),
+                                                      _createTile(
+                                                          context,
+                                                          'Chọn ảnh đại diện',
+                                                          Icon(
+                                                            Icons.upload_sharp,
+                                                            color: Colors.black,
+                                                          ),
+                                                          _changeAvatar),
                                                     ],
                                                   )),
                                             );
@@ -311,10 +297,32 @@ class _ProfilePageState extends State<ProfilePageTmp>
                       ]),
                     ),
                     SizedBox(height: 20.0),
-                    Text(value.userEntity.firstName + value.userEntity.lastName,
-                        style: TextStyle(
-                            fontSize: 24.0, fontWeight: FontWeight.bold)),
-                    SizedBox(height: 20.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                            value.userEntity.firstName +
+                                value.userEntity.lastName,
+                            style: TextStyle(
+                                fontSize: 24.0, fontWeight: FontWeight.bold)),
+                        SizedBox(
+                          width: 5.0,
+                        ),
+                        Icon(
+                          Icons.check_circle,
+                          color: Colors.blueAccent,
+                        )
+                      ],
+                    ),
+                    if (value.userEntity.description != null)
+                      SizedBox(height: 5.0),
+                    if (value.userEntity.description != null)
+                      Text(
+                        value.userEntity.description,
+                        style: TextStyle(fontSize: 16.0, color: Colors.grey),
+                        textAlign: TextAlign.center,
+                      ),
+                    SizedBox(height: 15.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
@@ -331,14 +339,22 @@ class _ProfilePageState extends State<ProfilePageTmp>
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16.0))),
                         ),
-                        Container(
-                          height: 40.0,
-                          width: 45.0,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[300],
-                              borderRadius: BorderRadius.circular(5.0)),
-                          child: Icon(Icons.more_horiz),
-                        )
+                        GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SettingProfile(value)),
+                              );
+                            },
+                            child: Container(
+                              height: 40.0,
+                              width: 45.0,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(5.0)),
+                              child: Icon(Icons.more_horiz),
+                            ))
                       ],
                     )
                   ],
@@ -354,27 +370,29 @@ class _ProfilePageState extends State<ProfilePageTmp>
             padding: EdgeInsets.symmetric(horizontal: 15.0),
             child: Column(
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Icon(Icons.home, color: Colors.grey, size: 30.0),
-                    SizedBox(width: 10.0),
-                    Text("Sống tại ", style: TextStyle(fontSize: 16.0)),
-                    Text(value.userEntity.city,
-                        style: TextStyle(
-                            fontSize: 16.0, fontWeight: FontWeight.bold))
-                  ],
-                ),
-                SizedBox(height: 15.0),
-                Row(
-                  children: <Widget>[
-                    Icon(Icons.location_on, color: Colors.grey, size: 30.0),
-                    SizedBox(width: 10.0),
-                    Text("Đến từ ", style: TextStyle(fontSize: 16.0)),
-                    Text(value.userEntity.city,
-                        style: TextStyle(
-                            fontSize: 16.0, fontWeight: FontWeight.bold))
-                  ],
-                ),
+                if (value.userEntity.city != null)
+                  Row(
+                    children: <Widget>[
+                      Icon(Icons.home, color: Colors.grey, size: 30.0),
+                      SizedBox(width: 10.0),
+                      Text("Sống tại ", style: TextStyle(fontSize: 16.0)),
+                      Text(value.userEntity.city,
+                          style: TextStyle(
+                              fontSize: 16.0, fontWeight: FontWeight.bold))
+                    ],
+                  ),
+                if (value.userEntity.city != null) SizedBox(height: 15.0),
+                if (value.userEntity.city != null)
+                  Row(
+                    children: <Widget>[
+                      Icon(Icons.location_on, color: Colors.grey, size: 30.0),
+                      SizedBox(width: 10.0),
+                      Text("Đến từ ", style: TextStyle(fontSize: 16.0)),
+                      Text(value.userEntity.city,
+                          style: TextStyle(
+                              fontSize: 16.0, fontWeight: FontWeight.bold))
+                    ],
+                  ),
                 SizedBox(height: 15.0),
                 Row(
                   children: <Widget>[
@@ -392,8 +410,13 @@ class _ProfilePageState extends State<ProfilePageTmp>
                   ),
                   child: Center(
                       child: GestureDetector(
-                        onTap: (){
-                        },
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SettingProfile(value)),
+                            );
+                          },
                           child: Text('Chỉnh sửa trang cá nhân',
                               style: TextStyle(
                                   color: Colors.blue,
@@ -598,13 +621,17 @@ class _ProfilePageState extends State<ProfilePageTmp>
     print('action 1');
   }
 
-  _action2(ProfileProvide provide) {
-       ImagePicker().getImage(source: ImageSource.gallery).then((path) {
-              provide.updateAvatar(path.path);
-      });
-    }
+  _changeAvatar() {
+    print('change avatar');
+    ImagePicker().getImage(source: ImageSource.gallery).then((path) {
+      provide.updateAvatar(path.path);
+    });
+  }
 
-  _action3() {
-    print('action 3');
+  _changeCoverImage() {
+    print('change cover img');
+    ImagePicker().getImage(source: ImageSource.gallery).then((path) {
+      provide.updateCover(path.path);
+    });
   }
 }

@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePageTmp>
             WatchTab(),
             ProfileTab(),
             NotificationsTab(),
-            MenuTab()
+            MenuTab(value)
           ]);
         }));
   }

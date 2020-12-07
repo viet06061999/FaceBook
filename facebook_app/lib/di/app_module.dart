@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartin/dartin.dart';
+import 'package:facebook_app/data/repository/chat_repository.dart';
+import 'package:facebook_app/data/repository/chat_repository_impl.dart';
 import 'package:facebook_app/data/repository/friend_repository.dart';
 import 'package:facebook_app/data/repository/friend_repository_impl.dart';
 import 'package:facebook_app/data/repository/photo_repository.dart';
@@ -41,6 +43,7 @@ final repoModule = Module([
   factory<PostRepository>(({params}) => PostRepositoryImpl(get(), get())),
   factory<PhotoRepository>(({params}) => PhotoRepositoryImpl(get(), get())),
   factory<FriendRepository>(({params}) => FriendRepositoryImpl(get())),
+  factory<ChatRepository>(({params}) => ChatRepositoryImpl(get())),
 ]);
 
 //remote

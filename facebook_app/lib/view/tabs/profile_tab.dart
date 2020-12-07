@@ -77,14 +77,14 @@ class _ProfilePageState extends State<ProfilePageTmp>
                                                   color: Colors.black,
                                                 ),
                                                 _action1),
-                                            _createTile(
-                                                context,
-                                                'Tải ảnh lên',
-                                                Icon(
-                                                  Icons.upload_sharp,
-                                                  color: Colors.black,
-                                                ),
-                                                _action2(value)),
+                                            // _createTile(
+                                            //     context,
+                                            //     'Tải ảnh lên',
+                                            //     Icon(
+                                            //       Icons.upload_sharp,
+                                            //       color: Colors.black,
+                                            //     ),
+                                            //     _action2(value)),
                                           ],
                                         )),
                                   );
@@ -137,14 +137,14 @@ class _ProfilePageState extends State<ProfilePageTmp>
                                                         color: Colors.black,
                                                       ),
                                                       _action1),
-                                                  _createTile(
-                                                      context,
-                                                      'Tải ảnh lên',
-                                                      Icon(
-                                                        Icons.upload_sharp,
-                                                        color: Colors.black,
-                                                      ),
-                                                      _action2(value)),
+                                                  // _createTile(
+                                                  //     context,
+                                                  //     'Tải ảnh lên',
+                                                  //     Icon(
+                                                  //       Icons.upload_sharp,
+                                                  //       color: Colors.black,
+                                                  //     ),
+                                                  //     _action2(value)),
                                                 ],
                                               )),
                                         );
@@ -218,14 +218,14 @@ class _ProfilePageState extends State<ProfilePageTmp>
                                                       color: Colors.black,
                                                     ),
                                                     _action1),
-                                                _createTile(
-                                                    context,
-                                                    'Chọn ảnh đại diện',
-                                                    Icon(
-                                                      Icons.upload_sharp,
-                                                      color: Colors.black,
-                                                    ),
-                                                    _action2(value)),
+                                                // _createTile(
+                                                //     context,
+                                                //     'Chọn ảnh đại diện',
+                                                //     Icon(
+                                                //       Icons.upload_sharp,
+                                                //       color: Colors.black,
+                                                //     ),
+                                                //     _action2(value)),
                                               ],
                                             )),
                                       );
@@ -284,14 +284,14 @@ class _ProfilePageState extends State<ProfilePageTmp>
                                                             color: Colors.black,
                                                           ),
                                                           _action1),
-                                                      _createTile(
-                                                          context,
-                                                          'Chọn ảnh đại diện',
-                                                          Icon(
-                                                            Icons.upload_sharp,
-                                                            color: Colors.black,
-                                                          ),
-                                                          _action2(value)),
+                                                      // _createTile(
+                                                      //     context,
+                                                      //     'Chọn ảnh đại diện',
+                                                      //     Icon(
+                                                      //       Icons.upload_sharp,
+                                                      //       color: Colors.black,
+                                                      //     ),
+                                                      //     _action2(value)),
                                                     ],
                                                   )),
                                             );

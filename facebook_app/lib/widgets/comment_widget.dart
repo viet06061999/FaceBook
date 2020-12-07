@@ -91,7 +91,14 @@ class _CreateCommentState extends State<CreateCommentWidget> {
                   child: GestureDetector(
                       onTap: (){
                       },
-                      child:Text('Viết bình luận')
+                      child:
+                      TextField(
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Viết bình luận'
+                        ),
+                      ),
+
                   ),
                 )
               ],

@@ -106,13 +106,13 @@ class PostWidget extends StatelessWidget {
                     //FontAwesomeIcons.commentAlt, size: 20.0,
                     IconButton(
                         icon: new Icon(FontAwesomeIcons.commentAlt, size: 20.0),
-                        // onPressed: () {
-                        //   showMaterialModalBottomSheet(
-                        //     context: context,
-                        //     backgroundColor: Colors.transparent,
-                        //     builder: (context) => CreateCommentWidget(provide: provide,),
-                        //   );
-                        // },
+                        onPressed: () {
+                          showMaterialModalBottomSheet(
+                            context: context,
+                            backgroundColor: Colors.transparent,
+                            builder: (context) => CreateCommentWidget(provide: provide, post: post,),
+                          );
+                        },
                     ),
                     SizedBox(width: 5.0),
                     Text('Comment', style: TextStyle(fontSize: 14.0)),

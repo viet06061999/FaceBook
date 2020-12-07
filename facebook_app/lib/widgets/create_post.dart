@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:facebook_app/viewmodel/home_view_model.dart';
-import 'package:facebook_app/widgets/photo_grid.dart';
+import 'package:facebook_app/widgets/photo_grid_offline.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter_absolute_path/flutter_absolute_path.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 
 class CreatePostWidget extends StatefulWidget {
   final HomeProvide provide;
@@ -19,7 +22,10 @@ class _CreatePostState extends State<CreatePostWidget> {
   final HomeProvide provide;
 
   _CreatePostState(this.provide);
+
   List<String> pathImages = [];
+  List<Asset> images = List<Asset>();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -52,11 +58,11 @@ class _CreatePostState extends State<CreatePostWidget> {
                     SizedBox(height: 5.0),
                   ],
                 ),
-                FlatButton(
-                    // onPressed: () {uj
-                    //   provide.uploadPost(content,pathImages: pathImages);
-                    //   Navigator.pop(context);
-                    // },
+                TextButton(
+                    onPressed: () {
+                      provide.uploadPost(content, pathImages: pathImages);
+                      Navigator.pop(context);
+                    },
                     child: Text(
                       'ĐĂNG',
                       style: TextStyle(
@@ -72,11 +78,11 @@ class _CreatePostState extends State<CreatePostWidget> {
             minLines: 4,
             textInputAction: TextInputAction.next,
             style: TextStyle(fontSize: 18, color: Colors.black),
-            // onChanged: (text) {
-            //   setState(() {
-            //     content = text;
-            //   });
-            // },
+            onChanged: (text) {
+              setState(() {
+                content = text;
+              });
+            },
             decoration: InputDecoration(
                 border: InputBorder.none, hintText: 'Bạn đang nghĩ gì?'),
           ),
@@ -91,11 +97,9 @@ class _CreatePostState extends State<CreatePostWidget> {
             ),
             child: Center(
                 child: GestureDetector(
-                    // onTap: (){
-                    //   ImagePicker().getImage(source: ImageSource.gallery).then((path) {
-                    //     pathImages.add(path.path);
-                    //   });
-                    // },
+                    onTap: () {
+                      loadAssets();
+                    },
                     child: Text('Tải ảnh lên',
                         style: TextStyle(
                             color: Colors.blue,
@@ -106,13 +110,24 @@ class _CreatePostState extends State<CreatePostWidget> {
       ),
     );
   }
+
   Visibility buildImages(BuildContext context) {
     if (pathImages.length == 1) {
-      return Visibility(visible: true, child: Image.network(pathImages[0]));
+      return Visibility(
+        visible: true,
+        child: Container(
+          height: MediaQuery.of(context).size.height / 2,
+          width: MediaQuery.of(context).size.width - 10,
+          child: Image.file(
+            File(pathImages[0]),
+            fit: BoxFit.cover,
+          ),
+        ),
+      );
     } else if (pathImages.length % 2 == 0) {
       return Visibility(
         visible: pathImages.length > 0,
-        child: PhotoGrid(
+        child: PhotoGridOffline(
           imageUrls: pathImages,
           onImageClicked: (i) => print('Image $i was clicked!'),
           onExpandClicked: () => print('Expand Image was clicked'),
@@ -127,15 +142,12 @@ class _CreatePostState extends State<CreatePostWidget> {
               Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: Container(
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height / 2,
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width / 2 - 4,
-                  child: Image.network(pathImages[0], fit: BoxFit.cover),
+                  height: MediaQuery.of(context).size.height / 3,
+                  width: MediaQuery.of(context).size.width / 2.5,
+                  child: Image.file(
+                    File(pathImages[0]),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               Column(
@@ -143,33 +155,57 @@ class _CreatePostState extends State<CreatePostWidget> {
                   Padding(
                     padding: const EdgeInsets.all(2.0),
                     child: Container(
-                      height: MediaQuery
-                          .of(context)
-                          .size
-                          .height / 4,
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width / 2 - 4,
-                      child: Image.network(pathImages[1], fit: BoxFit.cover),
+                      height: MediaQuery.of(context).size.height / 6,
+                      width: MediaQuery.of(context).size.width / 2.2,
+                      child: Image.file(
+                        File(pathImages[1]),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   Container(
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .height / 4,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width / 2 - 4,
-                    child: Image.network(pathImages[2], fit: BoxFit.cover),
+                    height: MediaQuery.of(context).size.height / 6,
+                    width: MediaQuery.of(context).size.width / 2.2,
+                    child: Image.file(
+                      File(pathImages[2]),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ],
               )
             ],
-          )
-      );
+          ));
     }
+  }
+
+  loadAssets() {
+    String error = 'No Error Dectected';
+
+    try {
+      MultiImagePicker.pickImages(
+        maxImages: 4,
+        enableCamera: true,
+        selectedAssets: images,
+        cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
+        materialOptions: MaterialOptions(
+          actionBarColor: "#abcdef",
+          actionBarTitle: "Example App",
+          allViewTitle: "All Photos",
+          useDetailsView: false,
+          selectCircleStrokeColor: "#000000",
+        ),
+      ).then((value) {
+        for (int i = 0; i < value.length; i++) {
+          FlutterAbsolutePath.getAbsolutePath(value[i].identifier)
+              .then((value) => setState(() {
+                    print(value);
+                    pathImages.add(value);
+                  }));
+        }
+      });
+    } on Exception catch (e) {
+      error = e.toString();
+    }
+    if (!mounted) return;
   }
 }

@@ -80,7 +80,7 @@ class _CreateCommentState extends State<CreateCommentWidget> {
 
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                  width: MediaQuery.of(context).size.width/1.5,
+                  width: MediaQuery.of(context).size.width/1.8,
                   decoration: BoxDecoration(
                       border: Border.all(
                           width: 1.0,
@@ -89,18 +89,28 @@ class _CreateCommentState extends State<CreateCommentWidget> {
                       borderRadius: BorderRadius.circular(10.0)
                   ),
                   child: GestureDetector(
-                      onTap: (){
-                      },
                       child:
                       TextField(
+                        onChanged: (text) {
+                          setState(() {
+                            content = text;
+                          });
+                        },
                         decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Viết bình luận'
                         ),
                       ),
-
                   ),
-                )
+                ),
+                IconButton(
+                  icon: new Icon(FontAwesomeIcons.paperPlane) ,
+                  onPressed: () {
+                    provide.addComment(post, content);
+                    Navigator.pop(context);
+                  },
+
+                ),
               ],
             ),
           ),

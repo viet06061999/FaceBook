@@ -14,6 +14,7 @@ import 'package:facebook_app/data/source/local/user_local_data.dart';
 import 'package:facebook_app/data/source/remote/fire_base_auth.dart';
 import 'package:facebook_app/data/source/remote/fire_base_chat.dart';
 import 'package:facebook_app/data/source/remote/fire_base_friend.dart';
+import 'package:facebook_app/data/source/remote/fire_base_notification.dart';
 import 'package:facebook_app/data/source/remote/fire_base_post.dart';
 import 'package:facebook_app/data/source/remote/fire_base_storage.dart';
 import 'package:facebook_app/data/source/remote/fire_base_user_storage.dart';
@@ -37,9 +38,8 @@ final viewModelModule = Module([
   single<ProfileProvide>(
       ({params}) => ProfileProvide(get(), get(), get(), get())),
   single<FriendProvide>(
-          ({params}) => FriendProvide(get(), get(), get(), get())),
-  single<ChatProvide>(
-          ({params}) => ChatProvide(get())),
+      ({params}) => FriendProvide(get(), get(), get(), get())),
+  single<ChatProvide>(({params}) => ChatProvide(get())),
 ]);
 
 final repoModule = Module([
@@ -47,7 +47,7 @@ final repoModule = Module([
       ({params}) => UserRepositoryImpl(get(), get(), get(), get())),
   factory<PostRepository>(({params}) => PostRepositoryImpl(get(), get())),
   factory<PhotoRepository>(({params}) => PhotoRepositoryImpl(get(), get())),
-  factory<FriendRepository>(({params}) => FriendRepositoryImpl(get())),
+  factory<FriendRepository>(({params}) => FriendRepositoryImpl(get(), get())),
   factory<ChatRepository>(({params}) => ChatRepositoryImpl(get())),
 ]);
 
@@ -59,6 +59,7 @@ final remoteModule = Module([
   factory<FirUserUpload>(({params}) => FirUserUpload(get())),
   factory<FirFriend>(({params}) => FirFriend(get())),
   factory<FirChat>(({params}) => FirChat(get())),
+  factory<FirNotification>(({params}) => FirNotification(get())),
 ]);
 
 final firebase = Module([

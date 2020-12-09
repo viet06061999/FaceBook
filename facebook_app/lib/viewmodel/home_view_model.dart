@@ -48,6 +48,7 @@ class HomeProvide extends BaseProvide {
   List<Friend> _friends = [];
 
   List<Friend> get friends => _friends;
+
   List<Friend> _friendsPending = [];
 
   List<Friend> get friendsPending => _friendsPending;
@@ -105,6 +106,7 @@ class HomeProvide extends BaseProvide {
       userEntity = value;
       _getListPost();
       getFriends(userEntity);
+      getPendings(userEntity);
     });
   }
 

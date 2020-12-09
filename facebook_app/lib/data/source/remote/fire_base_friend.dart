@@ -37,7 +37,7 @@ class FirFriend {
     DocumentReference first = _firestore.doc('users/' + id);
     return _firestore
         .collection('friends')
-        .where('second_user', isEqualTo: first)
+        .where('first_user', isEqualTo: first)
         .where('status', isEqualTo: FriendStatus.pending.index)
         .snapshots(includeMetadataChanges: true);
   }

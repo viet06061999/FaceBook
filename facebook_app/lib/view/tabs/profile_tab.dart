@@ -1,5 +1,8 @@
+import 'package:facebook_app/view/chat/chats/list_friend.dart';
 import 'package:facebook_app/viewmodel/profile_view_model.dart';
 import 'package:facebook_app/base/base.dart';
+import 'package:facebook_app/widgets/friend_grid.dart';
+import 'package:facebook_app/widgets/list_friend.dart';
 import 'package:facebook_app/widgets/post_widget.dart';
 import 'package:facebook_app/widgets/separator_widget.dart';
 import 'package:facebook_app/widgets/setting_profile.dart';
@@ -18,7 +21,9 @@ class ProfileTab extends PageProvideNode<ProfileProvide> {
 class ProfilePageTmp extends StatefulWidget {
   final ProfileProvide provide;
 
-  const ProfilePageTmp(this.provide);
+  ProfilePageTmp(this.provide) {
+    provide.getFriends(provide.userEntity);
+  }
 
   @override
   State<StatefulWidget> createState() => _ProfilePageState();
@@ -302,6 +307,7 @@ class _ProfilePageState extends State<ProfilePageTmp>
                       children: <Widget>[
                         Text(
                             value.userEntity.firstName +
+                                " " +
                                 value.userEntity.lastName,
                             style: TextStyle(
                                 fontSize: 24.0, fontWeight: FontWeight.bold)),
@@ -344,7 +350,8 @@ class _ProfilePageState extends State<ProfilePageTmp>
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => SettingProfile(value)),
+                                    builder: (context) =>
+                                        SettingProfile(value)),
                               );
                             },
                             child: Container(
@@ -442,7 +449,7 @@ class _ProfilePageState extends State<ProfilePageTmp>
                             style: TextStyle(
                                 fontSize: 22.0, fontWeight: FontWeight.bold)),
                         SizedBox(height: 6.0),
-                        Text('69 người bạn',
+                        Text(value.friends.length.toString() + ' người bạn',
                             style: TextStyle(
                                 fontSize: 16.0, color: Colors.grey[800])),
                       ],
@@ -451,139 +458,36 @@ class _ProfilePageState extends State<ProfilePageTmp>
                         style: TextStyle(fontSize: 16.0, color: Colors.blue)),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            height: MediaQuery.of(context).size.width / 3 - 20,
-                            width: MediaQuery.of(context).size.width / 3 - 20,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage('assets/samantha.jpg')),
-                                borderRadius: BorderRadius.circular(10.0)),
-                          ),
-                          SizedBox(height: 5.0),
-                          Text('Samantha',
-                              style: TextStyle(
-                                  fontSize: 16.0, fontWeight: FontWeight.bold))
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            height: MediaQuery.of(context).size.width / 3 - 20,
-                            width: MediaQuery.of(context).size.width / 3 - 20,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage('assets/andrew.jpg')),
-                                borderRadius: BorderRadius.circular(10.0)),
-                          ),
-                          SizedBox(height: 5.0),
-                          Text('Andrew',
-                              style: TextStyle(
-                                  fontSize: 16.0, fontWeight: FontWeight.bold))
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            height: MediaQuery.of(context).size.width / 3 - 20,
-                            width: MediaQuery.of(context).size.width / 3 - 20,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage('assets/Sam Wilson.jpg'),
-                                    fit: BoxFit.cover),
-                                borderRadius: BorderRadius.circular(10.0)),
-                          ),
-                          SizedBox(height: 5.0),
-                          Text('Sam Wilson',
-                              style: TextStyle(
-                                  fontSize: 16.0, fontWeight: FontWeight.bold))
-                        ],
-                      ),
-                    ],
+                FriendGrid(
+                    friends: value.friends,
+                    onImageClicked: null,
+                    onExpandClicked: null),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ListUserFriend(
+                              provide: value,
+                              friends: value.friends,
+                              onImageClicked: null,
+                              onExpandClicked: null)),
+                    );
+                  },
+                  child: Container(
+                    margin: EdgeInsets.symmetric(vertical: 15.0),
+                    height: 40.0,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    child: Center(
+                        child: Text('Xem tất cả bạn bè',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0))),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            height: MediaQuery.of(context).size.width / 3 - 20,
-                            width: MediaQuery.of(context).size.width / 3 - 20,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage('assets/steven.jpg')),
-                                borderRadius: BorderRadius.circular(10.0)),
-                          ),
-                          SizedBox(height: 5.0),
-                          Text('Steven',
-                              style: TextStyle(
-                                  fontSize: 16.0, fontWeight: FontWeight.bold))
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            height: MediaQuery.of(context).size.width / 3 - 20,
-                            width: MediaQuery.of(context).size.width / 3 - 20,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage('assets/greg.jpg')),
-                                borderRadius: BorderRadius.circular(10.0)),
-                          ),
-                          SizedBox(height: 5.0),
-                          Text('Greg',
-                              style: TextStyle(
-                                  fontSize: 16.0, fontWeight: FontWeight.bold))
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            height: MediaQuery.of(context).size.width / 3 - 20,
-                            width: MediaQuery.of(context).size.width / 3 - 20,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage('assets/andy.jpg'),
-                                    fit: BoxFit.cover),
-                                borderRadius: BorderRadius.circular(10.0)),
-                          ),
-                          SizedBox(height: 5.0),
-                          Text('Andy',
-                              style: TextStyle(
-                                  fontSize: 16.0, fontWeight: FontWeight.bold))
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 15.0),
-                  height: 40.0,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  child: Center(
-                      child: Text('Xem tất cả bạn bè',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16.0))),
                 ),
               ],
             ),

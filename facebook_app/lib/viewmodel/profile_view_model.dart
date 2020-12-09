@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:facebook_app/data/model/friend.dart';
 import 'package:facebook_app/data/model/post.dart';
 import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/data/model/video.dart';
@@ -7,6 +8,8 @@ import 'package:facebook_app/data/repository/photo_repository.dart';
 import 'package:facebook_app/data/repository/post_repository.dart';
 import 'package:facebook_app/data/repository/user_repository.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class ProfileProvide extends HomeProvide {
   List<Post> _userListPost = [];
@@ -20,6 +23,13 @@ class ProfileProvide extends HomeProvide {
   List<Video> _videos = [];
 
   List<Video> get videos => _videos;
+
+  GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
+  GlobalKey<NavigatorState> _navigatorKey;
+
+  void init({GlobalKey<NavigatorState> navigatorKey}) {
+    _navigatorKey = navigatorKey;
+  }
 
   ProfileProvide(PostRepository repository, PhotoRepository photoRepository,
       UserRepository userRepository, FriendRepository friendRepository)
@@ -73,6 +83,23 @@ class ProfileProvide extends HomeProvide {
   updateCover(String pathCoverImage) {
     userRepository.updateCoverImage(pathCoverImage, userEntity, () {});
     notifyListeners();
+  }
+
+  updateUser(UserEntity userEntity) {
+    userRepository.updateUser(userEntity).listen((event) {}, onError: (error) {
+      print(error);
+    }).onDone(() {});
+  }
+
+  updateDescriptionUser(UserEntity userEntity, String description) {
+    userRepository.updateDescriptionUser(userEntity, description).listen(
+        (event) {
+      print("loading");
+    }, onError: (error) {
+      print(error);
+    }).onDone(() {
+      print("done");
+    });
   }
 
   getUserPhotos(String userId) =>

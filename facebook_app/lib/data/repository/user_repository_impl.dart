@@ -70,4 +70,14 @@ class UserRepositoryImpl implements UserRepository {
       firUserUpload.uploadImage(userEntity.id, urlPath);
     }, onError, (progress) => null);
   }
+
+  @override
+  Observable<void> updateUser(UserEntity userEntity) {
+    _firAuth.updateUser(userEntity);
+  }
+
+  @override
+  Observable<void> updateDescriptionUser(UserEntity userEntity, String description) {
+    _firAuth.updateDescriptionUser(userEntity, description);
+  }
 }

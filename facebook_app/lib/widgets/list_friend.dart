@@ -109,14 +109,17 @@ class _ListUserFriendState extends State<ListUserFriend> {
       padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
       child: Row(
         children: <Widget>[
-          Container(
-            height: 60,
-            width: 60,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30.0),
-              image: DecorationImage(
-                image: NetworkImage(friend.userSecond.avatar),
-                fit: BoxFit.cover,
+          GestureDetector(
+            onTap: () {},
+            child: Container(
+              height: 60,
+              width: 60,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30.0),
+                image: DecorationImage(
+                  image: NetworkImage(friend.userSecond.avatar),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
@@ -126,14 +129,17 @@ class _ListUserFriendState extends State<ListUserFriend> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    friend.userSecond.firstName +
-                        " " +
-                        friend.userSecond.lastName,
-                    style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Text(
+                      friend.userSecond.firstName +
+                          " " +
+                          friend.userSecond.lastName,
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                   SizedBox(height: 2),
                   Container(
@@ -159,7 +165,7 @@ class _ListUserFriendState extends State<ListUserFriend> {
                                       color: Color(0xFF737373),
                                       child: new Container(
                                           decoration: new BoxDecoration(
-                                              color: Colors.white,
+                                            color: Colors.white,
                                           ),
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
@@ -170,48 +176,57 @@ class _ListUserFriendState extends State<ListUserFriend> {
                                                       friend.userSecond
                                                           .firstName +
                                                       " " +
-                                                      friend.userSecond.lastName,
+                                                      friend
+                                                          .userSecond.lastName,
                                                   Icon(
                                                     Icons.people_outline,
                                                     color: Colors.black,
                                                   ),
-                                                  _action1, friend.userSecond.id),
+                                                  _action1,
+                                                  friend.userSecond.id),
                                               _createTile(
                                                   context,
                                                   'Xem trang cá nhân của ' +
                                                       friend.userSecond
                                                           .firstName +
                                                       " " +
-                                                      friend.userSecond.lastName,
+                                                      friend
+                                                          .userSecond.lastName,
                                                   Icon(
-                                                    Icons.account_circle_outlined,
+                                                    Icons
+                                                        .account_circle_outlined,
                                                     color: Colors.black,
                                                   ),
-                                                  _action1, friend.userSecond.id),
+                                                  _action1,
+                                                  friend.userSecond.id),
                                               _createTile(
                                                   context,
                                                   'Chặn ' +
                                                       friend.userSecond
                                                           .firstName +
                                                       " " +
-                                                      friend.userSecond.lastName,
+                                                      friend
+                                                          .userSecond.lastName,
                                                   Icon(
                                                     Icons.block,
                                                     color: Colors.black,
                                                   ),
-                                                  _action1, friend.userSecond.id),
+                                                  _action1,
+                                                  friend.userSecond.id),
                                               _createTile(
                                                   context,
                                                   'Hủy kết bạn ' +
                                                       friend.userSecond
                                                           .firstName +
                                                       " " +
-                                                      friend.userSecond.lastName,
+                                                      friend
+                                                          .userSecond.lastName,
                                                   Icon(
                                                     Icons.cancel_outlined,
                                                     color: Colors.black,
                                                   ),
-                                                  _action1, friend.userSecond.id),
+                                                  _action1,
+                                                  friend.userSecond.id),
                                             ],
                                           )),
                                     );
@@ -234,8 +249,8 @@ class _ListUserFriendState extends State<ListUserFriend> {
     );
   }
 
-  ListTile _createTile(
-      BuildContext context, String name, Icon icon, Function action, String userId) {
+  ListTile _createTile(BuildContext context, String name, Icon icon,
+      Function action, String userId) {
     return ListTile(
       leading: icon,
       title: Text(name),

@@ -320,9 +320,9 @@ class _ProfilePageState extends State<ProfilePageTmp>
                         )
                       ],
                     ),
-                    if (value.userEntity.description != null)
+                    if (value.userEntity.description != "")
                       SizedBox(height: 5.0),
-                    if (value.userEntity.description != null)
+                    if (value.userEntity.description != "")
                       Text(
                         value.userEntity.description,
                         style: TextStyle(fontSize: 16.0, color: Colors.grey),
@@ -377,7 +377,7 @@ class _ProfilePageState extends State<ProfilePageTmp>
             padding: EdgeInsets.symmetric(horizontal: 15.0),
             child: Column(
               children: <Widget>[
-                if (value.userEntity.city != null)
+                if (value.userEntity.city != "")
                   Row(
                     children: <Widget>[
                       Icon(Icons.home, color: Colors.grey, size: 30.0),
@@ -388,8 +388,8 @@ class _ProfilePageState extends State<ProfilePageTmp>
                               fontSize: 16.0, fontWeight: FontWeight.bold))
                     ],
                   ),
-                if (value.userEntity.city != null) SizedBox(height: 15.0),
-                if (value.userEntity.city != null)
+                if (value.userEntity.city != "") SizedBox(height: 15.0),
+                if (value.userEntity.city != "")
                   Row(
                     children: <Widget>[
                       Icon(Icons.location_on, color: Colors.grey, size: 30.0),

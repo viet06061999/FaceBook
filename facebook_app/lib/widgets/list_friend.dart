@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:facebook_app/data/model/friend.dart';
 import 'package:facebook_app/viewmodel/profile_view_model.dart';
+import 'package:facebook_app/widgets/profile_friend.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,11 +18,12 @@ class ListUserFriend extends StatefulWidget {
 
   // ListUserFriend(this.provide, this.friends, this.onImageClicked, this.onExpandClicked);
   ListUserFriend(
-      {@required this.friends,
+      {@required this.provide,
+        @required this.friends,
       @required this.onImageClicked,
       @required this.onExpandClicked,
       Key key,
-      this.provide})
+      })
       : super(key: key);
 
   @override
@@ -110,7 +112,14 @@ class _ListUserFriendState extends State<ListUserFriend> {
       child: Row(
         children: <Widget>[
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ProfileFriend(widget.provide)),
+              );
+            },
             child: Container(
               height: 60,
               width: 60,

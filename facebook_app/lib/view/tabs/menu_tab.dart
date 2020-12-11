@@ -31,9 +31,7 @@ class MenuTab extends StatelessWidget {
               style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold)),
         ),
         GestureDetector(
-          onTap: (){
-
-          },
+          onTap: () {},
           child: Row(
             children: <Widget>[
               SizedBox(width: 15.0),
@@ -48,6 +46,7 @@ class MenuTab extends StatelessWidget {
                 children: <Widget>[
                   Text(
                       provide.userEntity.firstName +
+                          " " +
                           provide.userEntity.lastName,
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 18.0)),
@@ -294,15 +293,16 @@ class MenuTab extends StatelessWidget {
           height: 65.0,
           padding: EdgeInsets.symmetric(horizontal: 15.0),
           child: RaisedButton(
-            onPressed: () {
-              UserRepositoryImpl(
-                      inject<FirAuth>(),
-                      inject<UserLocalDatasource>(),
-                      inject<FirUploadPhoto>(),
-                      inject<FirUserUpload>())
-                  .logOut();
-              SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-              Row(
+              onPressed: () {
+                UserRepositoryImpl(
+                        inject<FirAuth>(),
+                        inject<UserLocalDatasource>(),
+                        inject<FirUploadPhoto>(),
+                        inject<FirUserUpload>())
+                    .logOut();
+                SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+              },
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Row(
@@ -310,12 +310,33 @@ class MenuTab extends StatelessWidget {
                     children: <Widget>[
                       Icon(Icons.exit_to_app, size: 40.0, color: Colors.blue),
                       SizedBox(width: 10.0),
-                      Text('Logout', style: TextStyle(fontSize: 17.0)),
+                      Text('Đăng xuất', style: TextStyle(fontSize: 17.0)),
                     ],
                   ),
                 ],
-              );
+              )),
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width,
+          height: 65.0,
+          padding: EdgeInsets.symmetric(horizontal: 15.0),
+          child: RaisedButton(
+            onPressed: () {
+              SystemChannels.platform.invokeMethod('SystemNavigator.pop');
             },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Icon(Icons.close, size: 40.0, color: Colors.blue),
+                    SizedBox(width: 10.0),
+                    Text('Thoát ứng dụng', style: TextStyle(fontSize: 17.0)),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ],

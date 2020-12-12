@@ -65,7 +65,7 @@ class FirChat {
 
   Stream<QuerySnapshot> getConservations(String userId) =>
       _firestore
-          .collection('conservation')
+          .collection('conservations')
           .where('two_id', arrayContains: userId)
           .snapshots(includeMetadataChanges: true);
 

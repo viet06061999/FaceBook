@@ -21,10 +21,7 @@ class PostWidget extends StatelessWidget {
         children: <Widget>[
           Container(
             color: Colors.grey[400],
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
+            width: MediaQuery.of(context).size.width,
             height: 11.0,
           ),
           Container(
@@ -51,7 +48,14 @@ class PostWidget extends StatelessWidget {
             ),
           ),
           SizedBox(height: 20.0),
-          Text(post.described, style: TextStyle(fontSize: 15.0)),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                    child:
+                        Text(post.described, style: TextStyle(fontSize: 15.0)))),
+          ),
           SizedBox(height: 10.0),
           buildImages(context),
           SizedBox(height: 10.0),
@@ -99,7 +103,7 @@ class PostWidget extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: 14,
                                 color:
-                                !post.isLiked ? Colors.grey : Colors.blue),
+                                    !post.isLiked ? Colors.grey : Colors.blue),
                           ));
                     }),
                   ],
@@ -108,14 +112,17 @@ class PostWidget extends StatelessWidget {
                   children: <Widget>[
                     //FontAwesomeIcons.commentAlt, size: 20.0,
                     IconButton(
-                        icon: new Icon(FontAwesomeIcons.commentAlt, size: 20.0),
-                        onPressed: () {
-                          showMaterialModalBottomSheet(
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            builder: (context) => CreateCommentWidget(provide: provide, post: post,),
-                          );
-                        },
+                      icon: new Icon(FontAwesomeIcons.commentAlt, size: 20.0),
+                      onPressed: () {
+                        showMaterialModalBottomSheet(
+                          context: context,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) => CreateCommentWidget(
+                            provide: provide,
+                            post: post,
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(width: 5.0),
                     Text('Comment', style: TextStyle(fontSize: 14.0)),
@@ -157,14 +164,8 @@ class PostWidget extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: Container(
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height / 2,
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width / 2 - 4,
+                  height: MediaQuery.of(context).size.height / 2,
+                  width: MediaQuery.of(context).size.width / 2 - 4,
                   child: Image.network(post.images[0], fit: BoxFit.cover),
                 ),
               ),
@@ -173,33 +174,20 @@ class PostWidget extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(2.0),
                     child: Container(
-                      height: MediaQuery
-                          .of(context)
-                          .size
-                          .height / 4,
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width / 2 - 4,
+                      height: MediaQuery.of(context).size.height / 4,
+                      width: MediaQuery.of(context).size.width / 2 - 4,
                       child: Image.network(post.images[1], fit: BoxFit.cover),
                     ),
                   ),
                   Container(
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .height / 4,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width / 2 - 4,
+                    height: MediaQuery.of(context).size.height / 4,
+                    width: MediaQuery.of(context).size.width / 2 - 4,
                     child: Image.network(post.images[2], fit: BoxFit.cover),
                   ),
                 ],
               )
             ],
-          )
-      );
+          ));
     }
   }
 }

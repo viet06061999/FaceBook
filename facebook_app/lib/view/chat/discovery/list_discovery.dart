@@ -4,16 +4,21 @@ import 'package:facebook_app/view/chat/discovery/widgets/popular_item.dart';
 import 'package:facebook_app/view/chat/discovery/widgets/stories_list.dart';
 import 'package:facebook_app/view/chat/discovery/widgets/search_bar.dart';
 import 'package:facebook_app/widgets/messenger_app_bar/messenger_app_bar.dart';
+import 'package:facebook_app/viewmodel/chat_view_model.dart';
 
 class ListDicovery extends StatefulWidget {
-  ListDicovery({Key key}) : super(key: key);
+  final ChatProvide _provide;
+  ListDicovery(this._provide);
 
-  _ListDicoveryState createState() => _ListDicoveryState();
+  _ListDicoveryState createState() => _ListDicoveryState(_provide);
 }
 
 class _ListDicoveryState extends State<ListDicovery> {
   bool _isScroll = false;
   ScrollController _controller;
+  final ChatProvide _provide;
+
+  _ListDicoveryState(this._provide);
 
   _scrollListener() {
     if (_controller.offset > 0) {
@@ -44,6 +49,7 @@ class _ListDicoveryState extends State<ListDicovery> {
         child: Column(
           children: <Widget>[
             MessengerAppBar(
+              _provide,
               isScroll: _isScroll,
               title: 'Discovery',
               actions: <Widget>[],

@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:facebook_app/view/chat/chats/list_friend.dart';
 import 'package:facebook_app/view/chat/discovery/list_discovery.dart';
 import 'package:facebook_app/view/chat/people/list_people.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends PageProvideNode<ChatProvide> {
   @override
@@ -14,8 +15,9 @@ class HomeScreen extends PageProvideNode<ChatProvide> {
   }
 }
 
-class HomeScreenTmp extends StatefulWidget{
+class HomeScreenTmp extends StatefulWidget {
   final ChatProvide provide;
+
   const HomeScreenTmp(this.provide);
 
   @override
@@ -23,21 +25,24 @@ class HomeScreenTmp extends StatefulWidget{
 }
 
 class _HomeScreenState extends State<HomeScreenTmp> {
-  ChatProvide _provide;
+  ChatProvide provide;
 
   @override
   void initState() {
     super.initState();
-    _provide = widget.provide;// set up listener here
-    }
+    provide = widget.provide; // set up listener here
+  }
+
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  List<Widget> _widgetOptions = <Widget>[
-    ListFriend(),
-    ListPeople(),
-    ListDicovery(),
-  ];
+  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
+  List<Widget> _widgetOptions(ChatProvide provide) =>
+      <Widget>[
+        ListFriend(provide),
+        ListPeople(provide),
+        ListDicovery(provide),
+      ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -48,7 +53,9 @@ class _HomeScreenState extends State<HomeScreenTmp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _widgetOptions.elementAt(_selectedIndex),
+      body: Consumer<ChatProvide>(builder: (context, value, child) {
+        return  _widgetOptions(value).elementAt(_selectedIndex);
+      }),
       bottomNavigationBar: BottomNavigationBar(
         selectedIconTheme: IconThemeData(color: Colors.black87),
         unselectedIconTheme: IconThemeData(color: Colors.grey.shade400),

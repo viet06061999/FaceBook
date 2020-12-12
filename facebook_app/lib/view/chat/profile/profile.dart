@@ -64,8 +64,8 @@ class _ProfilePageState extends State<ProfilePageTmp>
                       SizedBox(height: 10.0),
                       Center(
                         child: Container(
-                          width: 160.0,
-                          height: 160.0,
+                          width: 100.0,
+                          height: 100.0,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(80.0),
                             image: DecorationImage(
@@ -78,7 +78,7 @@ class _ProfilePageState extends State<ProfilePageTmp>
                       SizedBox(height: 10.0),
                       Center(
                         child: Text(
-                          'duynk',
+                          provide.userEntity.firstName +" " +  provide.userEntity.lastName,
                           style: TextStyle(
                             fontSize: 22.0,
                             color: Colors.black,
@@ -93,7 +93,7 @@ class _ProfilePageState extends State<ProfilePageTmp>
                       _buildSettingItem('Username', '@abc', true),
                       _buildSettingItem('Gender', 'Male', true),
                       _buildSettingItem(
-                          'Email', 'duy@gmail.com', false),
+                          'Email', provide.userEntity.email, false),
                       _buildTitleSetting('Setting'),
                       _buildSettingItem('Notification', '', true),
                       _buildSettingItem('Privacy and Security', '', true),
@@ -136,7 +136,7 @@ class _ProfilePageState extends State<ProfilePageTmp>
                   },
                   child: Icon(
                     FontAwesomeIcons.arrowLeft,
-                    size: 20.0,
+                    size: 15.0,
                     color: Colors.black,
                   ),
                 ),
@@ -149,7 +149,7 @@ class _ProfilePageState extends State<ProfilePageTmp>
                   'Profile',
                   style: TextStyle(
                       color: Colors.black,
-                      fontSize: 25.0,
+                      fontSize: 20.0,
                       fontWeight: FontWeight.bold),
                 ),
               )
@@ -158,22 +158,22 @@ class _ProfilePageState extends State<ProfilePageTmp>
           Container(
             child: Row(
               children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(left: 20.0),
-                  child: Icon(
-                    FontAwesomeIcons.camera,
-                    color: Colors.black,
-                    size: 20.0,
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 20.0),
-                  child: Icon(
-                    FontAwesomeIcons.solidEdit,
-                    color: Colors.black,
-                    size: 20.0,
-                  ),
-                ),
+                // Container(
+                //   padding: EdgeInsets.only(left: 20.0),
+                //   child: Icon(
+                //     FontAwesomeIcons.camera,
+                //     color: Colors.black,
+                //     size: 20.0,
+                //   ),
+                // ),
+                // Container(
+                //   padding: EdgeInsets.only(left: 20.0),
+                //   child: Icon(
+                //     FontAwesomeIcons.solidEdit,
+                //     color: Colors.black,
+                //     size: 20.0,
+                //   ),
+                // ),
               ],
             ),
           )

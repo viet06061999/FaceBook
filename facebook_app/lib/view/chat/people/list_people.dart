@@ -1,3 +1,4 @@
+import 'package:facebook_app/viewmodel/chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:facebook_app/models/list_friend_model.dart';
@@ -5,15 +6,19 @@ import 'package:facebook_app/view/chat/people/widgets/people_card.dart';
 import 'package:facebook_app/widgets/messenger_app_bar/messenger_app_bar.dart';
 
 class ListPeople extends StatefulWidget {
-  ListPeople({Key key}) : super(key: key);
+  final ChatProvide _provide;
 
-  _ListFriendState createState() => _ListFriendState();
+  ListPeople(this._provide);
+
+  _ListFriendState createState() => _ListFriendState(_provide);
 }
 
 class _ListFriendState extends State<ListPeople> {
   bool _isScroll = false;
   ScrollController _controller;
+  final ChatProvide _provide;
 
+  _ListFriendState(this._provide);
   _scrollListener() {
     if (_controller.offset > 0) {
       this.setState(() {
@@ -43,6 +48,7 @@ class _ListFriendState extends State<ListPeople> {
         child: Column(
           children: <Widget>[
             MessengerAppBar(
+              _provide,
               isScroll: _isScroll,
               title: 'People',
               actions: <Widget>[

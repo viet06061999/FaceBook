@@ -65,9 +65,19 @@ class UserRepositoryImpl implements UserRepository {
   Future<void> updateCoverImage(
       String pathCover, UserEntity userEntity, Function onError) {
     return firPhoto.uploadFile(pathCover, (urlPath) {
-      userEntity.avatar = urlPath;
+      userEntity.coverImage = urlPath;
       _firAuth.updateUser(userEntity);
       firUserUpload.uploadImage(userEntity.id, urlPath);
     }, onError, (progress) => null);
+  }
+
+  @override
+  Observable<void> updateUser(UserEntity userEntity) {
+    _firAuth.updateUser(userEntity);
+  }
+
+  @override
+  Observable<void> updateDescriptionUser(UserEntity userEntity, String description) {
+    _firAuth.updateDescriptionUser(userEntity, description);
   }
 }

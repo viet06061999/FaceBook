@@ -48,3 +48,4 @@ abstract class PageProvideNode<T extends ChangeNotifier> extends StatelessWidget
   @override
   void onClick(String action) {}
 }
+

@@ -47,11 +47,21 @@ class FirAuth {
     });
   }
 
-  Observable<void> updateUser(UserEntity userEntity) {
+   Observable<void> updateUser(UserEntity userEntity) {
     Future<void> future = FirebaseFirestore.instance
         .collection("users")
         .doc(userEntity.id)
         .update(userEntity.userToMap());
+    return Observable.fromFuture(future);
+  }
+
+  Observable<void> updateDescriptionUser(UserEntity userEntity, String description) {
+    Future<void> future = FirebaseFirestore.instance
+        .collection("users")
+        .doc(userEntity.id)
+        .update({
+      'description': description
+    });
     return Observable.fromFuture(future);
   }
 

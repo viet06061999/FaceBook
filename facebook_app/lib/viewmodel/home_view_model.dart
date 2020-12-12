@@ -49,6 +49,10 @@ class HomeProvide extends BaseProvide {
 
   List<Friend> get friends => _friends;
 
+  List<Friend> _friendsPending = [];
+
+  List<Friend> get friendsPending => _friendsPending;
+
   bool _isTop = true;
 
   bool get isTop => _isTop;
@@ -102,6 +106,7 @@ class HomeProvide extends BaseProvide {
       userEntity = value;
       _getListPost();
       getFriends(userEntity);
+      getPendings(userEntity);
     });
   }
 
@@ -119,14 +124,14 @@ class HomeProvide extends BaseProvide {
       print('ko null');
       loadingImage = true;
       _progressPhoto = new List(pathImages.length);
-       pathImages.asMap().forEach((index, element) async {
+      pathImages.asMap().forEach((index, element) async {
         print('index1 $index');
         await photoRepository.uploadPhoto(userEntity.id, element, (urlPath) {
           print('index $index');
           loadingImage = false;
           print(urlPath);
           post.images.add(urlPath);
-          if(index == pathImages.length-1){
+          if (index == pathImages.length - 1) {
             _createPost(post).listen((event) {
               print("xu ly upload post success o day");
             }, onError: (e) => {print("xu ly upload post fail o day")});
@@ -198,35 +203,65 @@ class HomeProvide extends BaseProvide {
         });
       }, onError: (e) => {print("xu ly fail o day")});
 
-  getFriends(UserEntity entity) =>
-      friendRepository.getFriends(entity.id).listen((event) async {
-        event.docChanges.forEach((element) async {
-          DocumentReference documentReference =
-              element.doc.data()['second_user'];
-          await documentReference.get().then((value) {
-            UserEntity second = UserEntity.fromJson(value.data());
-            Friend friend = Friend.fromJson(element.doc.data(), entity, second);
-            if (element.type == DocumentChangeType.added) {
+  getFriends(UserEntity entity) {
+    _friends.clear();
+    friendRepository.getFriends(entity.id).listen((event) async {
+      event.docChanges.forEach((element) async {
+        DocumentReference documentReference = element.doc.data()['second_user'];
+        await documentReference.get().then((value) {
+          UserEntity second = UserEntity.fromJson(value.data());
+          Friend friend = Friend.fromJson(element.doc.data(), entity, second);
+          if (element.type == DocumentChangeType.added) {
+            _friends.insert(0, friend);
+          } else if (element.type == DocumentChangeType.modified) {
+            int position = -1;
+            position = _friends.indexWhere(
+                (element) => (element.userSecond == friend.userSecond));
+            if (position != -1)
+              _friends[position] = friend;
+            else
               _friends.insert(0, friend);
-            } else if (element.type == DocumentChangeType.modified) {
-              int position = -1;
-              position = _friends.indexWhere(
-                  (element) => (element.userSecond == friend.userSecond));
-
-              if (position != -1)
-                _friends[position] = friend;
-              else
-                _friends.insert(0, friend);
-            } else if (element.type == DocumentChangeType.removed) {
-              _friends.removeWhere(
-                  (element) => element.userSecond == friend.userSecond);
-            }
-          });
-          if (event.docChanges.length != 0) {
-            notifyListeners();
+          } else if (element.type == DocumentChangeType.removed) {
+            _friends.removeWhere(
+                (element) => element.userSecond == friend.userSecond);
           }
         });
-      }, onError: (e) => {print("xu ly fail o day")});
+        if (event.docChanges.length != 0) {
+          notifyListeners();
+        }
+      });
+    }, onError: (e) => {print("xu ly fail o day")});
+  }
+
+  getPendings(UserEntity entity) {
+    _friendsPending.clear();
+    friendRepository.getRequestFriends(entity.id).listen((event) async {
+      event.docChanges.forEach((element) async {
+        DocumentReference documentReference = element.doc.data()['second_user'];
+        await documentReference.get().then((value) {
+          UserEntity second = UserEntity.fromJson(value.data());
+          Friend friend = Friend.fromJson(element.doc.data(), entity, second);
+          if (element.type == DocumentChangeType.added) {
+            _friendsPending.insert(0, friend);
+          } else if (element.type == DocumentChangeType.modified) {
+            int position = -1;
+            position = _friendsPending.indexWhere(
+                    (element) => (element.userSecond == friend.userSecond));
+            if (position != -1)
+              _friendsPending[position] = friend;
+            else
+              _friendsPending.insert(0, friend);
+          } else if (element.type == DocumentChangeType.removed) {
+            _friendsPending.removeWhere(
+                    (element) => element.userSecond == friend.userSecond);
+          }
+        });
+        if (event.docChanges.length != 0) {
+          notifyListeners();
+        }
+      });
+    }, onError: (e) => {print("xu ly fail o day")});
+  }
 
   void updateLike(Post post) {
     if (post.isLiked) {

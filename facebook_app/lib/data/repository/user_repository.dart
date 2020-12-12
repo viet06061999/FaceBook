@@ -16,5 +16,8 @@ abstract class UserRepository {
 
   Future<void> updateCoverImage(String pathCover, UserEntity userEntity, Function onError);
 
+  Observable<void> updateUser(UserEntity userEntity);
+
+  Observable<void> updateDescriptionUser(UserEntity userEntity, String description);
   void logOut();
 }

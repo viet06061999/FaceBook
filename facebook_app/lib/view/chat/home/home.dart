@@ -1,16 +1,35 @@
+import 'package:facebook_app/base/base.dart';
+import 'package:facebook_app/viewmodel/chat_view_model.dart';
+import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:facebook_app/view/chat/chats/list_friend.dart';
 import 'package:facebook_app/view/chat/discovery/list_discovery.dart';
 import 'package:facebook_app/view/chat/people/list_people.dart';
 
-class HomeScreen extends StatefulWidget {
-  HomeScreen({Key key}) : super(key: key);
-
-  _HomeScreenState createState() => _HomeScreenState();
+class HomeScreen extends PageProvideNode<ChatProvide> {
+  @override
+  Widget buildContent(BuildContext context) {
+    return HomeScreenTmp(mProvider);
+  }
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreenTmp extends StatefulWidget{
+  final ChatProvide provide;
+  const HomeScreenTmp(this.provide);
+
+  @override
+  State<StatefulWidget> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreenTmp> {
+  ChatProvide _provide;
+
+  @override
+  void initState() {
+    super.initState();
+    _provide = widget.provide;// set up listener here
+    }
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);

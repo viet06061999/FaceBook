@@ -25,4 +25,5 @@ class ChatProvide extends BaseProvide {
     _userEntity = userEntity;
     notifyListeners();
   }
+
 }

@@ -1,23 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facebook_app/base/base.dart';
-import 'package:facebook_app/data/model/post.dart';
+import 'package:facebook_app/data/model/conservation.dart';
+import 'package:facebook_app/data/model/friend.dart';
 import 'package:facebook_app/data/model/user.dart';
-import 'package:facebook_app/data/model/video.dart';
+import 'package:facebook_app/data/repository/chat_repository.dart';
 import 'package:facebook_app/data/repository/friend_repository.dart';
-import 'package:facebook_app/data/repository/photo_repository.dart';
-import 'package:facebook_app/data/repository/post_repository.dart';
 import 'package:facebook_app/data/repository/user_repository.dart';
-import 'package:facebook_app/viewmodel/home_view_model.dart';
 
 class ChatProvide extends BaseProvide {
   final UserRepository userRepository;
-  UserEntity _userEntity = UserEntity.origin();
+  final FriendRepository friendRepository;
+  final ChatRepository chatRepository;
 
-  ChatProvide(this.userRepository) {
+  ChatProvide(this.userRepository, this.friendRepository, this.chatRepository) {
     userRepository.getCurrentUser().then((value) {
       userEntity = value;
+      getFriends(value);
+      getConservations(value);
     });
   }
+
+  UserEntity _userEntity = UserEntity.origin();
 
   UserEntity get userEntity => _userEntity;
 
@@ -26,4 +29,73 @@ class ChatProvide extends BaseProvide {
     notifyListeners();
   }
 
+  List<Friend> _friends = [];
+
+  List<Friend> get friends => _friends;
+
+  List<Conservation> _conservations = [];
+
+  List<Conservation> get conservations => _conservations;
+
+  getFriends(UserEntity entity) =>
+      friendRepository.getFriends(entity.id).listen((event) async {
+        print(entity.id);
+        event.docChanges.forEach((element) async {
+          DocumentReference documentReference =
+              element.doc.data()['second_user'];
+          await documentReference.get().then((value) {
+            UserEntity second = UserEntity.fromJson(value.data());
+            Friend friend = Friend.fromJson(element.doc.data(), entity, second);
+            if (element.type == DocumentChangeType.added) {
+              _friends.insert(0, friend);
+            } else if (element.type == DocumentChangeType.modified) {
+              int position = -1;
+              position = _friends.indexWhere(
+                  (element) => (element.userSecond == friend.userSecond));
+
+              if (position != -1)
+                _friends[position] = friend;
+              else
+                _friends.insert(0, friend);
+            } else if (element.type == DocumentChangeType.removed) {
+              _friends.removeWhere(
+                  (element) => element.userSecond == friend.userSecond);
+            }
+          });
+          if (event.docChanges.length != 0) {
+            notifyListeners();
+          }
+        });
+      }, onError: (e) => {print("xu ly fail o day")});
+
+  getConservations(UserEntity entity) =>
+      chatRepository.getConservations(userEntity.id).listen((event) async {
+        print('vao day roi nek');
+        event.docChanges.forEach((element) async {
+          DocumentReference documentReferenceFrom =
+              element.doc.data()['current_message']['from'];
+          DocumentReference documentReferenceTo =
+              element.doc.data()['current_message']['to'];
+          await documentReferenceFrom.get().then((value) {
+            UserEntity from = UserEntity.fromJson(value.data());
+            documentReferenceTo.get().then((value) {
+              UserEntity to = UserEntity.fromJson(value.data());
+              var conservation =
+                  Conservation.fromMap(element.doc.data(), from, to);
+              print(conservation);
+              if (element.type == DocumentChangeType.added) {
+                _conservations.insert(0, conservation);
+              } else if (element.type == DocumentChangeType.modified) {
+                _conservations.insert(0, conservation);
+              } else if (element.type == DocumentChangeType.removed) {
+                _conservations.removeWhere(
+                        (element) => element.id == conservation.id);
+              }
+            });
+          });
+          if (event.docChanges.length != 0) {
+            notifyListeners();
+          }
+        });
+      }, onError: (e) => {print("xu ly fail o day")});
 }

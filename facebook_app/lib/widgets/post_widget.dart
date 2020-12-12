@@ -214,8 +214,28 @@ class PostWidget extends StatelessWidget {
   }
 
   String fix(String text1){
-    DateTime now = DateTime.now();
-    print('============= +$now');
+    var now = (new DateTime.now()).millisecondsSinceEpoch;
+    var format = new DateFormat('yyyy-MM-dd HH:mm:ss');
+    DateTime baiDang = format.parse(text1);
+    var timeago = baiDang.millisecondsSinceEpoch;
+    print( "$timeago === $now");
+    var timeagov1 = (now - timeago)/1000;
+    timeagov1 = (timeagov1 / 60 + 1);
+    if(timeagov1<60) {
+      String a = timeagov1.toStringAsFixed(0);
+      return "$a phút";
+    }
+    else if(timeagov1<60*24){
+      String a = (timeagov1/60).toStringAsFixed(0);
+      return "$a giờ";
+    }
+    else if(timeagov1<60*24*30){
+      String a =(timeagov1/ (60*24) ).toStringAsFixed(0);
+      return "$a ngày";
+    }
+    else {
+      return "1 tháng trước";
+    }
 
     // int n = text1.length;
     // for(int i=0;i< n; i++){

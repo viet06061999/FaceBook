@@ -7,12 +7,12 @@ var friendList = [
     name: "Dr. Chelsie Jones",
     imageAvatarUrl:
         "assets/images/list_friend/1.jpeg",
-    shortDescription: "Nigeria",
+    shortDescription: "wwzzzz",
     isActive: true,
   ),
   ListFriendModel(
     id: 2,
-    createdAt: "2019-10-08T05:04:43.301Z",
+    createdAt: "209-10-08T05:04:43.301Z",
     name: "Garett Ward",
     imageAvatarUrl:
         "assets/images/list_friend/1.jpg",

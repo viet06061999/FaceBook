@@ -20,4 +20,15 @@ extension StringX on String {
     String output = this + thatString;
     return output.toSha256();
   }
+
+  String encryptDecrypt(String input) {
+    var first = this.substring(0, 6);
+    var second = input.substring(0, 6);
+    var output = [];
+    for(var i = 0; i < 6; i++) {
+      var charCode = first.codeUnitAt(i) ^ second.codeUnitAt(i);
+      output.add(new String.fromCharCode(charCode));
+    }
+    return output.join("").toSha256();
+  }
 }

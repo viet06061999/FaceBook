@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facebook_app/data/base_type/message_type.dart';
-import 'package:facebook_app/data/model/comment.dart';
 import 'package:facebook_app/data/model/user.dart';
-import 'package:facebook_app/data/model/video.dart';
+
 
 class Message {
-  String id = '';
+
   String message = '';
   String sendTime = '';
   UserEntity from = UserEntity.origin();
@@ -15,7 +14,7 @@ class Message {
   Message.origin();
 
   Message(
-    this.id,
+
     this.from,
     this.to,
     this.message,
@@ -24,7 +23,7 @@ class Message {
   );
 
   Message.fromMap(Map map, UserEntity from, UserEntity to) {
-    this.id = map['id'];
+
     this.message = map['message'];
     this.sendTime = map['send_time'];
     this.type = map['type'];
@@ -34,7 +33,7 @@ class Message {
 
   Map toMap(DocumentReference from, DocumentReference to) =>
       new Map<String, dynamic>.from({
-        'id': this.id,
+
         "message": this.message,
         "send_time": this.sendTime,
         "type": this.type.index,

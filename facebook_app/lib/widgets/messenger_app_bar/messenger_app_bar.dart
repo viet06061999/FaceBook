@@ -1,23 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:facebook_app/models/account_user.dart';
 import 'package:facebook_app/routes/routes.dart';
-
+import 'package:facebook_app/base/base.dart';
 import 'app_bar_network_rounded_image.dart';
+import 'package:facebook_app/viewmodel/chat_view_model.dart';
 import 'app_bar_title.dart';
 
 class MessengerAppBar extends StatefulWidget {
   List<Widget> actions = List<Widget>(0);
+  final ChatProvide provide;
   String title;
   bool isScroll;
   bool isBack;
 
-  MessengerAppBar({this.actions, this.title = '', this.isScroll, this.isBack});
+  MessengerAppBar(this.provide,{this.actions, this.title = '', this.isScroll, this.isBack});
 
   @override
-  _MessengerAppBarState createState() => _MessengerAppBarState();
+  _MessengerAppBarState createState() => _MessengerAppBarState(provide);
 }
 
 class _MessengerAppBarState extends State<MessengerAppBar> {
+  final ChatProvide provide;
+
+  _MessengerAppBarState(this.provide);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -43,7 +49,7 @@ class _MessengerAppBarState extends State<MessengerAppBar> {
                   Routes.goToProfile(context);
                 },
                 child: AppBarNetworkRoundedImage(
-                  imageUrl: yourAccount.avatarImg,
+                  imageUrl: provide.userEntity.avatar,
                 ),
               ),
               SizedBox(

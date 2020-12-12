@@ -13,6 +13,7 @@ var routes = <String, WidgetBuilder>{
   "/profile": (BuildContext context) => ProfilePage(),
 };
 
+
 class App extends StatefulWidget {
   final HomeProvide provide;
   App(this.provide);

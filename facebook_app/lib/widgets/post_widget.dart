@@ -5,14 +5,23 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:facebook_app/widgets/photo_grid.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 
 import 'comment_widget.dart';
-
+// class reset {
+//   void fix(String text1){
+//     int n = text1.length;
+//     for(int i=0;i< n; i++){
+//         if(text1[i]=='.'){
+//           text1 = text1.substring(0,i+1);
+//         }
+//     }
+//   }
+// }
 class PostWidget extends StatelessWidget {
   final Post post;
   final HomeProvide provide;
-
   PostWidget({this.post, this.provide});
 
   @override
@@ -22,7 +31,10 @@ class PostWidget extends StatelessWidget {
         children: <Widget>[
           Container(
             color: Colors.grey[400],
-            width: MediaQuery.of(context).size.width,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
             height: 11.0,
           ),
           Container(
@@ -42,21 +54,14 @@ class PostWidget extends StatelessWidget {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 17.0)),
                     SizedBox(height: 5.0),
-                    Text(post.modified)
+                    Text(fix(post.modified))
                   ],
                 ),
               ],
             ),
           ),
           SizedBox(height: 20.0),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                    child:
-                        Text(post.described, style: TextStyle(fontSize: 15.0)))),
-          ),
+          Text(post.described, style: TextStyle(fontSize: 15.0)),
           SizedBox(height: 10.0),
           buildImages(context),
           SizedBox(height: 10.0),
@@ -104,7 +109,7 @@ class PostWidget extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: 14,
                                 color:
-                                    !post.isLiked ? Colors.grey : Colors.blue),
+                                !post.isLiked ? Colors.grey : Colors.blue),
                           ));
                     }),
                   ],
@@ -113,17 +118,14 @@ class PostWidget extends StatelessWidget {
                   children: <Widget>[
                     //FontAwesomeIcons.commentAlt, size: 20.0,
                     IconButton(
-                      icon: new Icon(FontAwesomeIcons.commentAlt, size: 20.0),
-                      onPressed: () {
-                        showMaterialModalBottomSheet(
-                          context: context,
-                          backgroundColor: Colors.transparent,
-                          builder: (context) => CreateCommentWidget(
-                            provide: provide,
-                            post: post,
-                          ),
-                        );
-                      },
+                        icon: new Icon(FontAwesomeIcons.commentAlt, size: 20.0),
+                        onPressed: () {
+                          showMaterialModalBottomSheet(
+                            context: context,
+                            backgroundColor: Colors.transparent,
+                            builder: (context) => CreateCommentWidget(provide: provide, post: post,),
+                          );
+                        },
                     ),
                     SizedBox(width: 5.0),
                     Text('Comment', style: TextStyle(fontSize: 14.0)),
@@ -165,8 +167,14 @@ class PostWidget extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: Container(
-                  height: MediaQuery.of(context).size.height / 2,
-                  width: MediaQuery.of(context).size.width / 2 - 4,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height / 2,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width / 2 - 4,
                   child: Image.network(post.images[0], fit: BoxFit.cover),
                 ),
               ),
@@ -175,20 +183,47 @@ class PostWidget extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(2.0),
                     child: Container(
-                      height: MediaQuery.of(context).size.height / 4,
-                      width: MediaQuery.of(context).size.width / 2 - 4,
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height / 4,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width / 2 - 4,
                       child: Image.network(post.images[1], fit: BoxFit.cover),
                     ),
                   ),
                   Container(
-                    height: MediaQuery.of(context).size.height / 4,
-                    width: MediaQuery.of(context).size.width / 2 - 4,
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height / 4,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width / 2 - 4,
                     child: Image.network(post.images[2], fit: BoxFit.cover),
                   ),
                 ],
               )
             ],
-          ));
+          )
+      );
     }
+  }
+
+  String fix(String text1){
+    DateTime now = DateTime.now();
+    print('============= +$now');
+
+    // int n = text1.length;
+    // for(int i=0;i< n; i++){
+    //   if(text1[i]=='.'){
+    //     text1 = text1.substring(0, i);
+    //     return text1;
+    //   }
+    // }
+    return "a";
   }
 }

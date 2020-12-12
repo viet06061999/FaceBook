@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facebook_app/base/base.dart';
 import 'package:facebook_app/data/model/conservation.dart';
 import 'package:facebook_app/data/model/friend.dart';
+import 'package:facebook_app/data/model/messages.dart';
 import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/data/repository/chat_repository.dart';
 import 'package:facebook_app/data/repository/friend_repository.dart';
@@ -37,9 +38,12 @@ class ChatProvide extends BaseProvide {
 
   List<Conservation> get conservations => _conservations;
 
+  List<Message> _messages = [];
+
+  List<Message> get messages => _messages;
+
   getFriends(UserEntity entity) =>
       friendRepository.getFriends(entity.id).listen((event) async {
-        print(entity.id);
         event.docChanges.forEach((element) async {
           DocumentReference documentReference =
               element.doc.data()['second_user'];
@@ -70,7 +74,6 @@ class ChatProvide extends BaseProvide {
 
   getConservations(UserEntity entity) =>
       chatRepository.getConservations(userEntity.id).listen((event) async {
-        print('vao day roi nek');
         event.docChanges.forEach((element) async {
           DocumentReference documentReferenceFrom =
               element.doc.data()['current_message']['from'];
@@ -82,14 +85,13 @@ class ChatProvide extends BaseProvide {
               UserEntity to = UserEntity.fromJson(value.data());
               var conservation =
                   Conservation.fromMap(element.doc.data(), from, to);
-              print(conservation);
               if (element.type == DocumentChangeType.added) {
                 _conservations.insert(0, conservation);
               } else if (element.type == DocumentChangeType.modified) {
                 _conservations.insert(0, conservation);
               } else if (element.type == DocumentChangeType.removed) {
-                _conservations.removeWhere(
-                        (element) => element.id == conservation.id);
+                _conservations
+                    .removeWhere((element) => element.id == conservation.id);
               }
             });
           });
@@ -98,4 +100,28 @@ class ChatProvide extends BaseProvide {
           }
         });
       }, onError: (e) => {print("xu ly fail o day")});
+
+  getChatDetail(Conservation conservation) {
+    chatRepository.getChat(conservation.id).listen((event) async {
+      _messages = (event.data()['messages'] as List)
+          .map((e) => convertToMessage(e, conservation.currentMessage.from,
+              conservation.currentMessage.to))
+          .toList();
+      notifyListeners();
+    }, onError: (e) => {print("xu ly fail o day")});
+  }
+
+  Message convertToMessage(Map map, UserEntity first, UserEntity second) {
+    DocumentReference documentReferenceFrom = map['from'];
+    DocumentReference documentReferenceFirst =
+        FirebaseFirestore.instance.collection("users").doc(first.id);
+    if (documentReferenceFrom.path == documentReferenceFirst.path) {
+      return Message.fromMap(map, first, second);
+    }
+    return Message.fromMap(map, second, first);
+  }
+
+  sendMessage(Message message){
+    chatRepository.sendMessage(message, message.from.id, message.to.id);
+  }
 }

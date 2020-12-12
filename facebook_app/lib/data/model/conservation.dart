@@ -15,7 +15,7 @@ class Conservation {
 
   Conservation.fromMap(Map map, UserEntity first, UserEntity second) {
     this.id = map['id'];
-    this.currentMessage = Message.fromMap(map, first, second);
+    this.currentMessage = Message.fromMap(map['current_message'], first, second);
   }
 
   static List<Conservation> fromListMap(

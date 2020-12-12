@@ -24,4 +24,12 @@ class Video {
     });
     return maps;
   }
+
+  static List<Video> fromListMap(List<Map> maps) {
+    List<Video> videos = [];
+    maps.forEach((element) {
+      videos.add(Video.fromJson(element));
+    });
+    return videos;
+  }
 }

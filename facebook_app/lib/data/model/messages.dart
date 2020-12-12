@@ -14,7 +14,6 @@ class Message {
   Message.origin();
 
   Message(
-
     this.from,
     this.to,
     this.message,
@@ -23,17 +22,15 @@ class Message {
   );
 
   Message.fromMap(Map map, UserEntity from, UserEntity to) {
-
     this.message = map['message'];
     this.sendTime = map['send_time'];
-    this.type = map['type'];
+    this.type =  MessageType.values[int.parse(map['type'].toString())];
     this.from = from;
     this.to = to;
   }
 
   Map toMap(DocumentReference from, DocumentReference to) =>
       new Map<String, dynamic>.from({
-
         "message": this.message,
         "send_time": this.sendTime,
         "type": this.type.index,

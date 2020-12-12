@@ -2,6 +2,7 @@ import 'package:facebook_app/data/base_type/message_type.dart';
 import 'package:facebook_app/data/model/messages.dart';
 import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/data/repository/chat_repository.dart';
+import 'package:facebook_app/data/repository/friend_repository.dart';
 import 'package:facebook_app/data/repository/user_repository.dart';
 import 'package:facebook_app/data/source/local/user_local_data.dart';
 import 'package:facebook_app/data/source/remote/fire_base_auth.dart';
@@ -27,16 +28,19 @@ class _RootPage extends State<RootPage> {
   @override
   void initState() {
     super.initState();
-    var userRepo = UserRepositoryImpl(
-        inject<FirAuth>(),
-        inject<UserLocalDatasource>(),
-        inject<FirUploadPhoto>(),
-        inject<FirUserUpload>());
+    var userRepo = inject<UserRepository>();
+    var chatRepo = inject<ChatRepository>();
     userRepo.getCurrentUser().then((value) {
       setState(() {
         status = value != null ? AuthStatus.signIn : AuthStatus.notSignedIn;
       });
     });
+    var from = UserEntity.origin();
+    var to = UserEntity.origin();
+    from.id = "asq94mf8O2NPYikndOT2gUh1ogT2";
+    to.id = "007uxyqTGXdvziH1zAcO7tBGuFZ2";
+    var message = Message(from, to, "Người yêu ơi có biết anh nhớ em nhiều lắm, những năm tháng trôi qua", "2020-12-12", MessageType.text);
+    chatRepo.sendMessage(message, from.id, to.id);
   }
 
   @override

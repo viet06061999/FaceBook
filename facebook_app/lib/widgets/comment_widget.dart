@@ -1,6 +1,7 @@
 import 'package:facebook_app/data/model/post.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:facebook_app/widgets/comment_list.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +24,6 @@ class _CreateCommentState extends State<CreateCommentWidget> {
 
   _CreateCommentState(this.post, this.provide);
 
-  List<String> comments = [];
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +39,7 @@ class _CreateCommentState extends State<CreateCommentWidget> {
       padding: EdgeInsets.all(20),
       child: Column(
         children: <Widget>[
+
           Container(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -53,64 +54,83 @@ class _CreateCommentState extends State<CreateCommentWidget> {
               ],
             ),
           ),
-          SizedBox(height: 20.0),
-          TextField(
-            maxLines: null,
-            minLines: 4,
-            textInputAction: TextInputAction.next,
-            style: TextStyle(fontSize: 18, color: Colors.black),
-            onChanged: (text) {
-              setState(() {
-                content = text;
-              });
-            },
-          ),
-          SizedBox(height: 10.0),
           Divider(height: 30.0),
+          ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: post.comments.length,
+              itemBuilder: (context, index) {
+                return CommentWidget(
+                  comment: post.comments[index], provide: provide,
+                );
+              }),
           Container(
-            padding: EdgeInsets.fromLTRB(5, 5, 10, 0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+            ),
+            padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                CircleAvatar(
-                  radius: 17.0,
-                  backgroundImage: NetworkImage(provide.userEntity.avatar),
-                ),
-
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                  width: MediaQuery.of(context).size.width/1.8,
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          width: 1.0,
-                          color: Colors.grey[400]
-                      ),
-                      borderRadius: BorderRadius.circular(10.0)
-                  ),
-                  child: GestureDetector(
-                      child:
-                      TextField(
-                        onChanged: (text) {
-                          setState(() {
-                            content = text;
-                          });
-                        },
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Viết bình luận'
-                        ),
-                      ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: IconButton(
+                    icon: Icon(
+                      FontAwesomeIcons.image,
+                      size: 25.0,
+                      color: Colors.lightBlue,
+                    ),
+                    onPressed: () {},
                   ),
                 ),
-                IconButton(
-                  icon: new Icon(FontAwesomeIcons.paperPlane) ,
-                  onPressed: () {
-                    provide.addComment(post, content);
-                    Navigator.pop(context);
-                  },
-
+                Expanded(
+                  child: Container(
+                    child: TextField(
+                      onChanged: (text) {
+                        setState(() {
+                          content = text;
+                        });
+                      },
+                      // decoration: InputDecoration(
+                      //     border: InputBorder.none, hintText: 'Viết bình luận'),
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(10.0),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(25),
+                            borderSide: BorderSide(
+                              width: 0,
+                              style: BorderStyle.none,
+                            ),
+                          ),
+                          hintText: 'Viết bình luận',
+                          filled: true,
+                          fillColor: Colors.grey.shade200,
+                          hintStyle: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey[600],
+                          ),
+                          suffixIcon: Icon(
+                            FontAwesomeIcons.solidSmileBeam,
+                            size: 25.0,
+                            color: Colors.lightBlue,
+                          )),
+                    ),
+                  ),
                 ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: IconButton(
+                    onPressed: () {
+                      provide.addComment(post, content);
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      FontAwesomeIcons.paperPlane,
+                      size: 25.0,
+                      color: Colors.lightBlue,
+                    ),
+                  ),
+                )
               ],
             ),
           ),

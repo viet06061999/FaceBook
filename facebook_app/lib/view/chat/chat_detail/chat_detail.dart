@@ -11,6 +11,7 @@ const ListYourFriendChat = [
 ];
 const ListYourChat = [
   'Nice to meet you!',
+  'Nice to meet you!',
   'Hiaaaaaaaaaaa',
 ];
 

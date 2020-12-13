@@ -60,6 +60,8 @@ class HomeProvide extends BaseProvide {
   set isTop(bool isTop) {
     _isTop = isTop;
     if (_isTop) {
+      print('istop');
+      print('tmpPosts $tmpPosts');
       listPost.insertAll(0, tmpPosts);
       tmpPosts.clear();
     }
@@ -121,13 +123,10 @@ class HomeProvide extends BaseProvide {
     Post post = Post("-1", content, DateTime.now().toString(),
         DateTime.now().toString(), [], [], [], Video.origin(), userEntity);
     if (pathImages != null && pathImages.isNotEmpty) {
-      print('ko null');
       loadingImage = true;
       _progressPhoto = new List(pathImages.length);
       pathImages.asMap().forEach((index, element) async {
-        print('index1 $index');
         await photoRepository.uploadPhoto(userEntity.id, element, (urlPath) {
-          print('index $index');
           loadingImage = false;
           print(urlPath);
           post.images.add(urlPath);
@@ -174,6 +173,7 @@ class HomeProvide extends BaseProvide {
             if (element.type == DocumentChangeType.added) {
               _insertPost(postRoot);
             } else if (element.type == DocumentChangeType.modified) {
+              print('thay doi');
               Post post = postRoot;
               int position = -1;
               position = _listPost.indexWhere(
@@ -185,13 +185,14 @@ class HomeProvide extends BaseProvide {
                 (element) =>
                     (element.postId == post.postId) || element.postId == '-1',
               );
-
+              print('position $position tmp $positionTmp');
               if (position != -1)
                 _listPost[position] = post;
               else if (positionTmp != -1)
                 tmpPosts[positionTmp] = post;
               else
                 _insertPost(postRoot);
+              notifyListeners();
             } else if (element.type == DocumentChangeType.removed) {
               Post post = postRoot;
               _listPost.removeWhere((element) => element.postId == post.postId);
@@ -246,14 +247,14 @@ class HomeProvide extends BaseProvide {
           } else if (element.type == DocumentChangeType.modified) {
             int position = -1;
             position = _friendsPending.indexWhere(
-                    (element) => (element.userSecond == friend.userSecond));
+                (element) => (element.userSecond == friend.userSecond));
             if (position != -1)
               _friendsPending[position] = friend;
             else
               _friendsPending.insert(0, friend);
           } else if (element.type == DocumentChangeType.removed) {
             _friendsPending.removeWhere(
-                    (element) => element.userSecond == friend.userSecond);
+                (element) => element.userSecond == friend.userSecond);
           }
         });
         if (event.docChanges.length != 0) {
@@ -264,23 +265,21 @@ class HomeProvide extends BaseProvide {
   }
 
   void updateLike(Post post) {
+    print(post.isLiked);
     if (post.isLiked) {
       post.likes.removeWhere((element) => element.id == userEntity.id);
+      repository.updateDisLikePost(post, userEntity);
     } else {
       post.likes.add(userEntity);
+      repository.updateLikePost(post, userEntity);
     }
     post.isLiked = !post.isLiked;
-    _updatePost(post);
   }
 
   void addComment(Post post, String content) {
     Comment comment = Comment(userEntity, content);
     post.comments.add(comment);
-    _updatePost(post);
-  }
-
-  void _updatePost(Post post) {
-    repository.updatePost(post, userEntity.id);
+    repository.updateComment(post, comment);
   }
 
   _insertPost(Post post) {

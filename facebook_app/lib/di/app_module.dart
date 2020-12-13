@@ -45,7 +45,7 @@ final viewModelModule = Module([
 final repoModule = Module([
   factory<UserRepository>(
       ({params}) => UserRepositoryImpl(get(), get(), get(), get())),
-  factory<PostRepository>(({params}) => PostRepositoryImpl(get(), get())),
+  factory<PostRepository>(({params}) => PostRepositoryImpl(get(), get(), get())),
   factory<PhotoRepository>(({params}) => PhotoRepositoryImpl(get(), get())),
   factory<FriendRepository>(({params}) => FriendRepositoryImpl(get(), get())),
   factory<ChatRepository>(({params}) => ChatRepositoryImpl(get())),

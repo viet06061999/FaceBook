@@ -14,10 +14,4 @@ class NotificationRepositoryImpl extends NotificationRepository {
   @override
   Stream<QuerySnapshot> getNotifications(String userId) =>
       _firNotification.getNotifications(userId);
-
-  @override
-  Future<void> updateNotificationPost(NotificationPost notification,
-          Post post, String idUserFirst, String idUserSecond) =>
-      _firNotification.updateNotificationPost(
-          notification, post, idUserFirst);
 }

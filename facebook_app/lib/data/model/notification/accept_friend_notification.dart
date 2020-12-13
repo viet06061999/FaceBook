@@ -11,6 +11,4 @@ class NotificationAcceptFriend extends Notification {
 
   @override
   String getContent({String userId}) => "đã gửi cho bạn một lời mời kết bạn";
-
-
 }

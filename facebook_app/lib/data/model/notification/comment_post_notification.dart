@@ -7,13 +7,11 @@ class NotificationCommentPost extends NotificationPost {
 
   NotificationCommentPost(
       Post post,
-      UserEntity userSecond,
       UserEntity userFirst,
       String updateTime,
-      NotificationType type,
       double others,
       List<String> receivers)
-      : super(post, userSecond, userFirst, updateTime, type, others,
+      : super(post, userFirst, updateTime, NotificationType.commentPost, others,
             receivers);
 
   @override

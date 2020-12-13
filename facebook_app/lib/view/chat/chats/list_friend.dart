@@ -21,7 +21,6 @@ class _ListFriendState extends State<ListFriend> {
   final ChatProvide _provide;
 
   _ListFriendState(this._provide);
-
   _scrollListener() {
     if (_controller.offset > 0) {
       this.setState(() {
@@ -124,7 +123,7 @@ class _ListFriendState extends State<ListFriend> {
     return Container(
       height: 100,
       padding: EdgeInsets.only(top: 16.0),
-      child: StoriesList(),
+      child: StoriesList(_provide),
     );
   }
 }

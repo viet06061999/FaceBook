@@ -5,7 +5,5 @@ import 'package:facebook_app/data/model/post.dart';
 import 'package:facebook_app/data/model/user.dart';
 
 abstract class NotificationRepository {
-  Future<void> updateNotificationPost(
-      NotificationPost notification, Post post, String idUserFirst, String idUserSecond);
   Stream<QuerySnapshot> getNotifications(String userId);
 }

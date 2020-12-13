@@ -24,31 +24,33 @@ class _StoriesListState extends State<StoriesList> {
         } else {
           return StoryListItem(
               provide,
-              provide.friends);
+              provide.friends[index-1] );
         }
       },
-      itemCount: provide.friends.length,
+      itemCount: provide.friends.length+1,
     );
   }
 }
 
 class StoryListItem extends StatefulWidget {
-  final List<Friend> friendItem;
+  final Friend friends;
+
   final ChatProvide provide;
-  StoryListItem(this.provide, this.friendItem);
+  StoryListItem(this.provide, this.friends);
 
   @override
   State<StatefulWidget> createState() {
-    return _StoryListItemState(friendItem);
+    return _StoryListItemState(provide , friends);
   }
 }
 
 class _StoryListItemState extends State<StoryListItem> {
-  final List<Friend> friendItem;
-  _StoryListItemState(this.friendItem);
+  final ChatProvide provide;
+  final Friend friends;
+  _StoryListItemState(this.provide, this.friends);
   _buildBorder() {
     if (true) {
-      return Border.all(color: Colors.grey.shade300, width: 3);
+      return Border.all(color: Colors.white, width: 3);
     } else {
       return Border.all(color: Colors.blue, width: 3);
     }
@@ -77,13 +79,13 @@ class _StoryListItemState extends State<StoryListItem> {
                   border: _buildBorder(),
                 ),
                 child: Container(
-                  width: 50.0,
-                  height: 50.0,
+                  width: 60.0,
+                  height: 60.0,
                   margin: EdgeInsets.all(2.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25.0),
                     image: DecorationImage(
-                      image: NetworkImage(friendItem[0].userSecond.avatar),  // ảnh đại diện
+                      image: NetworkImage(friends.userSecond.avatar),  // ảnh đại diện
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -93,7 +95,7 @@ class _StoryListItemState extends State<StoryListItem> {
               Container(
                 width: 60.0,
                 child: Text(
-                  friendItem[0].userSecond.firstName + " " + friendItem[0].userSecond.lastName,         // tên bạn
+                  friends.userSecond.firstName + " " + friends.userSecond.lastName,         // tên bạn
                   overflow: TextOverflow.ellipsis,
                   softWrap: true,
                   style: _getTextStyle(),
@@ -146,5 +148,6 @@ _notViewedStoryListItemTextStyle() {
 }
 
 _viewedStoryListItemTextStyle() {
-  return TextStyle(fontSize: 12, color: Colors.grey);
+  return  TextStyle(fontSize: 9, color: Colors.black, fontWeight: FontWeight.bold);
+    //TextStyle(fontSize: 8, color: Colors.grey);
 }

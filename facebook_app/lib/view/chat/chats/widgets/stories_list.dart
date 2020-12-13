@@ -1,14 +1,19 @@
+import 'package:facebook_app/data/model/friend.dart';
+import 'package:facebook_app/view/chat/chats/list_friend.dart';
+import 'package:facebook_app/viewmodel/chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:facebook_app/models/list_friend_model.dart';
 
 class StoriesList extends StatefulWidget {
+  final ChatProvide provide;
+  StoriesList(this.provide);
   @override
-  State<StatefulWidget> createState() {
-    return _StoriesListState();
-  }
+  _StoriesListState createState() => _StoriesListState(provide);
 }
 
 class _StoriesListState extends State<StoriesList> {
+  final ChatProvide provide;
+  _StoriesListState(this.provide);
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -18,28 +23,31 @@ class _StoriesListState extends State<StoriesList> {
           return AddToYourStoryButton();
         } else {
           return StoryListItem(
-              friendItem: friendList[index], friendIndex: index);
+              provide,
+              provide.friends);
         }
       },
-      itemCount: friendList.length,
+      itemCount: provide.friends.length,
     );
   }
 }
 
 class StoryListItem extends StatefulWidget {
-  final ListFriendModel friendItem;
-  final int friendIndex;
-  StoryListItem({this.friendItem, this.friendIndex});
+  final List<Friend> friendItem;
+  final ChatProvide provide;
+  StoryListItem(this.provide, this.friendItem);
 
   @override
   State<StatefulWidget> createState() {
-    return _StoryListItemState();
+    return _StoryListItemState(friendItem);
   }
 }
 
 class _StoryListItemState extends State<StoryListItem> {
+  final List<Friend> friendItem;
+  _StoryListItemState(this.friendItem);
   _buildBorder() {
-    if (widget.friendItem.isActive) {
+    if (true) {
       return Border.all(color: Colors.grey.shade300, width: 3);
     } else {
       return Border.all(color: Colors.blue, width: 3);
@@ -47,7 +55,7 @@ class _StoryListItemState extends State<StoryListItem> {
   }
 
   _getTextStyle() {
-    if (widget.friendItem.isActive) {
+    if (true) {
       return _viewedStoryListItemTextStyle();
     } else {
       return _notViewedStoryListItemTextStyle();
@@ -75,7 +83,7 @@ class _StoryListItemState extends State<StoryListItem> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25.0),
                     image: DecorationImage(
-                      image: AssetImage(widget.friendItem.imageAvatarUrl),
+                      image: NetworkImage(friendItem[0].userSecond.avatar),  // ảnh đại diện
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -85,7 +93,7 @@ class _StoryListItemState extends State<StoryListItem> {
               Container(
                 width: 60.0,
                 child: Text(
-                  widget.friendItem.name,
+                  friendItem[0].userSecond.firstName + " " + friendItem[0].userSecond.lastName,         // tên bạn
                   overflow: TextOverflow.ellipsis,
                   softWrap: true,
                   style: _getTextStyle(),

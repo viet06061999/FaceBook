@@ -218,7 +218,6 @@ class PostWidget extends StatelessWidget {
     var format = new DateFormat('yyyy-MM-dd HH:mm:ss');
     DateTime baiDang = format.parse(text1);
     var timeago = baiDang.millisecondsSinceEpoch;
-    print( "$timeago === $now");
     var timeagov1 = (now - timeago)/1000;
     timeagov1 = (timeagov1 / 60 + 1);
     if(timeagov1<60) {
@@ -236,14 +235,5 @@ class PostWidget extends StatelessWidget {
     else {
       return "1 tháng trước";
     }
-
-    // int n = text1.length;
-    // for(int i=0;i< n; i++){
-    //   if(text1[i]=='.'){
-    //     text1 = text1.substring(0, i);
-    //     return text1;
-    //   }
-    // }
-    return "a";
   }
 }

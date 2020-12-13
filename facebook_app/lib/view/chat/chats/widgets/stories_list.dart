@@ -1,14 +1,19 @@
+import 'package:facebook_app/data/model/friend.dart';
+import 'package:facebook_app/view/chat/chats/list_friend.dart';
+import 'package:facebook_app/viewmodel/chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:facebook_app/models/list_friend_model.dart';
 
 class StoriesList extends StatefulWidget {
+  final ChatProvide provide;
+  StoriesList(this.provide);
   @override
-  State<StatefulWidget> createState() {
-    return _StoriesListState();
-  }
+  _StoriesListState createState() => _StoriesListState(provide);
 }
 
 class _StoriesListState extends State<StoriesList> {
+  final ChatProvide provide;
+  _StoriesListState(this.provide);
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -18,36 +23,41 @@ class _StoriesListState extends State<StoriesList> {
           return AddToYourStoryButton();
         } else {
           return StoryListItem(
-              friendItem: friendList[index], friendIndex: index);
+              provide,
+              provide.friends[index-1] );
         }
       },
-      itemCount: friendList.length,
+      itemCount: provide.friends.length+1,
     );
   }
 }
 
 class StoryListItem extends StatefulWidget {
-  final ListFriendModel friendItem;
-  final int friendIndex;
-  StoryListItem({this.friendItem, this.friendIndex});
+  final Friend friends;
+
+  final ChatProvide provide;
+  StoryListItem(this.provide, this.friends);
 
   @override
   State<StatefulWidget> createState() {
-    return _StoryListItemState();
+    return _StoryListItemState(provide , friends);
   }
 }
 
 class _StoryListItemState extends State<StoryListItem> {
+  final ChatProvide provide;
+  final Friend friends;
+  _StoryListItemState(this.provide, this.friends);
   _buildBorder() {
-    if (widget.friendItem.isActive) {
-      return Border.all(color: Colors.grey.shade300, width: 3);
+    if (true) {
+      return Border.all(color: Colors.white, width: 3);
     } else {
       return Border.all(color: Colors.blue, width: 3);
     }
   }
 
   _getTextStyle() {
-    if (widget.friendItem.isActive) {
+    if (true) {
       return _viewedStoryListItemTextStyle();
     } else {
       return _notViewedStoryListItemTextStyle();
@@ -69,13 +79,13 @@ class _StoryListItemState extends State<StoryListItem> {
                   border: _buildBorder(),
                 ),
                 child: Container(
-                  width: 50.0,
-                  height: 50.0,
+                  width: 60.0,
+                  height: 60.0,
                   margin: EdgeInsets.all(2.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25.0),
                     image: DecorationImage(
-                      image: AssetImage(widget.friendItem.imageAvatarUrl),
+                      image: NetworkImage(friends.userSecond.avatar),  // ảnh đại diện
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -85,7 +95,7 @@ class _StoryListItemState extends State<StoryListItem> {
               Container(
                 width: 60.0,
                 child: Text(
-                  widget.friendItem.name,
+                  friends.userSecond.firstName + " " + friends.userSecond.lastName,         // tên bạn
                   overflow: TextOverflow.ellipsis,
                   softWrap: true,
                   style: _getTextStyle(),
@@ -138,5 +148,6 @@ _notViewedStoryListItemTextStyle() {
 }
 
 _viewedStoryListItemTextStyle() {
-  return TextStyle(fontSize: 12, color: Colors.grey);
+  return  TextStyle(fontSize: 9, color: Colors.black, fontWeight: FontWeight.bold);
+    //TextStyle(fontSize: 8, color: Colors.grey);
 }

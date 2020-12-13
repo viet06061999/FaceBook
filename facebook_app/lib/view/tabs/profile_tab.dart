@@ -522,7 +522,7 @@ class _ProfilePageState extends State<ProfilePageTmp>
   }
 
   _action1() {
-    print('action 1');
+    print('nhấn xem');
   }
 
   _changeAvatar() {

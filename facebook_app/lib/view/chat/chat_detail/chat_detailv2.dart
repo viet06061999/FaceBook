@@ -19,7 +19,9 @@ const ListYourChat = [
 class ChatDetail extends StatefulWidget {
   final Friend friend;
   final ChatProvide provide;
-  ChatDetail(this.provide, this.friend);
+  ChatDetail(this.provide, this.friend){
+    provide.getChatDetail(friend: friend.userSecond);
+  }
   _ChatDetailState createState() => _ChatDetailState(provide, friend);
 }
 

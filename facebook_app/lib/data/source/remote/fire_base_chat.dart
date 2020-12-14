@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:facebook_app/data/model/conservation.dart';
 import 'package:facebook_app/data/model/messages.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:facebook_app/ultils/string_ext.dart';
 
 class FirChat {
@@ -13,19 +11,22 @@ class FirChat {
       String userIdTo) async {
     var document =
     _firestore.collection('chats').doc(userIdFrom.encryptDecrypt(userIdTo));
+    print("path ${userIdFrom.encryptDecrypt(userIdTo)}");
     var usersRef = await document.get();
     Future<void> future = null;
-
     if (usersRef.exists) {
+      print('ton tai');
       future = document.update({
         'messages': FieldValue.arrayUnion([
           message.toMap(_firestore.doc('users/' + userIdFrom),
               _firestore.doc('users/' + userIdTo))
         ])
       }).then((value) {
+        print('xong roi nay');
         _updateCurrentMessage(message, userIdFrom, userIdTo);
       });
     } else {
+      print('khong ton tai');
       future = document.set({
         'messages': [
           message.toMap(_firestore.doc('users/' + userIdFrom),
@@ -40,6 +41,7 @@ class FirChat {
 
   Future<void> _updateCurrentMessage(Message message, String userIdFrom,
       String userIdTo) async {
+    print('di vao day conservation');
     var from = _firestore.doc('users/' + userIdFrom);
     var to = _firestore.doc('users/' + userIdTo);
     var document = _firestore.collection('conservations').doc(
@@ -48,12 +50,12 @@ class FirChat {
     await document.get();
     Future<void> future = null;
     if (usersRef.exists) {
-      print('exits');
+      print('exits conservation');
       future = document
           .update({
         'current_message': message.toMap(from, to)});
     } else {
-      print('non exists');
+      print('non exists conservation');
       future = document
           .set({
         'id': userIdFrom.encryptDecrypt(userIdTo),

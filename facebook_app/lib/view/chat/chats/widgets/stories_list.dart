@@ -68,12 +68,14 @@ class _StoryListItemState extends State<StoryListItem> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ChatDetail(provide, friends),
-        ),
-      ),
+      onTap: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ChatDetail(provide, friends),
+          ),
+        );
+      },
       child: Row(
         children: <Widget>[
           Column(

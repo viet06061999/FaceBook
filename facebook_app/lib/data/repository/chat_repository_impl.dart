@@ -13,12 +13,11 @@ class ChatRepositoryImpl implements ChatRepository {
   Stream<DocumentSnapshot> getChat(String conservationId) =>
    _firChat.getChat(conservationId);
 
-
   @override
   Stream<QuerySnapshot> getConservations(String userId) => _firChat.getConservations(userId);
 
   @override
   Future<void> sendMessage(Message message, String userIdFrom, String userIdTo) {
-     _firChat.sendMessage(message, userIdFrom, userIdTo);
+   return _firChat.sendMessage(message, userIdFrom, userIdTo);
   }
 }

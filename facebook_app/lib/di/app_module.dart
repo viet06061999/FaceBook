@@ -43,7 +43,7 @@ final viewModelModule = Module([
           ({params}) => ProfileFriendProvide(get(), get(), get(), get(), get(), params.get(0))),
   single<FriendProvide>(
       ({params}) => FriendProvide(get(), get(), get(), get(), get())),
-  single<ChatProvide>(({params}) => ChatProvide(get(), get(), get())),
+  single<ChatProvide>(({params}) => ChatProvide(get(), get(), get(), get())),
 ]);
 
 final repoModule = Module([

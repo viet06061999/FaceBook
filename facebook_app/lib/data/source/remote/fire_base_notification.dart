@@ -89,7 +89,7 @@ class FirNotification {
 
   Stream<QuerySnapshot> getNotifications(String userId) => _firestore
       .collection('notification')
-      .where('recivers', arrayContains: userId)
+      .where('receivers', arrayContains: userId)
       .snapshots(includeMetadataChanges: true);
 }
 

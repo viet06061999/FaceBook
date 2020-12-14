@@ -19,7 +19,7 @@ class NotificationsTab extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(15.0, 15.0, 0.0, 15.0),
                 child: Text('Notifications', style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold)),
               ),
-              for(NotificationApp notification in provide.notifications) NotificationWidget(notification: notification)
+              for(NotificationApp notification in provide.notifications) NotificationWidget(notification: notification, userEntity: provide.userEntity,)
             ],
           )
       ),

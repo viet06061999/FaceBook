@@ -11,7 +11,6 @@ class StoriesList extends StatefulWidget {
   @override
   _StoriesListState createState() => _StoriesListState(provide);
 }
-
 class _StoriesListState extends State<StoriesList> {
   final ChatProvide provide;
   _StoriesListState(this.provide);

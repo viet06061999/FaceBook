@@ -15,14 +15,13 @@ class ConversationItem extends StatefulWidget {
 class _ConversationItemState extends State<ConversationItem> {
   @override
   Widget build(BuildContext context) {
-    // print(widget.friendItem.imageAvatarUrl);
     return InkWell(
       onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ChatDetail(friendItem: widget.friendItem),
-          ),
+        context,
+        MaterialPageRoute(
+          builder: (context) => ChatDetail(friendItem: widget.friendItem),
         ),
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12.0),
         child: Slidable(

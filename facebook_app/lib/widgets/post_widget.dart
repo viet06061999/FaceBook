@@ -9,7 +9,6 @@ import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
 import 'comment_widget.dart';
-
 // class reset {
 //   void fix(String text1){
 //     int n = text1.length;
@@ -23,7 +22,6 @@ import 'comment_widget.dart';
 class PostWidget extends StatelessWidget {
   final Post post;
   final HomeProvide provide;
-
   PostWidget({this.post, this.provide});
 
   @override
@@ -33,7 +31,10 @@ class PostWidget extends StatelessWidget {
         children: <Widget>[
           Container(
             color: Colors.grey[400],
-            width: MediaQuery.of(context).size.width,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
             height: 11.0,
           ),
           Container(
@@ -170,8 +171,14 @@ class PostWidget extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: Container(
-                  height: MediaQuery.of(context).size.height / 2,
-                  width: MediaQuery.of(context).size.width / 2 - 4,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height / 2,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width / 2 - 4,
                   child: Image.network(post.images[0], fit: BoxFit.cover),
                 ),
               ),
@@ -180,40 +187,56 @@ class PostWidget extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(2.0),
                     child: Container(
-                      height: MediaQuery.of(context).size.height / 4,
-                      width: MediaQuery.of(context).size.width / 2 - 4,
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height / 4,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width / 2 - 4,
                       child: Image.network(post.images[1], fit: BoxFit.cover),
                     ),
                   ),
                   Container(
-                    height: MediaQuery.of(context).size.height / 4,
-                    width: MediaQuery.of(context).size.width / 2 - 4,
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height / 4,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width / 2 - 4,
                     child: Image.network(post.images[2], fit: BoxFit.cover),
                   ),
                 ],
               )
             ],
-          ));
+          )
+      );
     }
   }
 
-  String fix(String text1) {
+  String fix(String text1){
     var now = (new DateTime.now()).millisecondsSinceEpoch;
     var format = new DateFormat('yyyy-MM-dd HH:mm:ss');
     DateTime baiDang = format.parse(text1);
     var timeago = baiDang.millisecondsSinceEpoch;
-    var timeagov1 = (now - timeago) / 1000;
+    var timeagov1 = (now - timeago)/1000;
     timeagov1 = (timeagov1 / 60 + 1);
-    if (timeagov1 < 60) {
+    if(timeagov1<60) {
       String a = timeagov1.toStringAsFixed(0);
       return "$a phút";
-    } else if (timeagov1 < 60 * 24) {
-      String a = (timeagov1 / 60).toStringAsFixed(0);
+    }
+    else if(timeagov1<60*24){
+      String a = (timeagov1/60).toStringAsFixed(0);
       return "$a giờ";
-    } else if (timeagov1 < 60 * 24 * 30) {
-      String a = (timeagov1 / (60 * 24)).toStringAsFixed(0);
+    }
+    else if(timeagov1<60*24*30){
+      String a =(timeagov1/ (60*24) ).toStringAsFixed(0);
       return "$a ngày";
-    } else {
+    }
+    else {
       return "1 tháng trước";
     }
   }

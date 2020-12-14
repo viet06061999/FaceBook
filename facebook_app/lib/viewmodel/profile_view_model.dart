@@ -26,29 +26,23 @@ class ProfileProvide extends HomeProvide {
   List<Video> get videos => _videos;
 
   void init() {
+    print('init pảent');
     userRepository.getCurrentUser().then((value) {
       userEntity = value;
       getFriends(userEntity);
-      getUserListPost(userEntity.id);
-      getUserPhotos(userEntity.id);
-      getUserVideos(userEntity.id);
-      getFriends(userEntity);
-    });
-  }
-
-  ProfileProvide(PostRepository repository, PhotoRepository photoRepository,
-      UserRepository userRepository, FriendRepository friendRepository, NotificationRepository notificationRepository)
-      : super(repository, photoRepository, userRepository, friendRepository, notificationRepository) {
-    userRepository.getCurrentUser().then((value) {
-      userEntity = value;
       getUserListPost(userEntity.id);
       getUserPhotos(userEntity.id);
       getUserVideos(userEntity.id);
     });
   }
 
-  getUserListPost(String userId) =>
-      repository.getUserListPost(userId).listen((event) async {
+  ProfileProvide(PostRepository repository, PhotoRepository photoRepository,
+      UserRepository userRepository, FriendRepository friendRepository, NotificationRepository notificationRepository)
+      : super(repository, photoRepository, userRepository, friendRepository, notificationRepository) ;
+
+  getUserListPost(String userId) {
+    _userListPost.clear();
+      return repository.getUserListPost(userId).listen((event) async {
         event.docChanges.forEach((element) async {
           DocumentReference documentReference = element.doc.data()['owner'];
           documentReference.get().then((value) {
@@ -78,7 +72,7 @@ class ProfileProvide extends HomeProvide {
             notifyListeners();
           }
         });
-      }, onError: (e) => {print("xu ly fail o day")});
+      }, onError: (e) => {print("xu ly fail o day")});}
 
   updateAvatar(String pathAvatar) {
     userRepository.updateAvatar(pathAvatar, userEntity, () {});

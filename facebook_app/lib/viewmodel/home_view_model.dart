@@ -120,7 +120,6 @@ class HomeProvide extends BaseProvide {
       userEntity = value;
       _getListPost();
       getFriends(userEntity);
-      getPendings(userEntity);
       getNotifications();
     });
   }
@@ -226,8 +225,11 @@ class HomeProvide extends BaseProvide {
           UserEntity second = UserEntity.fromJson(value.data());
           Friend friend = Friend.fromJson(element.doc.data(), entity, second);
           if (element.type == DocumentChangeType.added) {
+            print('add');
             _friends.insert(0, friend);
+            print(_friends.length);
           } else if (element.type == DocumentChangeType.modified) {
+            print('modified');
             int position = -1;
             position = _friends.indexWhere(
                 (element) => (element.userSecond == friend.userSecond));
@@ -346,36 +348,6 @@ class HomeProvide extends BaseProvide {
     }, onError: (e) => {print("xu ly fail o day")});
   }
 
-  getPendings(UserEntity entity) {
-    _friendsPending.clear();
-    friendRepository.getRequestFriends(entity.id).listen((event) async {
-      event.docChanges.forEach((element) async {
-        DocumentReference documentReference = element.doc.data()['second_user'];
-        await documentReference.get().then((value) {
-          UserEntity second = UserEntity.fromJson(value.data());
-          Friend friend = Friend.fromJson(element.doc.data(), entity, second);
-          if (element.type == DocumentChangeType.added) {
-            _friendsPending.insert(0, friend);
-          } else if (element.type == DocumentChangeType.modified) {
-            int position = -1;
-            position = _friendsPending.indexWhere(
-                (element) => (element.userSecond == friend.userSecond));
-            if (position != -1)
-              _friendsPending[position] = friend;
-            else
-              _friendsPending.insert(0, friend);
-          } else if (element.type == DocumentChangeType.removed) {
-            _friendsPending.removeWhere(
-                (element) => element.userSecond == friend.userSecond);
-          }
-        });
-        if (event.docChanges.length != 0) {
-          notifyListeners();
-        }
-      });
-    }, onError: (e) => {print("xu ly fail o day")});
-  }
-
   bool checkFriend(String idThey) {
     return _friends.firstWhere((element) {
               return (element.userFirst.id == idThey ||
@@ -434,4 +406,9 @@ class HomeProvide extends BaseProvide {
             orElse: () => null) !=
         null;
   }
+  //dong y ket ban
+  // acceptRequest(Friend friend) {
+  //   friendRepository.acceptRequest(friend, () {});
+  //   notifyListeners();
+  // }
 }

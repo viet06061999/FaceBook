@@ -2,7 +2,7 @@ import 'package:facebook_app/viewmodel/chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:facebook_app/models/list_friend_model.dart';
-import 'package:facebook_app/view/chat/people/widgets/people_card.dart';
+import 'package:facebook_app/view/chat/people/widgets/conversation_item.dart';
 import 'package:facebook_app/widgets/messenger_app_bar/messenger_app_bar.dart';
 
 class ListPeople extends StatefulWidget {
@@ -10,15 +10,15 @@ class ListPeople extends StatefulWidget {
 
   ListPeople(this._provide);
 
-  _ListFriendState createState() => _ListFriendState(_provide);
+  _ListPeopleState createState() => _ListPeopleState(_provide);
 }
 
-class _ListFriendState extends State<ListPeople> {
-  bool _isScroll = false;
+class _ListPeopleState extends State<ListPeople> {
   ScrollController _controller;
+  bool _isScroll = false;
   final ChatProvide _provide;
 
-  _ListFriendState(this._provide);
+  _ListPeopleState(this._provide);
   _scrollListener() {
     if (_controller.offset > 0) {
       this.setState(() {
@@ -44,61 +44,63 @@ class _ListFriendState extends State<ListPeople> {
         overscroll.disallowGlow();
       },
       child: Container(
-        color: Colors.white,
+        decoration: BoxDecoration(color: Colors.white),
         child: Column(
           children: <Widget>[
-            MessengerAppBar(
-              _provide,
-              isScroll: _isScroll,
-              title: 'Danh bạ',
-              actions: <Widget>[
-                Container(
-                  width: 40.0,
-                  height: 40.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.grey.shade200,
-                  ),
-                  child: Icon(
-                    FontAwesomeIcons.solidAddressBook,
-                    size: 18.0,
-                  ),
-                ),
-                Container(
-                  width: 40.0,
-                  height: 40.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.grey.shade200,
-                  ),
-                  child: Icon(
-                    FontAwesomeIcons.userPlus,
-                    size: 18.0,
-                  ),
-                ),
-              ],
-            ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: GridView.builder(
-                  padding: EdgeInsets.only(top: 10.0),
-                  controller: _controller,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: MediaQuery.of(context).size.width /
-                        (MediaQuery.of(context).size.height / 1.5),
-                  ),
-                  itemBuilder: (BuildContext context, int index) {
-                    return PeopleCard(
-                        peopleItem: friendList[index], indexItem: index);
-                  },
-                  itemCount: friendList.length,
-                ),
-              ),
-            ),
+            _buildMessengerAppBar(_isScroll),
+            _buildRootListView(),
           ],
         ),
+      ),
+    );
+  }
+
+  _buildMessengerAppBar(_isScroll) {
+    return (MessengerAppBar(
+      _provide,
+      isScroll: _isScroll,
+      title: 'Danh bạ',
+      actions: <Widget>[
+        Container(
+          width: 35.0,
+          height: 35.0,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.grey.shade200,
+          ),
+          child: Icon(
+            FontAwesomeIcons.solidAddressBook,
+            size: 15.0,
+          ),
+        ),
+        Container(
+          width: 35.0,
+          height: 35.0,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.grey.shade200,
+          ),
+          child: Icon(
+            FontAwesomeIcons.userPlus,
+            size: 15.0,
+          ),
+        ),
+      ],
+    ));
+  }
+
+  _buildRootListView() {
+    return Expanded(
+      child: ListView.builder(
+        padding: EdgeInsets.only(top: 10.0),
+        controller: _controller,
+        itemBuilder: (context, index) {
+            return ConversationItem(
+              _provide,
+              _provide.friends[index],
+            );
+        },
+        itemCount: _provide.friends.length,
       ),
     );
   }

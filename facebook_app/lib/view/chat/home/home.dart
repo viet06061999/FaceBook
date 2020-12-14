@@ -82,6 +82,16 @@ class _HomeScreenState extends State<HomeScreenTmp> {
               style: TextStyle(height: 0.0),
             ),
           ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(
+          //     FontAwesomeIcons.solidCompass,
+          //     size: 24.0,
+          //   ),
+          //   title: Text(
+          //     '',
+          //     style: TextStyle(height: 0.0),
+          //   ),
+          // ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],

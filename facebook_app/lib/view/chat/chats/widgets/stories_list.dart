@@ -107,6 +107,7 @@ class _StoryListItemState extends State<StoryListItem> {
                   friends.userSecond.firstName + " " + friends.userSecond.lastName,         // tên bạn
                   overflow: TextOverflow.ellipsis,
                   softWrap: true,
+                  textAlign: TextAlign.center,
                   style: _getTextStyle(),
                 ),
               ),
@@ -157,6 +158,6 @@ _notViewedStoryListItemTextStyle() {
 }
 
 _viewedStoryListItemTextStyle() {
-  return  TextStyle(fontSize: 9, color: Colors.black, fontWeight: FontWeight.bold);
+  return  TextStyle(fontSize: 9, color: Colors.black, fontWeight: FontWeight.bold, );
     //TextStyle(fontSize: 8, color: Colors.grey);
 }

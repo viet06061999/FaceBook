@@ -72,7 +72,7 @@ class _ListFriendState extends State<ListFriend> {
           ),
           child: Icon(
             FontAwesomeIcons.camera,
-            size: 18.0,
+            size: 15.0,
           ),
         ),
         Container(
@@ -84,7 +84,7 @@ class _ListFriendState extends State<ListFriend> {
           ),
           child: Icon(
             FontAwesomeIcons.pen,
-            size: 18.0,
+            size: 15.0,
           ),
         ),
       ],

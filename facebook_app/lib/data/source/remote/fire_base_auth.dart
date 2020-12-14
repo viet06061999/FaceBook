@@ -72,7 +72,6 @@ class FirAuth {
     if (user != null) {
       await users.doc(user.uid).get().then((value) {
         userEntity = UserEntity.fromJson(value.data());
-        print(userEntity);
       }).catchError((onError){
         print(onError);
       });

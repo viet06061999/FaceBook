@@ -22,6 +22,7 @@ class FirUserUpload {
   }
 
   Observable<DocumentSnapshot> getImagesByUserId(String userId) {
+    print('userid $userId');
     return Observable.fromFuture(
         _firestore.collection("images").doc(userId).get());
   }

@@ -22,6 +22,7 @@ import 'package:facebook_app/data/source/remote/fire_base_storage.dart';
 import 'package:facebook_app/data/source/remote/fire_base_user_storage.dart';
 import 'package:facebook_app/helper/share_prefs.dart';
 import 'package:facebook_app/viewmodel/chat_view_model.dart';
+import 'package:facebook_app/viewmodel/friend_profile_view_model.dart';
 import 'package:facebook_app/viewmodel/friend_view_model.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:facebook_app/viewmodel/profile_view_model.dart';
@@ -38,6 +39,8 @@ final viewModelModule = Module([
   single<HomeProvide>(({params}) => HomeProvide(get(), get(), get(), get(), get())),
   single<ProfileProvide>(
       ({params}) => ProfileProvide(get(), get(), get(), get(), get())),
+  single<ProfileFriendProvide>(
+          ({params}) => ProfileFriendProvide(get(), get(), get(), get(), get(), params.get(0))),
   single<FriendProvide>(
       ({params}) => FriendProvide(get(), get(), get(), get(), get())),
   single<ChatProvide>(({params}) => ChatProvide(get(), get(), get())),

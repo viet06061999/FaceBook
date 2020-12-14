@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:facebook_app/data/model/friend.dart';
 import 'package:facebook_app/viewmodel/profile_view_model.dart';
-import 'package:facebook_app/widgets/profile_friend.dart';
+import 'file:///C:/Users/vietl/Desktop/FaceBook/facebook_app/lib/view/profile_friend.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -117,7 +117,7 @@ class _ListUserFriendState extends State<ListUserFriend> {
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        ProfileFriend(widget.provide)),
+                        ProfileFriend(friend.userSecond)),
               );
             },
             child: Container(

@@ -5,20 +5,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:facebook_app/widgets/photo_grid.dart';
-import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
-
 import 'comment_widget.dart';
-// class reset {
-//   void fix(String text1){
-//     int n = text1.length;
-//     for(int i=0;i< n; i++){
-//         if(text1[i]=='.'){
-//           text1 = text1.substring(0,i+1);
-//         }
-//     }
-//   }
-// }
+import 'black_background_image.dart';
+
 class PostWidget extends StatelessWidget {
   final Post post;
   final HomeProvide provide;
@@ -152,14 +142,28 @@ class PostWidget extends StatelessWidget {
 
   Visibility buildImages(BuildContext context) {
     if (post.images.length == 1) {
-      return Visibility(visible: true, child: Image.network(post.images[0]));
+      return
+        Visibility(
+            visible: true,
+            child: GestureDetector(
+                onTap: (){
+                  showMaterialModalBottomSheet(
+                    context: context,
+                    builder: (context) => BlackBackgroundScreen(provide: provide, post: post, index: 0)
+                  );
+                },
+                child: Image.network(post.images[0])
+            ),
+        );
     } else if (post.images.length % 2 == 0) {
       return Visibility(
         visible: post.images.length > 0,
         child: PhotoGrid(
           imageUrls: post.images,
-          onImageClicked: (i) => print('Image $i was clicked!'),
-          onExpandClicked: () => print('Expand Image was clicked'),
+          onImageClicked: (i) => showMaterialModalBottomSheet(
+              context: context,
+              builder: (context) => BlackBackgroundScreen(provide: provide, post: post, index: i)
+          ),
           maxImages: 4,
         ),
       );
@@ -168,24 +172,59 @@ class PostWidget extends StatelessWidget {
           visible: true,
           child: Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: Container(
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height / 2,
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width / 2 - 4,
-                  child: Image.network(post.images[0], fit: BoxFit.cover),
+              GestureDetector(
+                onTap: (){
+                  showMaterialModalBottomSheet(
+                      context: context,
+                      builder: (context) => BlackBackgroundScreen(provide: provide, post: post, index: 0)
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Container(
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height / 2,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width / 2 - 4,
+                    child: Image.network(post.images[0], fit: BoxFit.cover),
+                  ),
                 ),
               ),
               Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(2.0),
+                  GestureDetector(
+                    onTap: (){
+                      showMaterialModalBottomSheet(
+                          context: context,
+                          builder: (context) => BlackBackgroundScreen(provide: provide, post: post, index: 1)
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: Container(
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .height / 4,
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width / 2 - 4,
+                        child: Image.network(post.images[1], fit: BoxFit.cover),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: (){
+                      showMaterialModalBottomSheet(
+                          context: context,
+                          builder: (context) => BlackBackgroundScreen(provide: provide, post: post, index: 2)
+                      );
+                    },
                     child: Container(
                       height: MediaQuery
                           .of(context)
@@ -195,19 +234,8 @@ class PostWidget extends StatelessWidget {
                           .of(context)
                           .size
                           .width / 2 - 4,
-                      child: Image.network(post.images[1], fit: BoxFit.cover),
+                      child: Image.network(post.images[2], fit: BoxFit.cover),
                     ),
-                  ),
-                  Container(
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .height / 4,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width / 2 - 4,
-                    child: Image.network(post.images[2], fit: BoxFit.cover),
                   ),
                 ],
               )

@@ -5,15 +5,23 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:facebook_app/widgets/photo_grid.dart';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
-import 'comment_widget.dart';
-import 'black_background_image.dart';
-import 'post_detail.dart';
 
+import 'comment_widget.dart';
+// class reset {
+//   void fix(String text1){
+//     int n = text1.length;
+//     for(int i=0;i< n; i++){
+//         if(text1[i]=='.'){
+//           text1 = text1.substring(0,i+1);
+//         }
+//     }
+//   }
+// }
 class PostWidget extends StatelessWidget {
   final Post post;
   final HomeProvide provide;
-
   PostWidget({this.post, this.provide});
 
   @override
@@ -52,23 +60,8 @@ class PostWidget extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 5.0),
-          GestureDetector(
-              onTap: () {
-                showMaterialModalBottomSheet(
-                  context: context,
-                  builder: (context) => CreateCommentWidget(
-                    provide: provide,
-                    post: post,
-                  ));
-              },
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20,0,20,0),
-                child: Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(post.described, style: TextStyle(fontSize: 15.0))),
-              )
-          ),
+          SizedBox(height: 20.0),
+          Text(post.described, style: TextStyle(fontSize: 15.0)),
           SizedBox(height: 10.0),
           buildImages(context),
           SizedBox(height: 10.0),
@@ -100,47 +93,43 @@ class PostWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Consumer<HomeProvide>(builder: (key, value, child) {
-                  return FlatButton(
-                    onPressed: () => {value.updateLike(post)},
-                    padding: EdgeInsets.all(10.0),
-                    child: Row(
-                      // Replace with a Row for horizontal icon + text
-                      children: <Widget>[
-                        Icon(FontAwesomeIcons.thumbsUp,
-                            size: 20.0,
-                            color: !post.isLiked ? Colors.grey : Colors.blue),
-                        SizedBox(width: 5.0),
-                        Text(
-                          'Like',
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: !post.isLiked ? Colors.grey : Colors.blue),
-                        )
-                      ],
+                Row(
+                  children: <Widget>[
+                    Icon(FontAwesomeIcons.thumbsUp,
+                        size: 20.0,
+                        color: !post.isLiked ? Colors.grey : Colors.blue),
+                    SizedBox(width: 1.0),
+                    Consumer<HomeProvide>(builder: (key, value, child) {
+                      return TextButton(
+                          onPressed: () {
+                            value.updateLike(post);
+                          },
+                          child: Text(
+                            'Like',
+                            style: TextStyle(
+                                fontSize: 14,
+                                color:
+                                !post.isLiked ? Colors.grey : Colors.blue),
+                          ));
+                    }),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    //FontAwesomeIcons.commentAlt, size: 20.0,
+                    IconButton(
+                        icon: new Icon(FontAwesomeIcons.commentAlt, size: 20.0),
+                        onPressed: () {
+                          showMaterialModalBottomSheet(
+                            context: context,
+                            backgroundColor: Colors.transparent,
+                            builder: (context) => CreateCommentWidget(provide: provide, post: post,),
+                          );
+                        },
                     ),
-                  );
-                }),
-                FlatButton(
-                  onPressed: () => {
-                    showMaterialModalBottomSheet(
-                      context: context,
-                      backgroundColor: Colors.transparent,
-                      builder: (context) => CreateCommentWidget(
-                        provide: provide,
-                        post: post,
-                      ),
-                    )
-                  },
-                  padding: EdgeInsets.all(10.0),
-                  child: Row(
-                    // Replace with a Row for horizontal icon + text
-                    children: <Widget>[
-                      Icon(FontAwesomeIcons.commentAlt, size: 20.0),
-                      SizedBox(width: 5.0),
-                      Text('Comment', style: TextStyle(fontSize: 14.0)),
-                    ],
-                  ),
+                    SizedBox(width: 5.0),
+                    Text('Comment', style: TextStyle(fontSize: 14.0)),
+                  ],
                 ),
                 Row(
                   children: <Widget>[
@@ -159,28 +148,14 @@ class PostWidget extends StatelessWidget {
 
   Visibility buildImages(BuildContext context) {
     if (post.images.length == 1) {
-      return
-        Visibility(
-            visible: true,
-            child: GestureDetector(
-                onTap: (){
-                  showMaterialModalBottomSheet(
-                    context: context,
-                    builder: (context) => BlackBackgroundScreen(provide: provide, post: post, index: 0)
-                  );
-                },
-                child: Image.network(post.images[0])
-            ),
-        );
+      return Visibility(visible: true, child: Image.network(post.images[0]));
     } else if (post.images.length % 2 == 0) {
       return Visibility(
         visible: post.images.length > 0,
         child: PhotoGrid(
           imageUrls: post.images,
-          onImageClicked: (i) => showMaterialModalBottomSheet(
-              context: context,
-              builder: (context) => BlackBackgroundScreen(provide: provide, post: post, index: i)
-          ),
+          onImageClicked: (i) => print('Image $i was clicked!'),
+          onExpandClicked: () => print('Expand Image was clicked'),
           maxImages: 4,
         ),
       );
@@ -189,59 +164,24 @@ class PostWidget extends StatelessWidget {
           visible: true,
           child: Row(
             children: [
-              GestureDetector(
-                onTap: (){
-                  showMaterialModalBottomSheet(
-                      context: context,
-                      builder: (context) => BlackBackgroundScreen(provide: provide, post: post, index: 0)
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Container(
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .height / 2,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width / 2 - 4,
-                    child: Image.network(post.images[0], fit: BoxFit.cover),
-                  ),
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Container(
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height / 2,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width / 2 - 4,
+                  child: Image.network(post.images[0], fit: BoxFit.cover),
                 ),
               ),
               Column(
                 children: [
-                  GestureDetector(
-                    onTap: (){
-                      showMaterialModalBottomSheet(
-                          context: context,
-                          builder: (context) => BlackBackgroundScreen(provide: provide, post: post, index: 1)
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: Container(
-                        height: MediaQuery
-                            .of(context)
-                            .size
-                            .height / 4,
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width / 2 - 4,
-                        child: Image.network(post.images[1], fit: BoxFit.cover),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: (){
-                      showMaterialModalBottomSheet(
-                          context: context,
-                          builder: (context) => BlackBackgroundScreen(provide: provide, post: post, index: 2)
-                      );
-                    },
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
                     child: Container(
                       height: MediaQuery
                           .of(context)
@@ -251,8 +191,19 @@ class PostWidget extends StatelessWidget {
                           .of(context)
                           .size
                           .width / 2 - 4,
-                      child: Image.network(post.images[2], fit: BoxFit.cover),
+                      child: Image.network(post.images[1], fit: BoxFit.cover),
                     ),
+                  ),
+                  Container(
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height / 4,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width / 2 - 4,
+                    child: Image.network(post.images[2], fit: BoxFit.cover),
                   ),
                 ],
               )

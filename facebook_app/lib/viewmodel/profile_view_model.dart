@@ -25,11 +25,15 @@ class ProfileProvide extends HomeProvide {
 
   List<Video> get videos => _videos;
 
-  GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
-  GlobalKey<NavigatorState> _navigatorKey;
-
-  void init({GlobalKey<NavigatorState> navigatorKey}) {
-    _navigatorKey = navigatorKey;
+  void init() {
+    userRepository.getCurrentUser().then((value) {
+      userEntity = value;
+      getFriends(userEntity);
+      getUserListPost(userEntity.id);
+      getUserPhotos(userEntity.id);
+      getUserVideos(userEntity.id);
+      getFriends(userEntity);
+    });
   }
 
   ProfileProvide(PostRepository repository, PhotoRepository photoRepository,

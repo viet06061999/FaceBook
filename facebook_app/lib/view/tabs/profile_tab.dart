@@ -1,4 +1,3 @@
-import 'package:facebook_app/view/chat/chats/list_friend.dart';
 import 'package:facebook_app/viewmodel/profile_view_model.dart';
 import 'package:facebook_app/base/base.dart';
 import 'package:facebook_app/widgets/friend_grid.dart';
@@ -20,9 +19,8 @@ class ProfileTab extends PageProvideNode<ProfileProvide> {
 
 class ProfilePageTmp extends StatefulWidget {
   final ProfileProvide provide;
-
   ProfilePageTmp(this.provide) {
-    provide.getFriends(provide.userEntity);
+    provide.init();
   }
 
   @override

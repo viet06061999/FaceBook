@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facebook_app/base/base.dart';
+import 'package:facebook_app/data/base_type/friend_status.dart';
 import 'package:facebook_app/data/base_type/notification_type.dart';
 import 'package:facebook_app/data/model/comment.dart';
 import 'package:facebook_app/data/model/friend.dart';
@@ -112,9 +113,10 @@ class HomeProvide extends BaseProvide {
   }
 
   HomeProvide(this.repository, this.photoRepository, this.userRepository,
-      this.friendRepository, this.notificationRepository) {
+      this.friendRepository, this.notificationRepository);
+
+  init() {
     userRepository.getCurrentUser().then((value) {
-      print('vao user');
       userEntity = value;
       _getListPost();
       getFriends(userEntity);
@@ -368,8 +370,8 @@ class HomeProvide extends BaseProvide {
 
   bool checkFriend(String idThey) {
     return _friends.firstWhere((element) {
-              return element.userFirst.id == idThey ||
-                  element.userSecond.id == idThey;
+              return (element.userFirst.id == idThey ||
+                  element.userSecond.id == idThey) && element.status == FriendStatus.accepted;
             }, orElse: null) == null ? false : true;
   }
 

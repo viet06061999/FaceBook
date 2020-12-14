@@ -1,4 +1,5 @@
 import 'package:facebook_app/base/base.dart';
+import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:facebook_app/widgets/online_widget.dart';
 import 'package:facebook_app/widgets/post_widget.dart';
@@ -18,6 +19,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:facebook_app/chat.dart';
 
+
 class HomePage extends PageProvideNode<HomeProvide> {
   @override
   Widget buildContent(BuildContext context) {
@@ -27,7 +29,6 @@ class HomePage extends PageProvideNode<HomeProvide> {
 
 class HomePageTmp extends StatefulWidget {
   final HomeProvide provide;
-
   const HomePageTmp(this.provide);
 
   @override

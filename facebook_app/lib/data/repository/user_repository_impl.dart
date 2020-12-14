@@ -31,7 +31,6 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<UserEntity> getCurrentUser() async {
-    print('get current repo');
     bool isNetworkAvailable = await isAvailableInternet();
     if (isNetworkAvailable) {
       UserEntity entity = await _firAuth.curentUser();

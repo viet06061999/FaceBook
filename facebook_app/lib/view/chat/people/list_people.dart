@@ -50,7 +50,7 @@ class _ListFriendState extends State<ListPeople> {
             MessengerAppBar(
               _provide,
               isScroll: _isScroll,
-              title: 'People',
+              title: 'Danh bạ',
               actions: <Widget>[
                 Container(
                   width: 40.0,

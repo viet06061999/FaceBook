@@ -6,12 +6,13 @@ import 'package:facebook_app/data/model/user.dart';
 class NotificationCommentPost extends NotificationPost {
 
   NotificationCommentPost(
+      String id,
       Post post,
       UserEntity userFirst,
       String updateTime,
       double others,
       List<String> receivers)
-      : super(post, userFirst, updateTime, NotificationType.commentPost, others,
+      : super(id, post, userFirst, updateTime, NotificationType.commentPost, others,
             receivers);
 
   @override
@@ -20,10 +21,10 @@ class NotificationCommentPost extends NotificationPost {
       if (userId == post.owner.id)
         return "và $others đã bình luận bài viết của bạn";
       else
-        return " đã bình luận bài viết của bạn";
+        return "và $others đã bình luận bài viết của bạn đang theo dõi";
     } else {
       if (userId == post.owner.id)
-        return "và $others đã bình luận bài viết bạn đang theo dõi";
+        return " đã bình luận bài viết của bạn";
       else
         return " đã bình luận bài viết bạn đang theo dõi";
     }

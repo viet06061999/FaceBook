@@ -3,10 +3,10 @@ import 'package:facebook_app/data/base_type/notification_type.dart';
 import 'package:facebook_app/data/model/notification/notification_friend.dart';
 import 'package:facebook_app/data/model/user.dart';
 
-class NotificationRequestFriend extends Notification {
-  NotificationRequestFriend(UserEntity userFirst, String updateTime,
+class NotificationRequestFriend extends NotificationApp {
+  NotificationRequestFriend(String id, UserEntity userFirst, String updateTime,
       double others, List<String> receivers)
-      : super(userFirst, updateTime, NotificationType.requestFriend, others,
+      : super(id, userFirst, updateTime, NotificationType.requestFriend, others,
             receivers);
 
   @override

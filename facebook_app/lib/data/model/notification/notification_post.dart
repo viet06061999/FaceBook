@@ -5,19 +5,20 @@ import 'package:facebook_app/data/model/notification/notification_friend.dart';
 import 'package:facebook_app/data/model/post.dart';
 import 'package:facebook_app/data/model/user.dart';
 
-abstract class NotificationPost extends Notification {
+abstract class NotificationPost extends NotificationApp {
   Post post = Post.origin();
 
   String getContent({String userId});
 
   NotificationPost(
+      String id,
       this.post,
       UserEntity userFirst,
       String updateTime,
       NotificationType type,
       double others,
       List<String> receivers)
-      : super(userFirst, updateTime, type, others, receivers);
+      : super(id, userFirst, updateTime, type, others, receivers);
 
   @override
   NotificationPost.fromJson(Map map, UserEntity userFirst, Post post,

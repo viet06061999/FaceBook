@@ -1,11 +1,15 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facebook_app/data/model/comment.dart';
+import 'package:facebook_app/data/model/notification/accept_friend_notification.dart';
 import 'package:facebook_app/data/model/notification/comment_post_notification.dart';
 import 'package:facebook_app/data/model/notification/like_post_notification.dart';
 import 'package:facebook_app/data/model/notification/notification_friend.dart';
-import 'package:facebook_app/data/model/notification/notification_post.dart';
 import 'package:facebook_app/data/model/post.dart';
 import 'package:facebook_app/data/model/user.dart';
+import 'package:facebook_app/ultils/string_ext.dart';
 
 class FirNotification {
   final FirebaseFirestore _firestore;
@@ -13,10 +17,13 @@ class FirNotification {
   FirNotification(this._firestore);
 
   Future<void> createNotificationFriend(
-      Notification notification, String idUserFirst) {
+      UserEntity userFirst, String idUserSecond) {
+    var notification = NotificationAcceptFriend(
+      _getRandString(6),
+        userFirst, DateTime.now().toString(), 0, [idUserSecond]);
     return _firestore
         .collection('notification')
-        .add(notification.toMap(_firestore.doc('users/' + idUserFirst)));
+        .add(notification.toMap(_firestore.doc('users/' + userFirst.id)));
   }
 
   Future<void> updateNotificationLikePost(
@@ -26,15 +33,13 @@ class FirNotification {
     Future<void> future = null;
     var now = DateTime.now().toString();
     var receiver = post.comments.map((e) => e.user.id).toList();
-    var notification = NotificationLikePost(
-        post, userFirst, now, 0, receiver);
+    var notification = NotificationLikePost(_getRandString(6),post, userFirst, now, 0, receiver);
     if (ref.exists) {
-      future =
-          _firestore.collection('notification').doc(post.postId).update({
-            "first_user": _firestore.doc('users/' + userFirst.id),
-            "others": FieldValue.increment(1),
-            "receivers": receiver,
-          });
+      future = _firestore.collection('notification').doc(post.postId).update({
+        "first_user": _firestore.doc('users/' + userFirst.id),
+        "others": FieldValue.increment(1),
+        "receivers": receiver,
+      });
     } else {
       future = _firestore.collection('notification').doc(post.postId).set(
           notification.toMap(_firestore.doc('users/' + userFirst.id),
@@ -46,37 +51,34 @@ class FirNotification {
   Future<void> updateNotificationDisLikePost(
       Post post, UserEntity userFirst) async {
     var ref =
-    await _firestore.collection('notification').doc(post.postId).get();
+        await _firestore.collection('notification').doc(post.postId).get();
     Future<void> future = null;
     var now = DateTime.now().toString();
     if (ref.exists) {
-      future =
-          _firestore.collection('notification').doc(post.postId).update({
-            "others": FieldValue.increment(-1),
-            "update_time":now,
-            "receivers": FieldValue.arrayRemove([userFirst.id]),
-          });
+      future = _firestore.collection('notification').doc(post.postId).update({
+        "others": FieldValue.increment(-1),
+        "update_time": now,
+        "receivers": FieldValue.arrayRemove([userFirst.id]),
+      });
     }
     return future;
   }
 
-  Future<void> updateNotificationCommentPost(
-      Post post, Comment comment) async {
+  Future<void> updateNotificationCommentPost(Post post, Comment comment) async {
     var ref =
-    await _firestore.collection('notification').doc(post.postId).get();
+        await _firestore.collection('notification').doc(post.postId).get();
     Future<void> future = null;
     var now = DateTime.now().toString();
     var receiver = post.comments.map((e) => e.user.id);
     var notification = NotificationCommentPost(
-        post, comment.user, now, 0, receiver);
+        _getRandString(6), post, comment.user, now, 0, receiver);
     if (ref.exists) {
-      future =
-          _firestore.collection('notification').doc(post.postId).update({
-            "first_user": _firestore.doc('users/' + comment.user.id),
-            "others": FieldValue.increment(1),
-            "update_time":now,
-            "receivers": receiver,
-          });
+      future = _firestore.collection('notification').doc(post.postId).update({
+        "first_user": _firestore.doc('users/' + comment.user.id),
+        "others": FieldValue.increment(1),
+        "update_time": now,
+        "receivers": receiver,
+      });
     } else {
       future = _firestore.collection('notification').doc(post.postId).set(
           notification.toMap(_firestore.doc('users/' + comment.user.id),
@@ -85,10 +87,14 @@ class FirNotification {
     return future;
   }
 
-
-
   Stream<QuerySnapshot> getNotifications(String userId) => _firestore
       .collection('notification')
       .where('recivers', arrayContains: userId)
       .snapshots(includeMetadataChanges: true);
+}
+
+String _getRandString(int len) {
+  var random = Random.secure();
+  var values = List<int>.generate(len, (i) => random.nextInt(255));
+  return base64UrlEncode(values);
 }

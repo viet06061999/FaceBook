@@ -4,6 +4,8 @@ import 'package:facebook_app/data/repository/chat_repository.dart';
 import 'package:facebook_app/data/repository/chat_repository_impl.dart';
 import 'package:facebook_app/data/repository/friend_repository.dart';
 import 'package:facebook_app/data/repository/friend_repository_impl.dart';
+import 'package:facebook_app/data/repository/notification_repository.dart';
+import 'package:facebook_app/data/repository/notification_repository_impl.dart';
 import 'package:facebook_app/data/repository/photo_repository.dart';
 import 'package:facebook_app/data/repository/photo_repository_impl.dart';
 import 'package:facebook_app/data/repository/post_repository.dart';
@@ -25,7 +27,6 @@ import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:facebook_app/viewmodel/profile_view_model.dart';
 import 'package:facebook_app/viewmodel/login_view_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 const testScope = DartInScope('test');
@@ -34,11 +35,11 @@ const testScope = DartInScope('test');
 
 final viewModelModule = Module([
   factory<LoginProvide>(({params}) => LoginProvide(get())),
-  single<HomeProvide>(({params}) => HomeProvide(get(), get(), get(), get())),
+  single<HomeProvide>(({params}) => HomeProvide(get(), get(), get(), get(), get())),
   single<ProfileProvide>(
-      ({params}) => ProfileProvide(get(), get(), get(), get())),
+      ({params}) => ProfileProvide(get(), get(), get(), get(), get())),
   single<FriendProvide>(
-      ({params}) => FriendProvide(get(), get(), get(), get())),
+      ({params}) => FriendProvide(get(), get(), get(), get(), get())),
   single<ChatProvide>(({params}) => ChatProvide(get(), get(), get())),
 ]);
 
@@ -49,6 +50,7 @@ final repoModule = Module([
   factory<PhotoRepository>(({params}) => PhotoRepositoryImpl(get(), get())),
   factory<FriendRepository>(({params}) => FriendRepositoryImpl(get(), get())),
   factory<ChatRepository>(({params}) => ChatRepositoryImpl(get())),
+  factory<NotificationRepository>(({params}) => NotificationRepositoryImpl(get())),
 ]);
 
 //remote

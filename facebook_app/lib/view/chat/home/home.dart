@@ -24,7 +24,8 @@ class HomeScreenTmp extends StatefulWidget {
   State<StatefulWidget> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreenTmp> {
+class _HomeScreenState extends State<HomeScreenTmp>
+    with SingleTickerProviderStateMixin {
   ChatProvide provide;
 
   @override
@@ -35,10 +36,9 @@ class _HomeScreenState extends State<HomeScreenTmp> {
 
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
-  List<Widget> _widgetOptions(ChatProvide provide) =>
-      <Widget>[
+  List<Widget> _widgetOptions(ChatProvide provide) => <Widget>[
         ListFriend(provide),
         ListPeople(provide),
         ListDicovery(provide),
@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreenTmp> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Consumer<ChatProvide>(builder: (context, value, child) {
-        return  _widgetOptions(value).elementAt(_selectedIndex);
+        return _widgetOptions(value).elementAt(_selectedIndex);
       }),
       bottomNavigationBar: BottomNavigationBar(
         selectedIconTheme: IconThemeData(color: Colors.black87),
@@ -82,6 +82,16 @@ class _HomeScreenState extends State<HomeScreenTmp> {
               style: TextStyle(height: 0.0),
             ),
           ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(
+          //     FontAwesomeIcons.solidCompass,
+          //     size: 24.0,
+          //   ),
+          //   title: Text(
+          //     '',
+          //     style: TextStyle(height: 0.0),
+          //   ),
+          // ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],

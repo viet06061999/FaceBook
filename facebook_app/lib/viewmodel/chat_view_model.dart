@@ -108,6 +108,7 @@ class ChatProvide extends BaseProvide {
 
   Future<void> getChatDetail(
       {Conservation conservation, UserEntity friend}) async {
+    //_messages.clear();
     String conservationId = '';
     if (friend != null) {
       conservationId = userEntity.id.encryptDecrypt(friend.id);
@@ -121,6 +122,7 @@ class ChatProvide extends BaseProvide {
     if (ref.exists) {
       print('ton tai');
       chatRepository.getChat(conservationId).listen((event) async {
+        print('thay doi roi');
         _messages = (event.data()['messages'] as List)
             .map((e) => convertToMessage(e, userEntity, friend))
             .toList();
@@ -157,10 +159,12 @@ class ChatProvide extends BaseProvide {
             userEntity, to, path, DateTime.now().toString(), MessageType.image);
         chatRepository.sendMessage(message, message.from.id, message.to.id);
       }, () {}, (progress) {});
+      notifyListeners();
     }else{
       Message message = Message(
           userEntity, to, content, DateTime.now().toString(), MessageType.text);
       chatRepository.sendMessage(message, message.from.id, message.to.id);
+      notifyListeners();
     }
   }
 

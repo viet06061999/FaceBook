@@ -2,8 +2,8 @@ import 'dart:ui';
 import 'dart:math';
 
 import 'package:facebook_app/data/model/friend.dart';
+import 'package:facebook_app/view/profile_friend.dart';
 import 'package:facebook_app/viewmodel/profile_view_model.dart';
-import 'file:///C:/Users/vietl/Desktop/FaceBook/facebook_app/lib/view/profile_friend.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

@@ -72,7 +72,7 @@ class _StoryListItemState extends State<StoryListItem> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ChatDetail(provide, friends),
+            builder: (context) => ChatDetail(friends),
           ),
         );
       },

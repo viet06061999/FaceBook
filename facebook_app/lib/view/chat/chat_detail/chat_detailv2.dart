@@ -6,6 +6,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:facebook_app/widgets/messenger_app_bar/app_bar_network_rounded_image.dart';
 import 'package:facebook_app/widgets/messenger_app_bar_action/messenger_app_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_absolute_path/flutter_absolute_path.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter/cupertino.dart';
+import 'dart:io';
 
 class ChatDetail extends PageProvideNode<ChatProvide> {
   final Friend friend;
@@ -22,8 +27,8 @@ class ChatDetailTmp extends StatefulWidget {
   final ChatProvide provide;
   final Friend friend;
 
-   ChatDetailTmp(this.provide, this.friend){
-    provide.getChatDetail(friend: friend.userSecond );
+  ChatDetailTmp(this.provide, this.friend) {
+    provide.getChatDetail(friend: friend.userSecond);
   }
 
   @override
@@ -34,12 +39,25 @@ class _ChatDetailState extends State<ChatDetailTmp>
     with SingleTickerProviderStateMixin {
   ChatProvide _provide;
   Friend friend;
-
+  // ScrollController _controller;
+  // bool _isScroll = false;
+  // _scrollListener() {
+  //   if (_controller.offset > 0) {
+  //     this.setState(() {
+  //       _isScroll = true;
+  //     });
+  //   } else {
+  //     this.setState(() {
+  //       _isScroll = false;
+  //     });
+  //   }
+  // }
   _ChatDetailState(this.friend);
 
   @override
   void initState() {
-    // TODO: implement initState
+    // _controller = ScrollController();
+    // _controller.addListener(_scrollListener);
     super.initState();
     _provide = widget.provide;
   }
@@ -56,12 +74,10 @@ class _ChatDetailState extends State<ChatDetailTmp>
               Expanded(
                 child: ListView.builder(
                   reverse: true,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  // shrinkWrap: true,
+                  // physics: NeverScrollableScrollPhysics(),
                   itemCount: value.messages.length,
                   itemBuilder: (BuildContext context, int index) {
-                    // print('vaof list view roi');
-                    // print('size  ${value.messages.length}');
                     if (value.messages[value.messages.length-index-1].from.id ==
                         friend.userSecond.id) {
                       return Container(
@@ -74,7 +90,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             AppBarNetworkRoundedImage(
-                                //value.getConservations(friend.userSecond);
+                              //value.getConservations(friend.userSecond);
                                 imageUrl: friend.userSecond.avatar),
                             SizedBox(width: 15.0),
                             Container(
@@ -133,6 +149,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
   buildAppBar(Friend friend) {
     return MessengerAppBarAction(
       isScroll: true,
+      // isScroll: _isScroll,
       isBack: true,
       title: friend.userSecond.firstName + " " + friend.userSecond.lastName,
       imageUrl: friend.userSecond.avatar,
@@ -163,13 +180,31 @@ class _ChatDetailState extends State<ChatDetailTmp>
         children: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: IconButton(
-              icon: Icon(
-                FontAwesomeIcons.image,
-                size: 25.0,
-                color: Colors.lightBlue,
-              ),
-              onPressed: () {},
+            child: Row(
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    FontAwesomeIcons.camera,
+                    size: 25.0,
+                    color: Colors.lightBlue,
+                  ),
+                  onPressed: () {},
+
+                ),
+                IconButton(
+                  icon: Icon(
+                    FontAwesomeIcons.image,
+                    size: 25.0,
+                    color: Colors.lightBlue,
+                  ),
+                  onPressed: () {
+                    loadAssets();
+                  },
+                )
+              ],
+
+
+
             ),
           ),
           Expanded(
@@ -212,7 +247,8 @@ class _ChatDetailState extends State<ChatDetailTmp>
                 }
               },
               icon: Icon(
-                FontAwesomeIcons.solidThumbsUp,
+                // FontAwesomeIcons.solidThumbsUp,
+                FontAwesomeIcons.paperPlane,
                 size: 25.0,
                 color: Colors.lightBlue,
               ),
@@ -222,4 +258,43 @@ class _ChatDetailState extends State<ChatDetailTmp>
       ),
     );
   }
+
+  loadAssets() {
+    String error = 'No Error Dectected';
+
+    try {
+      MultiImagePicker.pickImages(
+        maxImages: 4,
+        enableCamera: true,
+        // selectedAssets: images,
+        cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
+        materialOptions: MaterialOptions(
+          actionBarColor: "#abcdef",
+          actionBarTitle: "Example App",
+          allViewTitle: "All Photos",
+          useDetailsView: false,
+          selectCircleStrokeColor: "#000000",
+        ),
+      ).then((value) {
+        for (int i = 0; i < value.length; i++) {
+          FlutterAbsolutePath.getAbsolutePath(value[i].identifier)
+              .then((value) =>
+              setState(() {
+                print(value);
+                // pathImages.add(value);
+              }));
+        }
+      });
+    } on Exception catch (e) {
+      error = e.toString();
+    }
+    if (!mounted) return;
+  }
+// Future<File> pickImage(ImageSource source) async{
+//   File testImage = await ImagePicker.pickImage(source: source);
+//   setState(() {
+//     pickedImage = testImage;
+//   });
+// }
+
 }

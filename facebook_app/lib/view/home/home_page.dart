@@ -1,4 +1,5 @@
 import 'package:facebook_app/base/base.dart';
+import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +13,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:facebook_app/chat.dart';
 
-
 class HomePage extends PageProvideNode<HomeProvide> {
   @override
   Widget buildContent(BuildContext context) {
@@ -22,6 +22,7 @@ class HomePage extends PageProvideNode<HomeProvide> {
 
 class HomePageTmp extends StatefulWidget {
   final HomeProvide provide;
+
   const HomePageTmp(this.provide);
 
   @override
@@ -35,9 +36,10 @@ class _HomePageState extends State<HomePageTmp>
   var _controller = ScrollController();
 
   @override
-  void initState() {
+  initState() {
     super.initState();
     _provide = widget.provide;
+    _provide.init();
     _tabController = TabController(vsync: this, length: 6);
     // set up listener here
     _controller.addListener(() {
@@ -83,13 +85,14 @@ class _HomePageState extends State<HomePageTmp>
                 Icon(Icons.search, color: Colors.black),
                 SizedBox(width: 15.0),
                 IconButton(
-                    icon: Icon(FontAwesomeIcons.facebookMessenger),
-                    color: Colors.black,
-                    onPressed: (){
-                    Navigator.push(context,
+                  icon: Icon(FontAwesomeIcons.facebookMessenger),
+                  color: Colors.black,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
                       MaterialPageRoute(builder: (context) => App(_provide)),
                     );
-                    },
+                  },
                 ), // xu ly tai day
               ]),
             ],

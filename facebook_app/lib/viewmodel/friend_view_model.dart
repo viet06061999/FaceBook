@@ -23,11 +23,7 @@ class FriendProvide extends HomeProvide {
 
   FriendProvide(PostRepository repository, PhotoRepository photoRepository,
       UserRepository userRepository, FriendRepository friendRepository, NotificationRepository notificationRepository)
-      : super(repository, photoRepository, userRepository, friendRepository, notificationRepository) {
-    userRepository.getCurrentUser().then((value) {
-      userEntity = value;
-    });
-  }
+      : super(repository, photoRepository, userRepository, friendRepository, notificationRepository);
 
   //lời mời kết bạn đã gửi
   getFriendsRequest(UserEntity entity) =>

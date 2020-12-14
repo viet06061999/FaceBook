@@ -1,15 +1,26 @@
+import 'package:facebook_app/data/model/friend.dart';
+import 'package:facebook_app/view/chat/chats/list_friend.dart';
 import 'package:flutter/material.dart';
 import 'package:facebook_app/models/list_friend_model.dart';
-
+import 'package:facebook_app/viewmodel/chat_view_model.dart';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:facebook_app/models/list_friend_model.dart';
+import 'package:facebook_app/view/chat/people/widgets/people_card.dart';
+import 'package:facebook_app/widgets/messenger_app_bar/messenger_app_bar.dart';
 class PeopleCard extends StatefulWidget {
-  PeopleCard({Key key, this.peopleItem, this.indexItem});
 
-  final ListFriendModel peopleItem;
+  final List<Friend> friends;
   final int indexItem;
-  _PeopleCardState createState() => _PeopleCardState();
+  PeopleCard(this.friends, this.indexItem);
+  _PeopleCardState createState() => _PeopleCardState(friends, indexItem);
 }
 
 class _PeopleCardState extends State<PeopleCard> {
+  final List<Friend> friends;
+  final int indexItem;
+  _PeopleCardState(this.friends, this.indexItem);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,7 +33,8 @@ class _PeopleCardState extends State<PeopleCard> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         image: DecorationImage(
-          image: AssetImage(widget.peopleItem.imageAvatarUrl),
+          image: indexItem == 0 ? NetworkImage(friends[indexItem].userFirst.avatar) :
+          NetworkImage(friends[indexItem-1].userSecond.avatar),
           fit: BoxFit.cover,
         ),
       ),
@@ -52,9 +64,7 @@ class _PeopleCardState extends State<PeopleCard> {
                 borderRadius: BorderRadius.circular(25.0),
                 border: Border.all(
                   width: 2.0,
-                  color: widget.peopleItem.isActive
-                      ? Colors.blue.shade700
-                      : Colors.transparent,
+                  color: Colors.transparent,
                 ),
               ),
               child: Container(
@@ -65,14 +75,16 @@ class _PeopleCardState extends State<PeopleCard> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(23.0),
                   image: DecorationImage(
-                    image: AssetImage(widget.peopleItem.imageAvatarUrl),
+                    image: indexItem == 0 ? NetworkImage(friends[indexItem].userFirst.avatar) :
+                    NetworkImage(friends[indexItem-1].userSecond.avatar),
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
             ),
             Text(
-              widget.indexItem == 0 ? 'Thêm tin mới' : widget.peopleItem.name,
+              indexItem == 0 ? 'Thêm tin mới' :
+              friends[indexItem-1].userSecond.firstName + " " + friends[indexItem-1].userSecond.lastName,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 18.0,

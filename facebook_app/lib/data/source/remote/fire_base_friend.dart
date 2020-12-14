@@ -8,8 +8,8 @@ class FirFriend {
 
   FirFriend(this._firestore);
 
-  createRequestFriend(String idUserFirst, String idUserSecond,
-      Function onError) {
+  createRequestFriend(
+      String idUserFirst, String idUserSecond, Function onError) {
     _createRequest(idUserFirst, idUserSecond, FriendStatus.pendingConfirm.index)
         .catchError((error) => onError());
     _createRequest(idUserSecond, idUserFirst, FriendStatus.pending.index)
@@ -52,8 +52,8 @@ class FirFriend {
         .snapshots(includeMetadataChanges: true);
   }
 
-  Future<void> _createRequest(String idUserFirst, String idUserSecond,
-      int status) {
+  Future<void> _createRequest(
+      String idUserFirst, String idUserSecond, int status) {
     return _firestore
         .collection("friends")
         .doc(idUserFirst.xorString(idUserSecond))
@@ -66,7 +66,13 @@ class FirFriend {
     });
   }
 
-  Future<void> _acceptRequest(String idUserFirst, String idUserSecond) {
+  Future<void> _acceptRequest(String idUserFirst, String idUserSecond) async {
+    print('vao accepted $idUserFirst $idUserSecond');
+    var ref = await _firestore
+        .collection("friends")
+        .doc(idUserFirst.xorString(idUserSecond))
+        .get();
+    print(ref.exists);
     return _firestore
         .collection("friends")
         .doc(idUserFirst.xorString(idUserSecond))

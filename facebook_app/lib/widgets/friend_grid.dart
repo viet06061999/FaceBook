@@ -1,17 +1,21 @@
 import 'dart:math';
 
 import 'package:facebook_app/data/model/friend.dart';
+import 'package:facebook_app/view/profile_friend.dart';
+import 'package:facebook_app/viewmodel/profile_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class FriendGrid extends StatefulWidget {
+  // final ProfileProvide provide;
   final int maxFriends = 6;
   final List<Friend> friends;
   final Function(int) onImageClicked;
   final Function onExpandClicked;
 
   FriendGrid(
-      {@required this.friends,
+      // {@required this.provide,
+          { @required this.friends,
       @required this.onImageClicked,
       @required this.onExpandClicked,
       Key key})
@@ -30,7 +34,7 @@ class _FriendGridState extends State<FriendGrid> {
       physics: NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 200,
-        crossAxisSpacing: 2,
+        crossAxisSpacing: 3,
         mainAxisSpacing: 3,
       ),
       children: images,
@@ -90,14 +94,24 @@ class _FriendGridState extends State<FriendGrid> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Container(
-            height: MediaQuery.of(context).size.width / 3 - 20,
-            width: MediaQuery.of(context).size.width / 3 - 20,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: NetworkImage(friend.userSecond.avatar),
-                    fit: BoxFit.cover),
-                borderRadius: BorderRadius.circular(10.0)),
+          GestureDetector(
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ProfileFriend(friend.userSecond)),
+              );
+            },
+            child: Container(
+              height: MediaQuery.of(context).size.width / 3 - 20,
+              width: MediaQuery.of(context).size.width / 3 - 20,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: NetworkImage(friend.userSecond.avatar),
+                      fit: BoxFit.cover),
+                  borderRadius: BorderRadius.circular(10.0)),
+            ),
           ),
           SizedBox(height: 5.0),
           Text(friend.userSecond.firstName + " " + friend.userSecond.lastName,

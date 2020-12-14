@@ -21,33 +21,44 @@ class FriendProvide extends HomeProvide {
 
   List<Friend> get friendRequest => _friendRequest;
 
-  FriendProvide(PostRepository repository, PhotoRepository photoRepository,
-      UserRepository userRepository, FriendRepository friendRepository, NotificationRepository notificationRepository)
-      : super(repository, photoRepository, userRepository, friendRepository, notificationRepository);
+  FriendProvide(
+      PostRepository repository,
+      PhotoRepository photoRepository,
+      UserRepository userRepository,
+      FriendRepository friendRepository,
+      NotificationRepository notificationRepository)
+      : super(repository, photoRepository, userRepository, friendRepository,
+            notificationRepository){
+    userRepository.getCurrentUser().then((value){
+      userEntity = value;
+      getFriendsRequest(value);
+    });
+  }
 
-  //lời mời kết bạn đã gửi
+  //lời mời kết bạn đã nhan
   getFriendsRequest(UserEntity entity) =>
-      friendRepository.getRequestedFriends(entity.id).listen((event) async {
+      friendRepository.getRequestFriends(entity.id).listen((event) async {
         event.docChanges.forEach((element) async {
           DocumentReference documentReference =
-          element.doc.data()['second_user'];
+              element.doc.data()['second_user'];
           await documentReference.get().then((value) {
             UserEntity second = UserEntity.fromJson(value.data());
             Friend friend = Friend.fromJson(element.doc.data(), entity, second);
             if (element.type == DocumentChangeType.added) {
               _friendRequest.insert(0, friend);
             } else if (element.type == DocumentChangeType.modified) {
+              print('removed');
               int position = -1;
               position = _friendRequest.indexWhere(
-                      (element) => (element.userSecond == friend.userSecond));
-
+                  (element) => (element.userSecond == friend.userSecond));
               if (position != -1)
                 _friendRequest[position] = friend;
               else
                 _friendRequest.insert(0, friend);
             } else if (element.type == DocumentChangeType.removed) {
+              print('removed');
               _friendRequest.removeWhere(
-                      (element) => element.userSecond == friend.userSecond);
+                  (element) => element.userFirst.id == friend.userFirst.id);
             }
           });
           if (event.docChanges.length != 0) {
@@ -56,22 +67,23 @@ class FriendProvide extends HomeProvide {
         });
       }, onError: (e) => {print("xu ly fail o day")});
 
-
-  //lời mời kết bạn đã nhận
+  //lời mời kết bạn đã gui
   getFriendsWaitConfirm(UserEntity entity) =>
       friendRepository.getRequestedFriends(entity.id).listen((event) async {
         event.docChanges.forEach((element) async {
           DocumentReference documentReference =
-          element.doc.data()['first_user'];
+              element.doc.data()['first_user'];
           await documentReference.get().then((value) {
             UserEntity firstUser = UserEntity.fromJson(value.data());
-            Friend friend = Friend.fromJson(element.doc.data(), firstUser, entity);
+            Friend friend =
+                Friend.fromJson(element.doc.data(), firstUser, entity);
             if (element.type == DocumentChangeType.added) {
+              print('get fpending');
               _friendWaitConfirm.insert(0, friend);
             } else if (element.type == DocumentChangeType.modified) {
               int position = -1;
               position = _friendWaitConfirm.indexWhere(
-                      (element) => (element.userSecond == friend.userSecond));
+                  (element) => (element.userSecond == friend.userSecond));
 
               if (position != -1)
                 _friendWaitConfirm[position] = friend;
@@ -79,7 +91,7 @@ class FriendProvide extends HomeProvide {
                 _friendWaitConfirm.insert(0, friend);
             } else if (element.type == DocumentChangeType.removed) {
               _friendWaitConfirm.removeWhere(
-                      (element) => element.userSecond == friend.userSecond);
+                  (element) => element.userSecond == friend.userSecond);
             }
           });
           if (event.docChanges.length != 0) {
@@ -87,4 +99,10 @@ class FriendProvide extends HomeProvide {
           }
         });
       }, onError: (e) => {print("xu ly fail o day")});
+
+  //dong y ket ban
+  acceptRequest(Friend friend) {
+    friendRepository.acceptRequest(friend, () {});
+    notifyListeners();
+  }
 }

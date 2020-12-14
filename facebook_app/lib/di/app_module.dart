@@ -36,14 +36,14 @@ const testScope = DartInScope('test');
 
 final viewModelModule = Module([
   factory<LoginProvide>(({params}) => LoginProvide(get())),
-  single<HomeProvide>(({params}) => HomeProvide(get(), get(), get(), get(), get())),
-  single<ProfileProvide>(
+  factory<HomeProvide>(({params}) => HomeProvide(get(), get(), get(), get(), get())),
+  factory<ProfileProvide>(
       ({params}) => ProfileProvide(get(), get(), get(), get(), get())),
-  single<ProfileFriendProvide>(
+  factory<ProfileFriendProvide>(
           ({params}) => ProfileFriendProvide(get(), get(), get(), get(), get(), params.get(0))),
-  single<FriendProvide>(
+  factory<FriendProvide>(
       ({params}) => FriendProvide(get(), get(), get(), get(), get())),
-  single<ChatProvide>(({params}) => ChatProvide(get(), get(), get(), get())),
+  factory<ChatProvide>(({params}) => ChatProvide(get(), get(), get(), get())),
 ]);
 
 final repoModule = Module([

@@ -293,42 +293,50 @@ class HomeProvide extends BaseProvide {
             case NotificationType.likePost:
               {
                 DocumentReference documentReference =
-                    element.doc.data()['owner'];
-                documentReference.get().then((value) {
-                  UserEntity userPost = UserEntity.fromJson(value.data());
-                  Post post = Post.fromMap(element.doc.data(), userPost);
-                  notification = NotificationLikePost(
-                      map['id'],
-                      post,
-                      user,
-                      map['update_time'],
-                      map['others'],
-                      (map['receivers'] as List)
-                          .map((e) => e.toString())
-                          .toList());
-                  _insertNotification(element.type, notification);
-                  notifyListeners();
+                    element.doc.data()['post'];
+                documentReference.get().then((postMap) {
+                  DocumentReference documentReferenceUser =
+                      postMap.data()['owner'];
+                  documentReferenceUser.get().then((value) {
+                    UserEntity userPost = UserEntity.fromJson(value.data());
+                    Post post = Post.fromMap(postMap.data(), userPost);
+                    notification = NotificationLikePost(
+                        map['id'],
+                        post,
+                        user,
+                        map['update_time'],
+                        map['others'],
+                        (map['receivers'] as List)
+                            .map((e) => e.toString())
+                            .toList());
+                    _insertNotification(element.type, notification);
+                    notifyListeners();
+                  });
                 });
               }
               break;
             case NotificationType.commentPost:
               {
                 DocumentReference documentReference =
-                    element.doc.data()['owner'];
-                documentReference.get().then((value) {
-                  UserEntity userPost = UserEntity.fromJson(value.data());
-                  Post post = Post.fromMap(element.doc.data(), userPost);
-                  notification = NotificationCommentPost(
-                      map['id'],
-                      post,
-                      user,
-                      map['update_time'],
-                      map['others'],
-                      (map['receivers'] as List)
-                          .map((e) => e.toString())
-                          .toList());
-                  _insertNotification(element.type, notification);
-                  notifyListeners();
+                    element.doc.data()['post'];
+                documentReference.get().then((postMap) {
+                  DocumentReference documentReferenceUser =
+                      postMap.data()['owner'];
+                  documentReferenceUser.get().then((value) {
+                    UserEntity userPost = UserEntity.fromJson(value.data());
+                    Post post = Post.fromMap(postMap.data(), userPost);
+                    notification = NotificationCommentPost(
+                        map['id'],
+                        post,
+                        user,
+                        map['update_time'],
+                        map['others'],
+                        (map['receivers'] as List)
+                            .map((e) => e.toString())
+                            .toList());
+                    _insertNotification(element.type, notification);
+                    notifyListeners();
+                  });
                 });
               }
               break;
@@ -371,8 +379,12 @@ class HomeProvide extends BaseProvide {
   bool checkFriend(String idThey) {
     return _friends.firstWhere((element) {
               return (element.userFirst.id == idThey ||
-                  element.userSecond.id == idThey) && element.status == FriendStatus.accepted;
-            }, orElse: null) == null ? false : true;
+                      element.userSecond.id == idThey) &&
+                  element.status == FriendStatus.accepted;
+            }, orElse: null) ==
+            null
+        ? false
+        : true;
   }
 
   void updateLike(Post post) {

@@ -29,11 +29,18 @@ class _RootPage extends State<RootPage> {
   void initState() {
     super.initState();
     var userRepo = inject<UserRepository>();
+    // var chatRepo = inject<ChatRepository>();
     userRepo.getCurrentUser().then((value) {
       setState(() {
         status = value != null ? AuthStatus.signIn : AuthStatus.notSignedIn;
       });
     });
+    // var from = UserEntity.origin();
+    // var to = UserEntity.origin();
+    // from.id = "y82MY9MUn2YzMBaE07OdLcbs5tf1";
+    // to.id = "007uxyqTGXdvziH1zAcO7tBGuFZ2";
+    // var message = Message(from, to, "Người yêu ơi có biết anh nhớ em nhiều lắm, những năm tháng trôi qua aa", "2020-12-12", MessageType.text);
+    // chatRepo.sendMessage(message, from.id, to.id);
   }
 
   @override

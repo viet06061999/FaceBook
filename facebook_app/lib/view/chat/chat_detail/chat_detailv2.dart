@@ -60,9 +60,9 @@ class _ChatDetailState extends State<ChatDetailTmp>
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: value.messages.length,
                   itemBuilder: (BuildContext context, int index) {
-                    print('vaof list view roi');
-                    print('size  ${value.messages.length}');
-                    if (value.messages[index].from.id ==
+                    // print('vaof list view roi');
+                    // print('size  ${value.messages.length}');
+                    if (value.messages[value.messages.length-index-1].from.id ==
                         friend.userSecond.id) {
                       return Container(
                         padding: const EdgeInsets.symmetric(
@@ -85,7 +85,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
                                 borderRadius: BorderRadius.circular(15.0),
                               ),
                               child: Text(
-                                value.messages[index].message,
+                                value.messages[value.messages.length-index-1].message,
                                 style: TextStyle(fontSize: 16.0),
                               ),
                             )
@@ -111,7 +111,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
                                 borderRadius: BorderRadius.circular(15.0),
                               ),
                               child: Text(
-                                value.messages[index].message,
+                                value.messages[value.messages.length-index-1].message,
                                 style: TextStyle(fontSize: 16.0),
                               ),
                             )
@@ -153,7 +153,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
   }
 
   _buildBottomChat(Friend friend) {
-    final myController = TextEditingController();
+    var myController = TextEditingController();
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -205,8 +205,11 @@ class _ChatDetailState extends State<ChatDetailTmp>
             padding: EdgeInsets.symmetric(horizontal: 8.0),
             child: IconButton(
               onPressed: () {
-                _provide.sendMessage(friend.userSecond,
-                    content: myController.text);
+                Text mess = Text(myController.text);
+                if(mess.data != null && mess.data != "" ) {
+                  _provide.sendMessage(friend.userSecond,
+                      content: myController.text);
+                }
               },
               icon: Icon(
                 FontAwesomeIcons.solidThumbsUp,

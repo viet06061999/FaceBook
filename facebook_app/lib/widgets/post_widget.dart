@@ -95,21 +95,25 @@ class PostWidget extends StatelessWidget {
               children: <Widget>[
                 Row(
                   children: <Widget>[
-                    Icon(FontAwesomeIcons.thumbsUp,
-                        size: 20.0,
-                        color: !post.isLiked ? Colors.grey : Colors.blue),
-                    SizedBox(width: 1.0),
                     Consumer<HomeProvide>(builder: (key, value, child) {
                       return TextButton(
                           onPressed: () {
                             value.updateLike(post);
                           },
-                          child: Text(
-                            'Like',
-                            style: TextStyle(
-                                fontSize: 14,
-                                color:
-                                !post.isLiked ? Colors.grey : Colors.blue),
+                          child: Row(
+                            children: [
+                              Icon(FontAwesomeIcons.thumbsUp,
+                                  size: 20.0,
+                                  color: !post.isLiked ? Colors.grey : Colors.blue),
+                              SizedBox(width: 10.0),
+                              Text(
+                                'Like',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color:
+                                    !post.isLiked ? Colors.grey : Colors.blue),
+                              ),
+                            ],
                           ));
                     }),
                   ],

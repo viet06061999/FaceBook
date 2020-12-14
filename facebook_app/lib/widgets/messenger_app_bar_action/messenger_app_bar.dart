@@ -50,8 +50,8 @@ class _MessengerAppBarActionState extends State<MessengerAppBarAction> {
                     Routes.goBack(context);
                   },
                   child: Icon(
-                    FontAwesomeIcons.chevronLeft,
-                    size: 25.0,
+                    FontAwesomeIcons.arrowLeft,
+                    size: 20.0,
                     color: Colors.black,
                   ),
                 ),
@@ -75,7 +75,7 @@ class _MessengerAppBarActionState extends State<MessengerAppBarAction> {
                       widget.title,
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 20.0,
+                        fontSize: 15.0,
                         fontWeight: FontWeight.w700,
                       ),
                       overflow: TextOverflow.ellipsis,
@@ -83,7 +83,7 @@ class _MessengerAppBarActionState extends State<MessengerAppBarAction> {
                   ),
                   Text(
                     widget.subTitle,
-                    style: TextStyle(color: Colors.grey, fontSize: 14.0),
+                    style: TextStyle(color: Colors.grey, fontSize: 11.0),
                   )
                 ],
               )

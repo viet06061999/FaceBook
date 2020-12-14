@@ -3,6 +3,7 @@ import 'package:facebook_app/view/chat/chats/list_friend.dart';
 import 'package:facebook_app/viewmodel/chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:facebook_app/models/list_friend_model.dart';
+import 'package:facebook_app/view/chat/chat_detail/chat_detailv2.dart';
 
 class StoriesList extends StatefulWidget {
   final ChatProvide provide;
@@ -66,7 +67,13 @@ class _StoryListItemState extends State<StoryListItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return InkWell(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ChatDetail(provide, friends),
+        ),
+      ),
       child: Row(
         children: <Widget>[
           Column(

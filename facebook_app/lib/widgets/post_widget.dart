@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
 import 'comment_widget.dart';
+
 // class reset {
 //   void fix(String text1){
 //     int n = text1.length;
@@ -22,6 +23,7 @@ import 'comment_widget.dart';
 class PostWidget extends StatelessWidget {
   final Post post;
   final HomeProvide provide;
+
   PostWidget({this.post, this.provide});
 
   @override
@@ -31,10 +33,7 @@ class PostWidget extends StatelessWidget {
         children: <Widget>[
           Container(
             color: Colors.grey[400],
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
+            width: MediaQuery.of(context).size.width,
             height: 11.0,
           ),
           Container(
@@ -93,43 +92,47 @@ class PostWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Icon(FontAwesomeIcons.thumbsUp,
-                        size: 20.0,
-                        color: !post.isLiked ? Colors.grey : Colors.blue),
-                    SizedBox(width: 1.0),
-                    Consumer<HomeProvide>(builder: (key, value, child) {
-                      return TextButton(
-                          onPressed: () {
-                            value.updateLike(post);
-                          },
-                          child: Text(
-                            'Like',
-                            style: TextStyle(
-                                fontSize: 14,
-                                color:
-                                !post.isLiked ? Colors.grey : Colors.blue),
-                          ));
-                    }),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    //FontAwesomeIcons.commentAlt, size: 20.0,
-                    IconButton(
-                        icon: new Icon(FontAwesomeIcons.commentAlt, size: 20.0),
-                        onPressed: () {
-                          showMaterialModalBottomSheet(
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            builder: (context) => CreateCommentWidget(provide: provide, post: post,),
-                          );
-                        },
+                Consumer<HomeProvide>(builder: (key, value, child) {
+                  return FlatButton(
+                    onPressed: () => {value.updateLike(post)},
+                    padding: EdgeInsets.all(10.0),
+                    child: Row(
+                      // Replace with a Row for horizontal icon + text
+                      children: <Widget>[
+                        Icon(FontAwesomeIcons.thumbsUp,
+                            size: 20.0,
+                            color: !post.isLiked ? Colors.grey : Colors.blue),
+                        SizedBox(width: 5.0),
+                        Text(
+                          'Like',
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: !post.isLiked ? Colors.grey : Colors.blue),
+                        )
+                      ],
                     ),
-                    SizedBox(width: 5.0),
-                    Text('Comment', style: TextStyle(fontSize: 14.0)),
-                  ],
+                  );
+                }),
+                FlatButton(
+                  onPressed: () => {
+                    showMaterialModalBottomSheet(
+                      context: context,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => CreateCommentWidget(
+                        provide: provide,
+                        post: post,
+                      ),
+                    )
+                  },
+                  padding: EdgeInsets.all(10.0),
+                  child: Row(
+                    // Replace with a Row for horizontal icon + text
+                    children: <Widget>[
+                      Icon(FontAwesomeIcons.commentAlt, size: 20.0),
+                      SizedBox(width: 5.0),
+                      Text('Comment', style: TextStyle(fontSize: 14.0)),
+                    ],
+                  ),
                 ),
                 Row(
                   children: <Widget>[
@@ -167,14 +170,8 @@ class PostWidget extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: Container(
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height / 2,
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width / 2 - 4,
+                  height: MediaQuery.of(context).size.height / 2,
+                  width: MediaQuery.of(context).size.width / 2 - 4,
                   child: Image.network(post.images[0], fit: BoxFit.cover),
                 ),
               ),
@@ -183,56 +180,40 @@ class PostWidget extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(2.0),
                     child: Container(
-                      height: MediaQuery
-                          .of(context)
-                          .size
-                          .height / 4,
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width / 2 - 4,
+                      height: MediaQuery.of(context).size.height / 4,
+                      width: MediaQuery.of(context).size.width / 2 - 4,
                       child: Image.network(post.images[1], fit: BoxFit.cover),
                     ),
                   ),
                   Container(
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .height / 4,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width / 2 - 4,
+                    height: MediaQuery.of(context).size.height / 4,
+                    width: MediaQuery.of(context).size.width / 2 - 4,
                     child: Image.network(post.images[2], fit: BoxFit.cover),
                   ),
                 ],
               )
             ],
-          )
-      );
+          ));
     }
   }
 
-  String fix(String text1){
+  String fix(String text1) {
     var now = (new DateTime.now()).millisecondsSinceEpoch;
     var format = new DateFormat('yyyy-MM-dd HH:mm:ss');
     DateTime baiDang = format.parse(text1);
     var timeago = baiDang.millisecondsSinceEpoch;
-    var timeagov1 = (now - timeago)/1000;
+    var timeagov1 = (now - timeago) / 1000;
     timeagov1 = (timeagov1 / 60 + 1);
-    if(timeagov1<60) {
+    if (timeagov1 < 60) {
       String a = timeagov1.toStringAsFixed(0);
       return "$a phút";
-    }
-    else if(timeagov1<60*24){
-      String a = (timeagov1/60).toStringAsFixed(0);
+    } else if (timeagov1 < 60 * 24) {
+      String a = (timeagov1 / 60).toStringAsFixed(0);
       return "$a giờ";
-    }
-    else if(timeagov1<60*24*30){
-      String a =(timeagov1/ (60*24) ).toStringAsFixed(0);
+    } else if (timeagov1 < 60 * 24 * 30) {
+      String a = (timeagov1 / (60 * 24)).toStringAsFixed(0);
       return "$a ngày";
-    }
-    else {
+    } else {
       return "1 tháng trước";
     }
   }

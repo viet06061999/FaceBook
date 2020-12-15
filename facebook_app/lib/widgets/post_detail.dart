@@ -75,7 +75,7 @@ class _PostDetail extends State<PostDetail> {
               ],
             ),
           ),
-          SizedBox(height: 20.0),
+          SizedBox(height: 10.0),
           GestureDetector(
               onTap: () {
                 showMaterialModalBottomSheet(
@@ -86,7 +86,13 @@ class _PostDetail extends State<PostDetail> {
                   ),
                 );
               },
-              child: Text(post.described, style: TextStyle(fontSize: 15.0))),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20,0,20,0),
+                child: Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(post.described, style: TextStyle(fontSize: 15.0))),
+              )
+          ),
           SizedBox(height: 10.0),
           buildImages(context),
           SizedBox(height: 10.0),
@@ -111,17 +117,20 @@ class _PostDetail extends State<PostDetail> {
               ],
             ),
           ),
-          Divider(height: 30.0),
-          ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: post.comments.length,
-              itemBuilder: (context, index) {
-                 return CommentWidget(
-                  comment: post.comments[index],
-                  provide: provide,
-                );
-              }),
+          Divider(height: 10.0),
+          Container(
+            height: MediaQuery.of(context).size.height * 0.68,
+            child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: post.comments.length,
+                itemBuilder: (context, index) {
+                   return CommentWidget(
+                    comment: post.comments[post.comments.length-index-1],
+                    provide: provide,
+                  );
+                }),
+          ),
           Container(
             decoration: BoxDecoration(
               color: Colors.white,

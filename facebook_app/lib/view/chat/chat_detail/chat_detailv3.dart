@@ -6,36 +6,37 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:facebook_app/widgets/messenger_app_bar/app_bar_network_rounded_image.dart';
 import 'package:facebook_app/widgets/messenger_app_bar_action/messenger_app_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:facebook_app/data/model/conservation.dart';
 
-class ChatDetail extends PageProvideNode<ChatProvide> {
-  final Friend friend;
+class ChatDetailV3 extends PageProvideNode<ChatProvide> {
+  final Conservation conservation;
 
-  ChatDetail(this.friend);
+  ChatDetailV3(this.conservation);
 
   @override
   Widget buildContent(BuildContext context) {
-    return ChatDetailTmp(mProvider, friend);
+    return ChatDetailV3Tmp(mProvider, conservation);
   }
 }
 
-class ChatDetailTmp extends StatefulWidget {
-  final Friend friend;
+class ChatDetailV3Tmp extends StatefulWidget {
+  final Conservation conservation;
   final ChatProvide provide;
 
-   ChatDetailTmp(this.provide, this.friend){
-    provide.getChatDetail(friend: friend.userSecond );
+  ChatDetailV3Tmp(this.provide, this.conservation){
+    provide.getChatDetail(conservation: conservation);
   }
 
   @override
-  State<StatefulWidget> createState() => _ChatDetailState(friend);
+  State<StatefulWidget> createState() => _ChatDetailState(conservation);
 }
 
-class _ChatDetailState extends State<ChatDetailTmp>
+class _ChatDetailState extends State<ChatDetailV3Tmp>
     with SingleTickerProviderStateMixin {
   ChatProvide _provide;
-  Friend friend;
+  final Conservation conservation;
 
-  _ChatDetailState(this.friend);
+  _ChatDetailState(this.conservation);
 
   @override
   void initState() {
@@ -46,13 +47,14 @@ class _ChatDetailState extends State<ChatDetailTmp>
 
   @override
   Widget build(BuildContext context) {
+    var friend = conservation.checkFriend(_provide.userEntity.id);
     return Scaffold(body: Consumer<ChatProvide>(
       builder: (context, value, child) {
         return Container(
           decoration: BoxDecoration(color: Colors.white),
           child: Column(
             children: <Widget>[
-              buildAppBar(friend),
+              buildAppBar(conservation),
               Expanded(
                 child: ListView.builder(
                   reverse: true,
@@ -63,7 +65,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
                     // print('vaof list view roi');
                     // print('size  ${value.messages.length}');
                     if (value.messages[value.messages.length-index-1].from.id ==
-                        friend.userSecond.id) {
+                        friend.id) {
                       return Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16.0,
@@ -75,7 +77,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
                           children: <Widget>[
                             AppBarNetworkRoundedImage(
                                 //value.getConservations(friend.userSecond);
-                                imageUrl: friend.userSecond.avatar),
+                                imageUrl: friend.avatar),
                             SizedBox(width: 15.0),
                             Container(
                               alignment: Alignment.center,
@@ -122,7 +124,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
                   },
                 ),
               ),
-              _buildBottomChat(friend),
+              _buildBottomChat(conservation),
             ],
           ),
         );
@@ -130,12 +132,13 @@ class _ChatDetailState extends State<ChatDetailTmp>
     ));
   }
 
-  buildAppBar(Friend friend) {
+  buildAppBar(Conservation conservation) {
+    var friend = conservation.checkFriend(_provide.userEntity.id);
     return MessengerAppBarAction(
       isScroll: true,
       isBack: true,
-      title: friend.userSecond.firstName + " " + friend.userSecond.lastName,
-      imageUrl: friend.userSecond.avatar,
+      title: friend.firstName + " " + friend.lastName,
+      imageUrl: friend.avatar,
       subTitle: 'Không hoạt động',
       actions: <Widget>[
         Icon(
@@ -152,7 +155,8 @@ class _ChatDetailState extends State<ChatDetailTmp>
     );
   }
 
-  _buildBottomChat(Friend friend) {
+  _buildBottomChat(Conservation conservation) {
+    var friend = conservation.checkFriend(_provide.userEntity.id);
     var myController = TextEditingController();
     return Container(
       decoration: BoxDecoration(
@@ -207,7 +211,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
               onPressed: () {
                 Text mess = Text(myController.text);
                 if(mess.data != null && mess.data != "" ) {
-                  _provide.sendMessage(friend.userSecond,
+                  _provide.sendMessage(friend,
                       content: myController.text);
                 }
               },

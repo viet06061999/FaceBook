@@ -30,9 +30,11 @@ class _RootPage extends State<RootPage> {
     super.initState();
     var userRepo = inject<UserRepository>();
     // var chatRepo = inject<ChatRepository>();
+    var friendRepo = inject<FriendRepository>();
     userRepo.getCurrentUser().then((value) {
       setState(() {
         status = value != null ? AuthStatus.signIn : AuthStatus.notSignedIn;
+        // friendRepo.createRequestFriend(value, "y82MY9MUn2YzMBaE07OdLcbs5tf1", (){});
       });
     });
     // var from = UserEntity.origin();

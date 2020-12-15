@@ -6,21 +6,33 @@ import 'package:facebook_app/view/chat/chats/widgets/conversation_item.dart';
 import 'package:facebook_app/view/chat/chats/widgets/search_bar.dart';
 import 'package:facebook_app/view/chat/chats/widgets/stories_list.dart';
 import 'package:facebook_app/widgets/messenger_app_bar/messenger_app_bar.dart';
+import 'package:facebook_app/base/base.dart';
+import 'package:provider/provider.dart';
 
-class ListFriend extends StatefulWidget {
-  final ChatProvide _provide;
-
-  ListFriend(this._provide);
-
-  _ListFriendState createState() => _ListFriendState(_provide);
+class ListFriend extends PageProvideNode<ChatProvide> {
+  @override
+  Widget buildContent(BuildContext context) {
+    return ListFriendTmp(mProvider);
+  }
 }
 
-class _ListFriendState extends State<ListFriend> {
+class ListFriendTmp extends StatefulWidget {
+  final ChatProvide provide;
+
+  ListFriendTmp(this.provide){
+   // provide.getConservations(provide.userEntity);
+  }
+  @override
+  State<StatefulWidget> createState() => _ListFriendState(provide);
+}
+
+class _ListFriendState extends State<ListFriendTmp>
+  with SingleTickerProviderStateMixin{
+  ChatProvide _provide;
+  _ListFriendState(this._provide);
+
   ScrollController _controller;
   bool _isScroll = false;
-  final ChatProvide _provide;
-
-  _ListFriendState(this._provide);
   _scrollListener() {
     if (_controller.offset > 0) {
       this.setState(() {
@@ -37,24 +49,27 @@ class _ListFriendState extends State<ListFriend> {
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
     super.initState();
+    _provide = widget.provide;
   }
 
   @override
   Widget build(BuildContext context) {
-    return NotificationListener<OverscrollIndicatorNotification>(
-      onNotification: (overscroll) {
-        overscroll.disallowGlow();
-      },
-      child: Container(
-        decoration: BoxDecoration(color: Colors.white),
-        child: Column(
-          children: <Widget>[
-            _buildMessengerAppBar(_isScroll),
-            _buildRootListView(),
-          ],
+    return Consumer<ChatProvide>(builder: (context, value, child){
+      return  NotificationListener<OverscrollIndicatorNotification>(
+        // onNotification: (overscroll) {
+        //   overscroll.disallowGlow();
+        // },
+        child: Container(
+          decoration: BoxDecoration(color: Colors.white),
+          child: Column(
+            children: <Widget>[
+              _buildMessengerAppBar(_isScroll),
+              _buildRootListView(value),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    },);
   }
 
   _buildMessengerAppBar(_isScroll) {
@@ -91,23 +106,22 @@ class _ListFriendState extends State<ListFriend> {
     ));
   }
 
-  _buildRootListView() {
+  _buildRootListView(ChatProvide value) {
     return Expanded(
       child: ListView.builder(
         padding: EdgeInsets.only(top: 10.0),
         controller: _controller,
         itemBuilder: (context, index) {
           if (index == 0) {
+            test(value.conservations.length);
             return _buildSearchBar();
           } else if (index == 1) {
-            return _buildStoriesList();
+            return _buildStoriesList(value);
           } else {
-            return ConversationItem(
-              friendItem: friendList[index - 2],
-            );
+            return ConversationItem(value.conservations[index-2]);
           }
         },
-        itemCount: friendList.length + 2,
+        itemCount: value.conservations.length + 2,
       ),
     );
   }
@@ -119,11 +133,15 @@ class _ListFriendState extends State<ListFriend> {
     );
   }
 
-  _buildStoriesList() {
+  _buildStoriesList(ChatProvide provide) {
     return Container(
       height: 100,
       padding: EdgeInsets.only(top: 16.0),
-      child: StoriesList(_provide),
+      child: StoriesList(provide),
     );
   }
+}
+
+void test(int kiemtra) {
+  print("hihihi $kiemtra");
 }

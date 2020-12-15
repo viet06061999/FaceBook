@@ -30,8 +30,6 @@ class _RootPage extends State<RootPage> {
     super.initState();
     var userRepo = inject<UserRepository>();
     // var chatRepo = inject<ChatRepository>();
-      });
-    });
     // var from = UserEntity.origin();
     // var to = UserEntity.origin();
     // from.id = "y82MY9MUn2YzMBaE07OdLcbs5tf1";

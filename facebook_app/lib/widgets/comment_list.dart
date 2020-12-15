@@ -27,9 +27,21 @@ class CommentWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(comment.user.firstName +' '+ comment.user.lastName,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 17.0)),
+                      Row(
+                        children: [
+                          Text(comment.user.firstName +' '+ comment.user.lastName,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 17.0)),
+                          SizedBox(
+                            width: 5.0,
+                          ),
+                          Icon(
+                            Icons.check_circle,
+                            size: 15,
+                            color: Colors.blueAccent,
+                          ),
+                        ],
+                      ),
                       SizedBox(height: 5.0),
                       Align(
                           alignment: Alignment.centerLeft,

@@ -1,31 +1,45 @@
 import 'package:facebook_app/data/model/post.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
+import 'package:facebook_app/widgets/photo_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:provider/provider.dart';
-import 'package:facebook_app/widgets/photo_grid.dart';
 import 'package:intl/intl.dart';
-import 'comment_widget.dart';
-import 'black_background_image.dart';
-import 'post_detail.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:provider/provider.dart';
+import 'dart:io';
 
-class PostWidget extends StatelessWidget {
+import 'black_background_image.dart';
+import 'comment_list.dart';
+
+class PostDetail extends StatefulWidget {
   final Post post;
   final HomeProvide provide;
 
-  PostWidget({this.post, this.provide});
+  PostDetail({this.post, this.provide});
+
+  @override
+  State<StatefulWidget> createState() {
+    return _PostDetail(this.post, this.provide);
+  }
+}
+
+class _PostDetail extends State<PostDetail> {
+  String content = "";
+  final Post post;
+  final HomeProvide provide;
+
+  _PostDetail(this.post, this.provide);
+
+  List<String> pathImages = [];
+  List<Asset> images = List<Asset>();
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: MediaQuery.of(context).size.height * 0.97,
       child: Column(
         children: <Widget>[
-          Container(
-            color: Colors.grey[400],
-            width: MediaQuery.of(context).size.width,
-            height: 11.0,
-          ),
           Container(
             padding: EdgeInsets.all(15),
             child: Row(
@@ -61,7 +75,7 @@ class PostWidget extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 5.0),
+          SizedBox(height: 20.0),
           GestureDetector(
               onTap: () {
                 showMaterialModalBottomSheet(
@@ -72,13 +86,7 @@ class PostWidget extends StatelessWidget {
                   ),
                 );
               },
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20,0,20,0),
-                child: Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(post.described, style: TextStyle(fontSize: 15.0))),
-              )
-          ),
+              child: Text(post.described, style: TextStyle(fontSize: 15.0))),
           SizedBox(height: 10.0),
           buildImages(context),
           SizedBox(height: 10.0),
@@ -103,72 +111,87 @@ class PostWidget extends StatelessWidget {
               ],
             ),
           ),
-          Divider(height: 20.0),
+          Divider(height: 30.0),
+          ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: post.comments.length,
+              itemBuilder: (context, index) {
+                 return CommentWidget(
+                  comment: post.comments[index],
+                  provide: provide,
+                );
+              }),
           Container(
-            padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+            ),
+            padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Consumer<HomeProvide>(builder: (key, value, child) {
-                      return TextButton(
-                          onPressed: () {
-                            value.updateLike(post);
-                          },
-                          child: Row(
-                            children: [
-                              Icon(FontAwesomeIcons.thumbsUp,
-                                  size: 15.0,
-                                  color: !post.isLiked
-                                      ? Colors.grey
-                                      : Colors.blue),
-                              SizedBox(width: 10.0),
-                              Text(
-                                'Like',
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: !post.isLiked
-                                        ? Colors.grey
-                                        : Colors.blue),
-                              ),
-                            ],
-                          ));
-                    }),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    TextButton(
-                      onPressed: () {
-                        showMaterialModalBottomSheet(
-                          context: context,
-                          backgroundColor: Colors.transparent,
-                          builder: (context) => CreateCommentWidget(
-                            provide: provide,
-                            post: post,
-                          ),
-                        );
-                      },
-                      child: Row(children: [
-                        Icon(FontAwesomeIcons.commentAlt, size: 15.0, color: Colors.grey,),
-                        SizedBox(width: 5.0),
-                        Text('Comment', style: TextStyle(fontSize: 12.0, color: Colors.grey)),
-                      ]),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: IconButton(
+                    icon: Icon(
+                      FontAwesomeIcons.image,
+                      size: 25.0,
+                      color: Colors.lightBlue,
                     ),
-                  ],
+                    onPressed: () {},
+                  ),
                 ),
-                Row(
-                  children: <Widget>[
-                    Icon(FontAwesomeIcons.share, size: 15.0, color: Colors.grey,),
-                    SizedBox(width: 5.0),
-                    Text('Share', style: TextStyle(fontSize: 12.0, color: Colors.grey,)),
-                  ],
+                Expanded(
+                  child: Container(
+                    child: TextField(
+                      onChanged: (text) {
+                        setState(() {
+                          content = text;
+                        });
+                      },
+                      // decoration: InputDecoration(
+                      //     border: InputBorder.none, hintText: 'Viết bình luận'),
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(10.0),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(25),
+                            borderSide: BorderSide(
+                              width: 0,
+                              style: BorderStyle.none,
+                            ),
+                          ),
+                          hintText: 'Viết bình luận',
+                          filled: true,
+                          fillColor: Colors.grey.shade200,
+                          hintStyle: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey[600],
+                          ),
+                          suffixIcon: Icon(
+                            FontAwesomeIcons.solidSmileBeam,
+                            size: 25.0,
+                            color: Colors.lightBlue,
+                          )),
+                    ),
+                  ),
                 ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: IconButton(
+                    onPressed: () {
+                      provide.addComment(post, content);
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      FontAwesomeIcons.paperPlane,
+                      size: 25.0,
+                      color: Colors.lightBlue,
+                    ),
+                  ),
+                )
               ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -257,25 +280,25 @@ class PostWidget extends StatelessWidget {
           ));
     }
   }
+}
 
-  String fix(String text1) {
-    var now = (new DateTime.now()).millisecondsSinceEpoch;
-    var format = new DateFormat('yyyy-MM-dd HH:mm:ss');
-    DateTime baiDang = format.parse(text1);
-    var timeago = baiDang.millisecondsSinceEpoch;
-    var timeagov1 = (now - timeago) / 1000;
-    timeagov1 = (timeagov1 / 60 + 1);
-    if (timeagov1 < 60) {
-      String a = timeagov1.toStringAsFixed(0);
-      return "$a phút";
-    } else if (timeagov1 < 60 * 24) {
-      String a = (timeagov1 / 60).toStringAsFixed(0);
-      return "$a giờ";
-    } else if (timeagov1 < 60 * 24 * 30) {
-      String a = (timeagov1 / (60 * 24)).toStringAsFixed(0);
-      return "$a ngày";
-    } else {
-      return "1 tháng trước";
-    }
+String fix(String text1) {
+  var now = (new DateTime.now()).millisecondsSinceEpoch;
+  var format = new DateFormat('yyyy-MM-dd HH:mm:ss');
+  DateTime baiDang = format.parse(text1);
+  var timeago = baiDang.millisecondsSinceEpoch;
+  var timeagov1 = (now - timeago) / 1000;
+  timeagov1 = (timeagov1 / 60 + 1);
+  if (timeagov1 < 60) {
+    String a = timeagov1.toStringAsFixed(0);
+    return "$a phút";
+  } else if (timeagov1 < 60 * 24) {
+    String a = (timeagov1 / 60).toStringAsFixed(0);
+    return "$a giờ";
+  } else if (timeagov1 < 60 * 24 * 30) {
+    String a = (timeagov1 / (60 * 24)).toStringAsFixed(0);
+    return "$a ngày";
+  } else {
+    return "1 tháng trước";
   }
 }

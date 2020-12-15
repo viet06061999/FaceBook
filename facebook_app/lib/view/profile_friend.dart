@@ -12,7 +12,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileFriend extends PageProvideNode<ProfileFriendProvide> {
-  ProfileFriend(UserEntity entity): super(params: [entity]);
+  ProfileFriend(UserEntity entity) : super(params: [entity]);
   @override
   Widget buildContent(BuildContext context) {
     return ProfilePageTmp(mProvider);
@@ -21,11 +21,9 @@ class ProfileFriend extends PageProvideNode<ProfileFriendProvide> {
 
 class ProfilePageTmp extends StatefulWidget {
   final ProfileFriendProvide provide;
-
   ProfilePageTmp(this.provide) {
-    provide.init();
+    provide.initChild();
   }
-
   @override
   State<StatefulWidget> createState() => _ProfileFriend();
 }
@@ -48,9 +46,7 @@ class _ProfileFriend extends State<ProfilePageTmp>
             color: Colors.black, //change your color here
           ),
           title: Text(
-            widget.provide.userEntity.firstName +
-                " " +
-                widget.provide.userEntity.lastName,
+            provide.userEntity.firstName + " " + provide.userEntity.lastName,
             style: TextStyle(color: Colors.black.withOpacity(1.0)),
           ),
           backgroundColor: Colors.white,
@@ -203,20 +199,64 @@ class _ProfileFriend extends State<ProfilePageTmp>
                                 color: Colors.blue,
                                 borderRadius: BorderRadius.circular(5.0)),
                             child: Center(
-                                child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Icon(
-                                  FontAwesomeIcons.userCheck,
-                                  color: Colors.white,
-                                  size: 22.0,
-                                ),
-                                Text('  Trả lời',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16.0)),
-                              ],
+                                child: GestureDetector(
+                              onTap: () {
+                                showModalBottomSheet(
+                                    context: context,
+                                    builder: (builder) {
+                                      return new Container(
+                                        // height: 350.0,
+                                        color: Color(0xFF737373),
+                                        child: new Container(
+                                            decoration: new BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: new BorderRadius
+                                                        .only(
+                                                    topLeft:
+                                                        const Radius.circular(
+                                                            10.0),
+                                                    topRight:
+                                                        const Radius.circular(
+                                                            10.0))),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: <Widget>[
+                                                _createTile(
+                                                    context,
+                                                    'Đồng ý',
+                                                    Icon(
+                                                      Icons.check,
+                                                      color: Colors.black,
+                                                    ),
+                                                    _action1),
+                                                _createTile(
+                                                    context,
+                                                    'Từ chối',
+                                                    Icon(
+                                                      Icons.close,
+                                                      color: Colors.black,
+                                                    ),
+                                                    _changeCoverImage),
+                                              ],
+                                            )),
+                                      );
+                                    });
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Icon(
+                                    FontAwesomeIcons.userCheck,
+                                    color: Colors.white,
+                                    size: 22.0,
+                                  ),
+                                  Text('  Trả lời',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16.0)),
+                                ],
+                              ),
                             )
                                 // child: Text('Trả lời',
                                 //     style: TextStyle(
@@ -362,7 +402,7 @@ class _ProfileFriend extends State<ProfilePageTmp>
                         context,
                         MaterialPageRoute(
                             builder: (context) => ListUserFriend(
-                                provide: provide,
+                                // provide: provide,
                                 friends: provide.friends,
                                 onImageClicked: null,
                                 onExpandClicked: null)),

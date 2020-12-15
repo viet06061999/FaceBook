@@ -1,13 +1,6 @@
-import 'package:facebook_app/data/model/post.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:provider/provider.dart';
-import 'package:facebook_app/widgets/photo_grid.dart';
 import 'package:facebook_app/data/model/comment.dart';
-
-import 'comment_widget.dart';
 
 class CommentWidget extends StatelessWidget {
   final Comment comment;
@@ -34,9 +27,21 @@ class CommentWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(comment.user.firstName + comment.user.lastName,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 17.0)),
+                      Row(
+                        children: [
+                          Text(comment.user.firstName +' '+ comment.user.lastName,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 17.0)),
+                          SizedBox(
+                            width: 5.0,
+                          ),
+                          Icon(
+                            Icons.check_circle,
+                            size: 15,
+                            color: Colors.blueAccent,
+                          ),
+                        ],
+                      ),
                       SizedBox(height: 5.0),
                       Align(
                           alignment: Alignment.centerLeft,

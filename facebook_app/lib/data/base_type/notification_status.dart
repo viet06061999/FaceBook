@@ -1,1 +1,0 @@
-enum NotificationStatus { none, seen }

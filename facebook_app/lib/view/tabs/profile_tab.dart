@@ -19,9 +19,7 @@ class ProfileTab extends PageProvideNode<ProfileProvide> {
 
 class ProfilePageTmp extends StatefulWidget {
   final ProfileProvide provide;
-  ProfilePageTmp(this.provide) {
-    provide.init();
-  }
+  ProfilePageTmp(this.provide);
 
   @override
   State<StatefulWidget> createState() => _ProfilePageState();
@@ -466,7 +464,7 @@ class _ProfilePageState extends State<ProfilePageTmp>
                       context,
                       MaterialPageRoute(
                           builder: (context) => ListUserFriend(
-                              provide: value,
+                              // provide: value,
                               friends: value.friends,
                               onImageClicked: null,
                               onExpandClicked: null)),

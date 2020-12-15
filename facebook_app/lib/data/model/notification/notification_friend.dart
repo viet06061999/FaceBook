@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:facebook_app/data/base_type/notification_status.dart';
 import 'package:facebook_app/data/base_type/notification_type.dart';
 import 'package:facebook_app/data/model/user.dart';
 
@@ -10,7 +9,6 @@ abstract class NotificationApp {
   NotificationType type = NotificationType.requestFriend;
   List<String> receivers = [];
   double others = 0;
-  NotificationStatus status = NotificationStatus.none;
 
   NotificationApp.origin();
 
@@ -26,8 +24,6 @@ abstract class NotificationApp {
     this.userFirst = userFirst;
     this.id = map['id'];
     this.type = NotificationType.values[int.parse(map['type'].toString())];
-    this.status =
-        NotificationStatus.values[int.parse(map['status'].toString())];
     this.updateTime = map['update_time'];
     this.others = map['others'];
     this.receivers =
@@ -40,7 +36,6 @@ abstract class NotificationApp {
         "type": this.type.index,
         "update_time": this.updateTime,
         "others": this.others,
-        "status": this.status,
         "receivers": this.receivers,
       });
 }

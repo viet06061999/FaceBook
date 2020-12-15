@@ -3,13 +3,14 @@ import 'dart:math';
 import 'package:facebook_app/base/base.dart';
 import 'package:facebook_app/data/model/friend.dart';
 import 'package:facebook_app/view/tabs/profile_tab.dart';
+import 'package:facebook_app/viewmodel/friend_view_model.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:facebook_app/viewmodel/profile_view_model.dart';
 import 'package:facebook_app/widgets/list_friend.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class FriendsTab extends PageProvideNode<ProfileProvide> {
+class FriendsTab extends PageProvideNode<FriendProvide> {
   @override
   Widget buildContent(BuildContext context) {
     return FriendsPageTmp(mProvider);
@@ -17,15 +18,12 @@ class FriendsTab extends PageProvideNode<ProfileProvide> {
 }
 
 class FriendsPageTmp extends StatefulWidget {
-  final ProfileProvide provide;
+  final FriendProvide provide;
   int maxFriends = 9999;
-  List<Friend> friends;
   Function(int) onImageClicked;
   Function onExpandClicked;
 
-  FriendsPageTmp(this.provide) {
-    provide.getPendings(provide.userEntity);
-  }
+  FriendsPageTmp(this.provide);
 
   @override
   State<StatefulWidget> createState() => _FriendsPageState();
@@ -33,7 +31,7 @@ class FriendsPageTmp extends StatefulWidget {
 
 class _FriendsPageState extends State<FriendsPageTmp>
     with SingleTickerProviderStateMixin {
-  ProfileProvide provide;
+  FriendProvide provide;
 
   @override
   void initState() {
@@ -44,8 +42,7 @@ class _FriendsPageState extends State<FriendsPageTmp>
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-        child: Consumer<ProfileProvide>(builder: (context, value, child) {
-          widget.friends = value.friendsPending;
+        child: Consumer<FriendProvide>(builder: (context, value, child) {
       return Container(
           padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
           child: Column(
@@ -78,7 +75,7 @@ class _FriendsPageState extends State<FriendsPageTmp>
                         context,
                         MaterialPageRoute(
                             builder: (context) => ListUserFriend(
-                                provide: value,
+                                // provide: value,
                                 friends: value.friends,
                                 onImageClicked: null,
                                 onExpandClicked: null)),
@@ -104,7 +101,7 @@ class _FriendsPageState extends State<FriendsPageTmp>
                       style: TextStyle(
                           fontSize: 21.0, fontWeight: FontWeight.bold)),
                   SizedBox(width: 10.0),
-                  Text(widget.friends.length.toString(),
+                  Text(value.friendRequest.length.toString(),
                       style: TextStyle(
                           fontSize: 21.0,
                           fontWeight: FontWeight.bold,
@@ -114,9 +111,9 @@ class _FriendsPageState extends State<FriendsPageTmp>
               ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: widget.friends.length,
+                  itemCount: value.friendRequest.length,
                   itemBuilder: (context, index) {
-                    return buildFriend(widget.friends[index]);
+                    return buildFriend(value.friendRequest[index]);
                   }),
               // SizedBox(height: 25.0),
               // Row(
@@ -230,10 +227,10 @@ class _FriendsPageState extends State<FriendsPageTmp>
   }
 
   List<Widget> buildFriends() {
-    int numImages = widget.friends.length;
-    print(widget.friends.length);
+    int numImages = provide.friendRequest.length;
+    print('number friend request $numImages');
     return List<Widget>.generate(min(numImages, widget.maxFriends), (index) {
-      Friend friend = widget.friends[index];
+      Friend friend = provide.friendRequest[index];
 
       // If its the last image
       if (index == widget.maxFriends - 1) {
@@ -307,7 +304,10 @@ class _FriendsPageState extends State<FriendsPageTmp>
               Row(
                 children: <Widget>[
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      provide.acceptRequest(friend);
+                      print('oke fr');
+                    },
                     child: Container(
                       padding: EdgeInsets.symmetric(
                           horizontal: 25.0, vertical: 10.0),

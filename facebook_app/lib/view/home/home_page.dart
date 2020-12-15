@@ -1,7 +1,7 @@
 import 'package:facebook_app/base/base.dart';
-import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:facebook_app/view/tabs/home_tab.dart';
 import 'package:facebook_app/view/tabs/friends_tab.dart';
@@ -34,6 +34,7 @@ class _HomePageState extends State<HomePageTmp>
   HomeProvide _provide;
   TabController _tabController;
   var _controller = ScrollController();
+  bool _isScroll = true;
 
   @override
   initState() {
@@ -67,62 +68,75 @@ class _HomePageState extends State<HomePageTmp>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          brightness: Brightness.light,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Text('facebook',
-                      style: TextStyle(
-                          color: Colors.blueAccent,
-                          fontSize: 27.0,
-                          fontWeight: FontWeight.bold)),
-                ],
+      body: NestedScrollView(
+          physics: ScrollPhysics(),
+          controller: _controller,
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return <Widget>[
+              SliverAppBar(
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Text('facebook',
+                            style: TextStyle(
+                                color: Colors.blueAccent,
+                                fontSize: 27.0,
+                                fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Icon(Icons.search, color: Colors.black),
+                          SizedBox(width: 15.0),
+                          IconButton(
+                            icon: Icon(FontAwesomeIcons.facebookMessenger),
+                            color: Colors.black,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => App(_provide)),
+                              );
+                            },
+                          ), // xu ly tai day
+                        ]),
+                  ],
+                ),
+                pinned: true,
+                floating: true,
+                backgroundColor: Colors.white,
+                forceElevated: innerBoxIsScrolled,
+                snap: true,
+                bottom: TabBar(
+                  indicatorColor: Colors.blueAccent,
+                  controller: _tabController,
+                  unselectedLabelColor: Colors.grey,
+                  labelColor: Colors.blueAccent,
+                  tabs: [
+                    Tab(icon: Icon(Icons.home, size: 30.0)),
+                    Tab(icon: Icon(Icons.people, size: 30.0)),
+                    Tab(icon: Icon(Icons.ondemand_video, size: 30.0)),
+                    Tab(icon: Icon(Icons.account_circle, size: 30.0)),
+                    Tab(icon: Icon(Icons.notifications, size: 30.0)),
+                    Tab(icon: Icon(Icons.menu, size: 30.0))
+                  ],
+                ),
               ),
-              Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-                Icon(Icons.search, color: Colors.black),
-                SizedBox(width: 15.0),
-                IconButton(
-                  icon: Icon(FontAwesomeIcons.facebookMessenger),
-                  color: Colors.black,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => App(_provide)),
-                    );
-                  },
-                ), // xu ly tai day
-              ]),
-            ],
-          ),
-          backgroundColor: Colors.white,
-          elevation: 0.0,
-          bottom: TabBar(
-            indicatorColor: Colors.blueAccent,
-            controller: _tabController,
-            unselectedLabelColor: Colors.grey,
-            labelColor: Colors.blueAccent,
-            tabs: [
-              Tab(icon: Icon(Icons.home, size: 30.0)),
-              Tab(icon: Icon(Icons.people, size: 30.0)),
-              Tab(icon: Icon(Icons.ondemand_video, size: 30.0)),
-              Tab(icon: Icon(Icons.account_circle, size: 30.0)),
-              Tab(icon: Icon(Icons.notifications, size: 30.0)),
-              Tab(icon: Icon(Icons.menu, size: 30.0))
-            ],
-          ),
-        ),
-        body: Consumer<HomeProvide>(builder: (context, value, child) {
-          return TabBarView(controller: _tabController, children: [
-            HomeTab(value, _controller),
-            FriendsTab(),
-            WatchTab(),
-            ProfileTab(),
-            NotificationsTab(value),
-            MenuTab(value)
-          ]);
-        }));
+            ];
+          },
+          body: Consumer<HomeProvide>(builder: (context, value, child) {
+            return TabBarView(controller: _tabController, children: [
+              HomeTab(value),
+              FriendsTab(),
+              WatchTab(),
+              ProfileTab(),
+              NotificationsTab(value),
+              MenuTab(value)
+            ]);
+          })),
+    );
   }
 }

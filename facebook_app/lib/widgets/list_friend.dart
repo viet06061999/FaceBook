@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:facebook_app/data/model/friend.dart';
 import 'package:facebook_app/view/profile_friend.dart';
+import 'package:facebook_app/viewmodel/friend_view_model.dart';
 import 'package:facebook_app/viewmodel/profile_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,6 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ListUserFriend extends StatefulWidget {
-  final ProfileProvide provide;
   final int maxFriends = 9999;
   final List<Friend> friends;
   final Function(int) onImageClicked;
@@ -18,7 +18,7 @@ class ListUserFriend extends StatefulWidget {
 
   // ListUserFriend(this.provide, this.friends, this.onImageClicked, this.onExpandClicked);
   ListUserFriend(
-      {@required this.provide,
+      {
         @required this.friends,
       @required this.onImageClicked,
       @required this.onExpandClicked,
@@ -40,9 +40,7 @@ class _ListUserFriendState extends State<ListUserFriend> {
             color: Colors.black, //change your color here
           ),
           title: Text(
-            widget.provide.userEntity.firstName +
-                " " +
-                widget.provide.userEntity.lastName,
+            "danh sach",
             style: TextStyle(color: Colors.black.withOpacity(1.0)),
           ),
           backgroundColor: Colors.white,

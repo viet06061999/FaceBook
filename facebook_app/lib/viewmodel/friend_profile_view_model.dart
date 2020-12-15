@@ -21,4 +21,12 @@ class ProfileFriendProvide extends ProfileProvide {
             notificationRepository) {
     userEntity = entity;
   }
+
+  void initChild() {
+    print('init child');
+    getFriends(userEntity);
+    getUserListPost(userEntity.id);
+    getUserPhotos(userEntity.id);
+    getUserVideos(userEntity.id);
+  }
 }

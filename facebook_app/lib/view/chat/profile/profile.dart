@@ -89,17 +89,27 @@ class _ProfilePageState extends State<ProfilePageTmp>
                       SizedBox(
                         height: 10.0,
                       ),
-                      _buildTitleSetting('Account'),
-                      _buildSettingItem('Username', '@abc', true),
-                      _buildSettingItem('Gender', 'Male', true),
-                      _buildSettingItem(
-                          'Email', provide.userEntity.email, false),
-                      _buildTitleSetting('Setting'),
-                      _buildSettingItem('Notification', '', true),
-                      _buildSettingItem('Privacy and Security', '', true),
-                      _buildSettingItem('Language', '', true),
-                      _buildSettingItem('Chat Settings', '', true),
-                      _buildSettingItem('Help', '', false),
+                      _buildSettingItem3('Chế độ bóng tối', '', false,FontAwesomeIcons.arrowLeft,FontAwesomeIcons.arrowLeft),
+                      _buildSettingItem3('Chuyển tài khoản', '', false,FontAwesomeIcons.arrowLeft,FontAwesomeIcons.arrowLeft),
+                      _buildSettingItem('Tin nhắn chờ', '', false,FontAwesomeIcons.arrowLeft),
+                      _buildTitleSetting('Trang cá nhân'),
+                      _buildSettingItem2('Trang thái hoạt động', 'Bật', false,FontAwesomeIcons.arrowLeft),
+                      _buildSettingItem2('Tên người dùng', provide.userEntity.email, false,FontAwesomeIcons.arrowLeft),
+                      _buildTitleSetting('Tuỳ chọn'),
+                      _buildSettingItem('Quyền riêng tư', '', false,FontAwesomeIcons.arrowLeft),
+                      _buildSettingItem('Âm thanh & thông báo', '', false,FontAwesomeIcons.arrowLeft),
+                      _buildSettingItem('Trình tiết kiệm dữ liệu', '', false,FontAwesomeIcons.arrowLeft),
+                      _buildSettingItem('Tin', '', false,FontAwesomeIcons.arrowLeft),
+                      _buildSettingItem('SMS', '', false,FontAwesomeIcons.arrowLeft),
+                      _buildSettingItem('Danh bạ thư điện thoại', '', false,FontAwesomeIcons.arrowLeft),
+                      _buildSettingItem('Ảnh & phương tiện', '', false,FontAwesomeIcons.arrowLeft),
+                      _buildSettingItem3('Bong bóng chat', '', false,FontAwesomeIcons.arrowLeft,FontAwesomeIcons.arrowLeft),
+                      _buildSettingItem('Cập nhật ứng dụng', '', false,FontAwesomeIcons.arrowLeft),
+                      _buildTitleSetting('Tài khoản'),
+                      _buildSettingItem('Cài đặt tài khoản', '', false,FontAwesomeIcons.arrowLeft),
+                      _buildSettingItem('Báo cáo vấn đề kỹ thuật', '', false,FontAwesomeIcons.arrowLeft),
+                      _buildSettingItem('Trợ giúp', '', false,FontAwesomeIcons.arrowLeft),
+                      _buildSettingItem('Pháp lý và chính sách', '', false,FontAwesomeIcons.arrowLeft),
                       SizedBox(height: 16.0)
                     ],
                   ),
@@ -190,22 +200,20 @@ class _ProfilePageState extends State<ProfilePageTmp>
       ),
       width: double.infinity,
       decoration: BoxDecoration(
-          color: Colors.grey.shade200,
+          color: Colors.transparent,
           border: Border(
-            top: BorderSide(width: 0.5, color: Colors.grey.shade300),
-            bottom: BorderSide(width: 0.5, color: Colors.grey.shade300),
           )),
       child: Text(
         title,
         style: TextStyle(
           color: Colors.grey,
-          fontSize: 16.0,
+          fontSize: 14.0,
         ),
       ),
     );
   }
 
-  _buildSettingItem(title, subtitle, isBorderBottom) {
+  _buildSettingItem(title, subtitle, isBorderBottom, icon) {
     return Container(
       margin: EdgeInsets.only(left: 16.0),
       padding: EdgeInsets.only(
@@ -224,12 +232,23 @@ class _ProfilePageState extends State<ProfilePageTmp>
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(
-            title,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 16.0,
-            ),
+          Row(
+            children: <Widget>[
+              Icon(
+                icon,
+                //FontAwesomeIcons.chevronRight,
+                color: Colors.grey.shade500,
+                size: 18.0,
+              ),
+              SizedBox(width: 10.0),
+              Text(
+                title,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16.0,
+                )
+              ),
+            ],
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -242,15 +261,130 @@ class _ProfilePageState extends State<ProfilePageTmp>
                 ),
               ),
               SizedBox(width: 10.0),
-              Icon(
-                FontAwesomeIcons.chevronRight,
-                color: Colors.grey.shade500,
-                size: 18.0,
-              )
+              // Icon(
+              //   FontAwesomeIcons.chevronRight,
+              //   color: Colors.grey.shade500,
+              //   size: 18.0,
+              // )
             ],
           )
         ],
       ),
     );
   }
+}
+
+_buildSettingItem2(title, subtitle, isBorderBottom, icon) {
+  return Container(
+    margin: EdgeInsets.only(left: 16.0),
+    padding: EdgeInsets.only(
+      top: 12.0,
+      bottom: 12.0,
+      right: 10.0,
+    ),
+    decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: isBorderBottom ? 0.5 : 0.0,
+            color: isBorderBottom ? Colors.grey.shade300 : Colors.transparent,
+          ),
+        )),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Icon(
+              icon,
+              //FontAwesomeIcons.chevronRight,
+              color: Colors.grey.shade500,
+              size: 18.0,
+            ),
+            SizedBox(width: 10.0),
+            Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+              Text(
+                  title,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16.0,
+                  )
+              ),
+                  SizedBox(width: 10.0),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      color: Colors.grey.shade600,
+                      fontSize: 14.0,
+                    ),
+                  ),
+            ],
+        ),
+      ],
+        ),
+    ],
+  ),
+  );
+}
+
+_buildSettingItem3(title, subtitle, isBorderBottom, icon1, icon2) {
+  return Container(
+    margin: EdgeInsets.only(left: 16.0),
+    padding: EdgeInsets.only(
+      top: 12.0,
+      bottom: 12.0,
+      right: 10.0,
+    ),
+    decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: isBorderBottom ? 0.5 : 0.0,
+            color: isBorderBottom ? Colors.grey.shade300 : Colors.transparent,
+          ),
+        )),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Icon(
+              icon1,
+              //FontAwesomeIcons.chevronRight,
+              color: Colors.grey.shade500,
+              size: 18.0,
+            ),
+            SizedBox(width: 10.0),
+            Text(
+                title,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16.0,
+                )
+            ),
+          ],
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              subtitle,
+              style: TextStyle(
+                color: Colors.grey.shade600,
+                fontSize: 15.0,
+              ),
+            ),
+            SizedBox(width: 10.0),
+            Icon(
+              icon2,
+              color: Colors.grey.shade500,
+              size: 18.0,
+            )
+          ],
+        )
+      ],
+    ),
+  );
 }

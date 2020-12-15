@@ -24,8 +24,8 @@ class ChatDetail extends PageProvideNode<ChatProvide> {
 }
 
 class ChatDetailTmp extends StatefulWidget {
-  final Friend friend;
   final ChatProvide provide;
+  final Friend friend;
 
   ChatDetailTmp(this.provide, this.friend) {
     provide.getChatDetail(friend: friend.userSecond);
@@ -39,25 +39,10 @@ class _ChatDetailState extends State<ChatDetailTmp>
     with SingleTickerProviderStateMixin {
   ChatProvide _provide;
   Friend friend;
-  // ScrollController _controller;
-  // bool _isScroll = false;
-  // _scrollListener() {
-  //   if (_controller.offset > 0) {
-  //     this.setState(() {
-  //       _isScroll = true;
-  //     });
-  //   } else {
-  //     this.setState(() {
-  //       _isScroll = false;
-  //     });
-  //   }
-  // }
   _ChatDetailState(this.friend);
 
   @override
   void initState() {
-    // _controller = ScrollController();
-    // _controller.addListener(_scrollListener);
     super.initState();
     _provide = widget.provide;
   }
@@ -202,9 +187,6 @@ class _ChatDetailState extends State<ChatDetailTmp>
                   },
                 )
               ],
-
-
-
             ),
           ),
           Expanded(

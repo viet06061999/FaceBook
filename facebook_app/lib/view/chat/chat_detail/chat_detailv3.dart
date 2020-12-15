@@ -7,6 +7,10 @@ import 'package:facebook_app/widgets/messenger_app_bar/app_bar_network_rounded_i
 import 'package:facebook_app/widgets/messenger_app_bar_action/messenger_app_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:facebook_app/data/model/conservation.dart';
+import 'package:flutter_absolute_path/flutter_absolute_path.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:flutter/cupertino.dart';
+import 'dart:io';
 
 class ChatDetailV3 extends PageProvideNode<ChatProvide> {
   final Conservation conservation;
@@ -35,7 +39,6 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
     with SingleTickerProviderStateMixin {
   ChatProvide _provide;
   final Conservation conservation;
-
   _ChatDetailState(this.conservation);
 
   @override
@@ -167,13 +170,28 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
         children: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: IconButton(
-              icon: Icon(
-                FontAwesomeIcons.image,
-                size: 25.0,
-                color: Colors.lightBlue,
-              ),
-              onPressed: () {},
+            child: Row(
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    FontAwesomeIcons.camera,
+                    size: 25.0,
+                    color: Colors.lightBlue,
+                  ),
+                  onPressed: () {},
+
+                ),
+                IconButton(
+                  icon: Icon(
+                    FontAwesomeIcons.image,
+                    size: 25.0,
+                    color: Colors.lightBlue,
+                  ),
+                  onPressed: () {
+                    loadAssets();
+                  },
+                )
+              ],
             ),
           ),
           Expanded(
@@ -226,4 +244,42 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
       ),
     );
   }
+
+
+  loadAssets() {
+    String error = 'No Error Dectected';
+    try {
+      MultiImagePicker.pickImages(
+        maxImages: 4,
+        enableCamera: true,
+        // selectedAssets: images,
+        cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
+        materialOptions: MaterialOptions(
+          actionBarColor: "#abcdef",
+          actionBarTitle: "Example App",
+          allViewTitle: "All Photos",
+          useDetailsView: false,
+          selectCircleStrokeColor: "#000000",
+        ),
+      ).then((value) {
+        for (int i = 0; i < value.length; i++) {
+          FlutterAbsolutePath.getAbsolutePath(value[i].identifier)
+              .then((value) =>
+              setState(() {
+                print(value);
+                // pathImages.add(value);
+              }));
+        }
+      });
+    } on Exception catch (e) {
+      error = e.toString();
+    }
+    if (!mounted) return;
+  }
+// Future<File> pickImage(ImageSource source) async{
+//   File testImage = await ImagePicker.pickImage(source: source);
+//   setState(() {
+//     pickedImage = testImage;
+//   });
+// }
 }

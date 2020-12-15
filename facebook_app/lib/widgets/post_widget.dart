@@ -66,11 +66,10 @@ class PostWidget extends StatelessWidget {
               onTap: () {
                 showMaterialModalBottomSheet(
                   context: context,
-                  builder: (context) => PostDetail(
+                  builder: (context) => CreateCommentWidget(
                     provide: provide,
                     post: post,
-                  ),
-                );
+                  ));
               },
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20,0,20,0),

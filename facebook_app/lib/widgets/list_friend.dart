@@ -40,7 +40,7 @@ class _ListUserFriendState extends State<ListUserFriend> {
             color: Colors.black, //change your color here
           ),
           title: Text(
-            "danh sach",
+            "Tất cả bạn bè",
             style: TextStyle(color: Colors.black.withOpacity(1.0)),
           ),
           backgroundColor: Colors.white,

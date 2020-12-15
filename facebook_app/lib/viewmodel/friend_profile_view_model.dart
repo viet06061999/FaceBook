@@ -23,7 +23,7 @@ class ProfileFriendProvide extends ProfileProvide {
   }
 
   void initChild() {
-    print('init child');
+    // print('init child');
     getFriends(userEntity);
     getUserListPost(userEntity.id);
     getUserPhotos(userEntity.id);

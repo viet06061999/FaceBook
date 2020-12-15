@@ -19,9 +19,7 @@ class ProfileTab extends PageProvideNode<ProfileProvide> {
 
 class ProfilePageTmp extends StatefulWidget {
   final ProfileProvide provide;
-  ProfilePageTmp(this.provide) {
-    provide.init();
-  }
+  ProfilePageTmp(this.provide);
 
   @override
   State<StatefulWidget> createState() => _ProfilePageState();

@@ -56,18 +56,6 @@ class _HomePageState extends State<HomePageTmp>
           print('bottom');
         }
       }
-      if (_controller.position.userScrollDirection == ScrollDirection.reverse) {
-        setState(() {
-          _isScroll = false;
-          print('ko hien');
-        });
-      } else if (_controller.position.userScrollDirection ==
-          ScrollDirection.forward) {
-        setState(() {
-          _isScroll = true;
-          print('hien');
-        });
-      }
     });
   }
 

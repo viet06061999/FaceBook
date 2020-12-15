@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreenTmp>
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   List<Widget> _widgetOptions(ChatProvide provide) => <Widget>[
-        ListFriend(provide),
+        ListFriend(),
         ListPeople(provide),
         ListDicovery(provide),
       ];

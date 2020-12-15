@@ -10,6 +10,7 @@ import 'package:facebook_app/data/repository/friend_repository.dart';
 import 'package:facebook_app/data/repository/photo_repository.dart';
 import 'package:facebook_app/data/repository/user_repository.dart';
 import 'package:facebook_app/ultils/string_ext.dart';
+import 'package:facebook_app/ultils/string_ext.dart';
 
 class ChatProvide extends BaseProvide {
   final UserRepository userRepository;
@@ -77,39 +78,64 @@ class ChatProvide extends BaseProvide {
         });
       }, onError: (e) => {print("xu ly fail o day")});
 
-  getConservations(UserEntity entity) =>
-      chatRepository.getConservations(userEntity.id).listen((event) async {
-        event.docChanges.forEach((element) async {
-          DocumentReference documentReferenceFrom =
-          element.doc.data()['current_message']['from'];
-          DocumentReference documentReferenceTo =
-          element.doc.data()['current_message']['to'];
-          await documentReferenceFrom.get().then((value) {
-            UserEntity from = UserEntity.fromJson(value.data());
-            documentReferenceTo.get().then((value) {
-              UserEntity to = UserEntity.fromJson(value.data());
-              var conservation =
-              Conservation.fromMap(element.doc.data(), from, to);
-              if (element.type == DocumentChangeType.added) {
+  getConservations(UserEntity entity) {
+    _conservations.clear();
+    chatRepository.getConservations(userEntity.id).listen((event) async {
+      print('vao day roi nek');
+      event.docChanges.forEach((element) async {
+        print('chay lan n');
+        DocumentReference documentReferenceFrom =
+        element.doc.data()['current_message']['from'];
+        DocumentReference documentReferenceTo =
+        element.doc.data()['current_message']['to'];
+        await documentReferenceFrom.get().then((value) {
+          UserEntity from = UserEntity.fromJson(value.data());
+          documentReferenceTo.get().then((value) {
+            UserEntity to = UserEntity.fromJson(value.data());
+            var conservation =
+            Conservation.fromMap(element.doc.data(), from, to);
+            print(conservation.currentMessage.message);
+            if (element.type == DocumentChangeType.added) {
+              print('add');
+              print('conservation ${conservation.currentMessage.from.lastName} ${conservation.currentMessage.to.lastName}');
+              _conservations.insert(0, conservation);
+              _conservations.forEach((element) {
+                print('conservationfor ${conservation.currentMessage.from.lastName} ${conservation.currentMessage.to.lastName}');
+              });
+            } else if (element.type == DocumentChangeType.modified) {
+              print('modified');
+              print('conservation ${conservation.currentMessage.from.lastName} ${conservation.currentMessage.to.lastName}');
+              var index = -1;
+              index = _conservations.indexWhere(
+                    (element) =>
+                (element.id == conservation.id) || element.id == '-1',
+              );
+              if(index == -1) _conservations.insert(0, conservation);
+              else {
+                _conservations.removeAt(index);
                 _conservations.insert(0, conservation);
-              } else if (element.type == DocumentChangeType.modified) {
-                _conservations.insert(0, conservation);
-              } else if (element.type == DocumentChangeType.removed) {
-                _conservations
-                    .removeWhere((element) => element.id == conservation.id);
               }
+              _conservations.forEach((element) {
+                print('conservationfor ${conservation.currentMessage.from.lastName} ${conservation.currentMessage.to.lastName}');
+              });
+            } else if (element.type == DocumentChangeType.removed) {
+              _conservations
+                  .removeWhere((element) => element.id == conservation.id);
+            }
 
             });
           });
-          if (event.docChanges.length != 0) {
-            notifyListeners();
-          }
         });
-      }, onError: (e) => {print("xu ly fail o day")});
+        if (event.docChanges.length != 0) {
+          notifyListeners();
+        }
+      });
+    }, onError: (e) => {print("xu ly fail o day")});
+  }
 
   Future<void> getChatDetail(
       {Conservation conservation, UserEntity friend}) async {
-    //_messages.clear();
+    _messages.clear();
     String conservationId = '';
     if (friend != null) {
       conservationId = userEntity.id.encryptDecrypt(friend.id);
@@ -135,11 +161,22 @@ class ChatProvide extends BaseProvide {
       FirebaseFirestore.instance
           .collection('conservations')
           .doc(conservationId)
-          .set({});
+          .set({
+        "id": userEntity.id.encryptDecrypt(friend.id),
+        "two_id":[userEntity.id, friend.id]
+      });
       FirebaseFirestore.instance
           .collection('chats')
           .doc(conservationId)
           .set({});
+      chatRepository.getChat(conservationId).listen((event) async {
+        print('thay doi roi');
+        _messages = (event.data()['messages'] as List)
+            .map((e) => convertToMessage(e, userEntity, friend))
+            .toList();
+        print(_messages.length);
+        notifyListeners();
+      }, onError: (e) => {print("xu ly fail o day")});
     }
   }
 

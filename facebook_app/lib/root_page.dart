@@ -2,7 +2,6 @@ import 'package:facebook_app/data/base_type/message_type.dart';
 import 'package:facebook_app/data/model/messages.dart';
 import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/data/repository/chat_repository.dart';
-import 'package:facebook_app/data/repository/friend_repository.dart';
 import 'package:facebook_app/data/repository/user_repository.dart';
 import 'package:facebook_app/data/source/local/user_local_data.dart';
 import 'package:facebook_app/data/source/remote/fire_base_auth.dart';
@@ -28,21 +27,16 @@ class _RootPage extends State<RootPage> {
   @override
   void initState() {
     super.initState();
-    var userRepo = inject<UserRepository>();
-    // var chatRepo = inject<ChatRepository>();
-    // var friendRepo = inject<FriendRepository>();
+    var userRepo = UserRepositoryImpl(
+        inject<FirAuth>(),
+        inject<UserLocalDatasource>(),
+        inject<FirUploadPhoto>(),
+        inject<FirUserUpload>());
     userRepo.getCurrentUser().then((value) {
       setState(() {
         status = value != null ? AuthStatus.signIn : AuthStatus.notSignedIn;
-        // friendRepo.createRequestFriend(value, "hnGGFRqVVMTHvmWOMHfUhitLcdM2", (){});
       });
     });
-    // var from = UserEntity.origin();
-    // var to = UserEntity.origin();
-    // from.id = "y82MY9MUn2YzMBaE07OdLcbs5tf1";
-    // to.id = "007uxyqTGXdvziH1zAcO7tBGuFZ2";
-    // var message = Message(from, to, "Người yêu ơi có biết anh nhớ em nhiều lắm, những năm tháng trôi qua aa", "2020-12-12", MessageType.text);
-    // chatRepo.sendMessage(message, from.id, to.id);
   }
 
   @override

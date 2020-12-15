@@ -6,80 +6,66 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:facebook_app/widgets/messenger_app_bar/app_bar_network_rounded_image.dart';
 import 'package:facebook_app/widgets/messenger_app_bar_action/messenger_app_bar.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_absolute_path/flutter_absolute_path.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:flutter/cupertino.dart';
-import 'dart:io';
+import 'package:facebook_app/data/model/conservation.dart';
 
-class ChatDetail extends PageProvideNode<ChatProvide> {
-  final Friend friend;
+class ChatDetailV3 extends PageProvideNode<ChatProvide> {
+  final Conservation conservation;
 
-  ChatDetail(this.friend);
+  ChatDetailV3(this.conservation);
 
   @override
   Widget buildContent(BuildContext context) {
-    return ChatDetailTmp(mProvider, friend);
+    return ChatDetailV3Tmp(mProvider, conservation);
   }
 }
 
-class ChatDetailTmp extends StatefulWidget {
-  final Friend friend;
+class ChatDetailV3Tmp extends StatefulWidget {
+  final Conservation conservation;
   final ChatProvide provide;
 
-  ChatDetailTmp(this.provide, this.friend) {
-    provide.getChatDetail(friend: friend.userSecond);
+  ChatDetailV3Tmp(this.provide, this.conservation){
+    provide.getChatDetail(conservation: conservation);
   }
 
   @override
-  State<StatefulWidget> createState() => _ChatDetailState(friend);
+  State<StatefulWidget> createState() => _ChatDetailState(conservation);
 }
 
-class _ChatDetailState extends State<ChatDetailTmp>
+class _ChatDetailState extends State<ChatDetailV3Tmp>
     with SingleTickerProviderStateMixin {
   ChatProvide _provide;
-  Friend friend;
-  // ScrollController _controller;
-  // bool _isScroll = false;
-  // _scrollListener() {
-  //   if (_controller.offset > 0) {
-  //     this.setState(() {
-  //       _isScroll = true;
-  //     });
-  //   } else {
-  //     this.setState(() {
-  //       _isScroll = false;
-  //     });
-  //   }
-  // }
-  _ChatDetailState(this.friend);
+  final Conservation conservation;
+
+  _ChatDetailState(this.conservation);
 
   @override
   void initState() {
-    // _controller = ScrollController();
-    // _controller.addListener(_scrollListener);
+    // TODO: implement initState
     super.initState();
     _provide = widget.provide;
   }
 
   @override
   Widget build(BuildContext context) {
+    var friend = conservation.checkFriend(_provide.userEntity.id);
     return Scaffold(body: Consumer<ChatProvide>(
       builder: (context, value, child) {
         return Container(
           decoration: BoxDecoration(color: Colors.white),
           child: Column(
             children: <Widget>[
-              buildAppBar(friend),
+              buildAppBar(conservation),
               Expanded(
                 child: ListView.builder(
                   reverse: true,
-                  // shrinkWrap: true,
-                  // physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
                   itemCount: value.messages.length,
                   itemBuilder: (BuildContext context, int index) {
+                    // print('vaof list view roi');
+                    // print('size  ${value.messages.length}');
                     if (value.messages[value.messages.length-index-1].from.id ==
-                        friend.userSecond.id) {
+                        friend.id) {
                       return Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16.0,
@@ -90,8 +76,8 @@ class _ChatDetailState extends State<ChatDetailTmp>
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             AppBarNetworkRoundedImage(
-                              //value.getConservations(friend.userSecond);
-                                imageUrl: friend.userSecond.avatar),
+                                //value.getConservations(friend.userSecond);
+                                imageUrl: friend.avatar),
                             SizedBox(width: 15.0),
                             Container(
                               alignment: Alignment.center,
@@ -138,7 +124,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
                   },
                 ),
               ),
-              _buildBottomChat(friend),
+              _buildBottomChat(conservation),
             ],
           ),
         );
@@ -146,13 +132,13 @@ class _ChatDetailState extends State<ChatDetailTmp>
     ));
   }
 
-  buildAppBar(Friend friend) {
+  buildAppBar(Conservation conservation) {
+    var friend = conservation.checkFriend(_provide.userEntity.id);
     return MessengerAppBarAction(
       isScroll: true,
-      // isScroll: _isScroll,
       isBack: true,
-      title: friend.userSecond.firstName + " " + friend.userSecond.lastName,
-      imageUrl: friend.userSecond.avatar,
+      title: friend.firstName + " " + friend.lastName,
+      imageUrl: friend.avatar,
       subTitle: 'Không hoạt động',
       actions: <Widget>[
         Icon(
@@ -169,7 +155,8 @@ class _ChatDetailState extends State<ChatDetailTmp>
     );
   }
 
-  _buildBottomChat(Friend friend) {
+  _buildBottomChat(Conservation conservation) {
+    var friend = conservation.checkFriend(_provide.userEntity.id);
     var myController = TextEditingController();
     return Container(
       decoration: BoxDecoration(
@@ -180,31 +167,13 @@ class _ChatDetailState extends State<ChatDetailTmp>
         children: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: Row(
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(
-                    FontAwesomeIcons.camera,
-                    size: 25.0,
-                    color: Colors.lightBlue,
-                  ),
-                  onPressed: () {},
-
-                ),
-                IconButton(
-                  icon: Icon(
-                    FontAwesomeIcons.image,
-                    size: 25.0,
-                    color: Colors.lightBlue,
-                  ),
-                  onPressed: () {
-                    loadAssets();
-                  },
-                )
-              ],
-
-
-
+            child: IconButton(
+              icon: Icon(
+                FontAwesomeIcons.image,
+                size: 25.0,
+                color: Colors.lightBlue,
+              ),
+              onPressed: () {},
             ),
           ),
           Expanded(
@@ -242,13 +211,12 @@ class _ChatDetailState extends State<ChatDetailTmp>
               onPressed: () {
                 Text mess = Text(myController.text);
                 if(mess.data != null && mess.data != "" ) {
-                  _provide.sendMessage(friend.userSecond,
+                  _provide.sendMessage(friend,
                       content: myController.text);
                 }
               },
               icon: Icon(
-                // FontAwesomeIcons.solidThumbsUp,
-                FontAwesomeIcons.paperPlane,
+                FontAwesomeIcons.solidThumbsUp,
                 size: 25.0,
                 color: Colors.lightBlue,
               ),
@@ -258,43 +226,4 @@ class _ChatDetailState extends State<ChatDetailTmp>
       ),
     );
   }
-
-  loadAssets() {
-    String error = 'No Error Dectected';
-
-    try {
-      MultiImagePicker.pickImages(
-        maxImages: 4,
-        enableCamera: true,
-        // selectedAssets: images,
-        cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
-        materialOptions: MaterialOptions(
-          actionBarColor: "#abcdef",
-          actionBarTitle: "Example App",
-          allViewTitle: "All Photos",
-          useDetailsView: false,
-          selectCircleStrokeColor: "#000000",
-        ),
-      ).then((value) {
-        for (int i = 0; i < value.length; i++) {
-          FlutterAbsolutePath.getAbsolutePath(value[i].identifier)
-              .then((value) =>
-              setState(() {
-                print(value);
-                // pathImages.add(value);
-              }));
-        }
-      });
-    } on Exception catch (e) {
-      error = e.toString();
-    }
-    if (!mounted) return;
-  }
-// Future<File> pickImage(ImageSource source) async{
-//   File testImage = await ImagePicker.pickImage(source: source);
-//   setState(() {
-//     pickedImage = testImage;
-//   });
-// }
-
 }

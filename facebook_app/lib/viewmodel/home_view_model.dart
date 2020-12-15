@@ -72,10 +72,12 @@ class HomeProvide extends BaseProvide {
   set isTop(bool isTop) {
     _isTop = isTop;
     if (_isTop) {
-      listPost.insertAll(0, tmpPosts);
-      tmpPosts.clear();
+      if(tmpPosts.length > 0){
+        listPost.insertAll(0, tmpPosts);
+        tmpPosts.clear();
+        notifyListeners();
+      }
     }
-    notifyListeners();
   }
 
   bool _loading = false;

@@ -96,8 +96,6 @@ class _CreateCommentState extends State<CreateCommentWidget> {
                             content = text;
                           });
                         },
-                        // decoration: InputDecoration(
-                        //     border: InputBorder.none, hintText: 'Viết bình luận'),
                         decoration: InputDecoration(
                             contentPadding: EdgeInsets.all(10.0),
                             border: OutlineInputBorder(

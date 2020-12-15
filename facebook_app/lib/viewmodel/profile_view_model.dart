@@ -37,42 +37,47 @@ class ProfileProvide extends HomeProvide {
   }
 
   ProfileProvide(PostRepository repository, PhotoRepository photoRepository,
-      UserRepository userRepository, FriendRepository friendRepository, NotificationRepository notificationRepository)
-      : super(repository, photoRepository, userRepository, friendRepository, notificationRepository) ;
+      UserRepository userRepository, FriendRepository friendRepository,
+      NotificationRepository notificationRepository)
+      : super(repository, photoRepository, userRepository, friendRepository,
+      notificationRepository) {
+    init();
+  }
 
   getUserListPost(String userId) {
     _userListPost.clear();
-      return repository.getUserListPost(userId).listen((event) async {
-        event.docChanges.forEach((element) async {
-          DocumentReference documentReference = element.doc.data()['owner'];
-          documentReference.get().then((value) {
-            UserEntity userPost = UserEntity.fromJson(value.data());
-            Post postRoot = Post.fromMap(element.doc.data(), userPost);
-            postRoot.isLiked = checkLiked(postRoot.likes);
-            if (element.type == DocumentChangeType.added) {
-              _userListPost.insert(0, postRoot);
-            } else if (element.type == DocumentChangeType.modified) {
-              Post post = postRoot;
-              int position = -1;
-              position = _userListPost.indexWhere(
-                (element) =>
-                    (element.postId == post.postId) || element.postId == '-1',
-              );
-              if (position != -1)
-                _userListPost[position] = post;
-              else
-                _userListPost.insert(0, post);
-            } else if (element.type == DocumentChangeType.removed) {
-              Post post = postRoot;
-              _userListPost
-                  .removeWhere((element) => element.postId == post.postId);
-            }
-          });
-          if (event.docChanges.length != 0) {
-            notifyListeners();
+    return repository.getUserListPost(userId).listen((event) async {
+      event.docChanges.forEach((element) async {
+        DocumentReference documentReference = element.doc.data()['owner'];
+        documentReference.get().then((value) {
+          UserEntity userPost = UserEntity.fromJson(value.data());
+          Post postRoot = Post.fromMap(element.doc.data(), userPost);
+          postRoot.isLiked = checkLiked(postRoot.likes);
+          if (element.type == DocumentChangeType.added) {
+            _userListPost.insert(0, postRoot);
+          } else if (element.type == DocumentChangeType.modified) {
+            Post post = postRoot;
+            int position = -1;
+            position = _userListPost.indexWhere(
+                  (element) =>
+              (element.postId == post.postId) || element.postId == '-1',
+            );
+            if (position != -1)
+              _userListPost[position] = post;
+            else
+              _userListPost.insert(0, post);
+          } else if (element.type == DocumentChangeType.removed) {
+            Post post = postRoot;
+            _userListPost
+                .removeWhere((element) => element.postId == post.postId);
           }
         });
-      }, onError: (e) => {print("xu ly fail o day")});}
+        if (event.docChanges.length != 0) {
+          notifyListeners();
+        }
+      });
+    }, onError: (e) => {print("xu ly fail o day")});
+  }
 
   updateAvatar(String pathAvatar) {
     userRepository.updateAvatar(pathAvatar, userEntity, () {});
@@ -92,9 +97,9 @@ class ProfileProvide extends HomeProvide {
 
   updateDescriptionUser(UserEntity userEntity, String description) {
     userRepository.updateDescriptionUser(userEntity, description).listen(
-        (event) {
-      print("loading");
-    }, onError: (error) {
+            (event) {
+          print("loading");
+        }, onError: (error) {
       print(error);
     }).onDone(() {
       print("done");

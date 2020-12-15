@@ -73,12 +73,12 @@ class PostWidget extends StatelessWidget {
                 );
               },
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(20,0,20,0),
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: Container(
                     alignment: Alignment.centerLeft,
-                    child: Text(post.described, style: TextStyle(fontSize: 15.0))),
-              )
-          ),
+                    child:
+                        Text(post.described, style: TextStyle(fontSize: 15.0))),
+              )),
           SizedBox(height: 10.0),
           buildImages(context),
           SizedBox(height: 10.0),
@@ -152,18 +152,32 @@ class PostWidget extends StatelessWidget {
                         );
                       },
                       child: Row(children: [
-                        Icon(FontAwesomeIcons.commentAlt, size: 15.0, color: Colors.grey,),
+                        Icon(
+                          FontAwesomeIcons.commentAlt,
+                          size: 15.0,
+                          color: Colors.grey,
+                        ),
                         SizedBox(width: 5.0),
-                        Text('Comment', style: TextStyle(fontSize: 12.0, color: Colors.grey)),
+                        Text('Comment',
+                            style:
+                                TextStyle(fontSize: 12.0, color: Colors.grey)),
                       ]),
                     ),
                   ],
                 ),
                 Row(
                   children: <Widget>[
-                    Icon(FontAwesomeIcons.share, size: 15.0, color: Colors.grey,),
+                    Icon(
+                      FontAwesomeIcons.share,
+                      size: 15.0,
+                      color: Colors.grey,
+                    ),
                     SizedBox(width: 5.0),
-                    Text('Share', style: TextStyle(fontSize: 12.0, color: Colors.grey,)),
+                    Text('Share',
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          color: Colors.grey,
+                        )),
                   ],
                 ),
               ],

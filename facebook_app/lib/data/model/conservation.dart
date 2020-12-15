@@ -18,6 +18,11 @@ class Conservation {
     this.currentMessage = Message.fromMap(map['current_message'], first, second);
   }
 
+  UserEntity checkFriend(String userId){
+    if(currentMessage.from.id == userId) return currentMessage.to;
+    return currentMessage.from;
+  }
+
   static List<Conservation> fromListMap(
       List<Map> maps, UserEntity fist, UserEntity second) {
     List<Conservation> conservations = [];

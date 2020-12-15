@@ -30,7 +30,7 @@ class _PostDetail extends State<PostDetail> {
   final HomeProvide provide;
 
   _PostDetail(this.post, this.provide);
-
+  TextEditingController controller = TextEditingController();
   List<String> pathImages = [];
   List<Asset> images = List<Asset>();
 
@@ -118,18 +118,24 @@ class _PostDetail extends State<PostDetail> {
             ),
           ),
           Divider(height: 10.0),
-          Container(
-            height: MediaQuery.of(context).size.height * 0.68,
-            child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: post.comments.length,
-                itemBuilder: (context, index) {
-                   return CommentWidget(
-                    comment: post.comments[post.comments.length-index-1],
-                    provide: provide,
-                  );
-                }),
+          SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: post.comments.length,
+                      itemBuilder: (context, index) {
+                         return CommentWidget(
+                          comment: post.comments[post.comments.length-index-1],
+                          provide: provide,
+                        );
+                      }),
+                ),
+              ],
+            ),
           ),
           Container(
             decoration: BoxDecoration(
@@ -152,6 +158,7 @@ class _PostDetail extends State<PostDetail> {
                 Expanded(
                   child: Container(
                     child: TextField(
+                      controller: controller,
                       onChanged: (text) {
                         setState(() {
                           content = text;
@@ -189,7 +196,10 @@ class _PostDetail extends State<PostDetail> {
                   child: IconButton(
                     onPressed: () {
                       provide.addComment(post, content);
-                      Navigator.pop(context);
+                      setState(() {
+                        controller.text = "";
+                      });
+                      // Navigator.pop(context);
                     },
                     icon: Icon(
                       FontAwesomeIcons.paperPlane,

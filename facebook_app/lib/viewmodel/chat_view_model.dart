@@ -98,6 +98,7 @@ class ChatProvide extends BaseProvide {
                 _conservations
                     .removeWhere((element) => element.id == conservation.id);
               }
+
             });
           });
           if (event.docChanges.length != 0) {

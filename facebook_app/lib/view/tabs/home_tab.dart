@@ -8,31 +8,32 @@ import 'package:flutter/material.dart';
 
 class HomeTab extends StatelessWidget {
   final HomeProvide provide;
-  final ScrollController _controller;
 
-  const HomeTab(this.provide, this._controller);
+  const HomeTab(this.provide);
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      controller: _controller,
-      physics: ScrollPhysics(),
-      child: Column(
-        children: <Widget>[
-          WriteSomethingWidget(provide: provide,),
-          SeparatorWidget(),
-          OnlineWidget(),
-          SeparatorWidget(),
-          StoriesWidget(),
-          ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: provide.listPost.length,
-              itemBuilder: (context, index) {
-                return PostWidget(post: provide.listPost[index], provide: provide,);
-              }),
-        ],
-      ),
+    return  ListView(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      children: <Widget>[
+        WriteSomethingWidget(provide: provide,),
+        SeparatorWidget(),
+        OnlineWidget(),
+        SeparatorWidget(),
+        StoriesWidget(),
+        ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: provide.listPost.length,
+            itemBuilder: (context, index) {
+              return PostWidget(
+                post: provide.listPost[index],
+                provide: provide,
+              );
+            }),
+      ],
     );
   }
 }
+

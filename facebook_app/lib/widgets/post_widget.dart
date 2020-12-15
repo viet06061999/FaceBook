@@ -8,10 +8,12 @@ import 'package:facebook_app/widgets/photo_grid.dart';
 import 'package:intl/intl.dart';
 import 'comment_widget.dart';
 import 'black_background_image.dart';
+import 'post_detail.dart';
 
 class PostWidget extends StatelessWidget {
   final Post post;
   final HomeProvide provide;
+
   PostWidget({this.post, this.provide});
 
   @override
@@ -50,8 +52,23 @@ class PostWidget extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 20.0),
-          Text(post.described, style: TextStyle(fontSize: 15.0)),
+          SizedBox(height: 5.0),
+          GestureDetector(
+              onTap: () {
+                showMaterialModalBottomSheet(
+                  context: context,
+                  builder: (context) => CreateCommentWidget(
+                    provide: provide,
+                    post: post,
+                  ));
+              },
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20,0,20,0),
+                child: Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(post.described, style: TextStyle(fontSize: 15.0))),
+              )
+          ),
           SizedBox(height: 10.0),
           buildImages(context),
           SizedBox(height: 10.0),

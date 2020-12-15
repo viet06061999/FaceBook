@@ -123,7 +123,6 @@ class ChatProvide extends BaseProvide {
                   .removeWhere((element) => element.id == conservation.id);
             }
 
-            });
           });
         });
         if (event.docChanges.length != 0) {

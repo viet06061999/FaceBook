@@ -17,19 +17,15 @@ class FriendRepositoryImpl extends FriendRepository {
   @override
   acceptRequest(Friend friend, Function onError) {
     _firFriend.acceptRequest(friend, onError);
-    var notification = NotificationAcceptFriend(
-        friend.userSecond, DateTime.now().toString(), 0, [friend.userFirst.id]);
     _firNotification.createNotificationFriend(
-        notification, friend.userSecond.id);
+        friend.userSecond, friend.userFirst.id);
   }
 
   @override
   createRequestFriend(
       UserEntity userFirst, String idUserSecond, Function onError) {
     _firFriend.createRequestFriend(userFirst.id, idUserSecond, onError);
-    var notification = NotificationAcceptFriend(
-        userFirst, DateTime.now().toString(), 0, [idUserSecond]);
-    _firNotification.createNotificationFriend(notification, userFirst.id);
+    _firNotification.createNotificationFriend(userFirst, idUserSecond);
   }
 
   @override

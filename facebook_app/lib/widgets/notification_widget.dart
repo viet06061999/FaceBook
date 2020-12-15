@@ -1,13 +1,12 @@
+import 'package:facebook_app/data/model/user.dart';
 import 'package:flutter/material.dart';
-import 'package:facebook_app/models/user_notification.dart';
+import 'package:facebook_app/data/model/notification/notification_friend.dart';
 
 class NotificationWidget extends StatelessWidget {
+  final NotificationApp notification;
+  final UserEntity userEntity;
 
-  final UserNotification notification;
-
-  NotificationWidget({
-    this.notification
-  });
+  NotificationWidget({this.notification, this.userEntity});
 
   @override
   Widget build(BuildContext context) {
@@ -22,18 +21,17 @@ class NotificationWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               CircleAvatar(
-                backgroundImage: AssetImage(notification.imageUrl),
+                backgroundImage: NetworkImage(notification.userFirst.avatar),
                 radius: 35.0,
               ),
-
               SizedBox(width: 15.0),
-
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(notification.content, style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold)),
-                  Text(notification.time, style: TextStyle(fontSize: 15.0, color: Colors.grey)),
+                  getContent(),
+                  Text(notification.updateTime,
+                      style: TextStyle(fontSize: 14.0, color: Colors.grey)),
                 ],
               ),
             ],
@@ -48,5 +46,18 @@ class NotificationWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget getContent() {
+    return RichText(
+        text: TextSpan(
+            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal),
+            children: [
+          TextSpan(
+              text:
+                  '${notification.userFirst.firstName} ${notification.userFirst.lastName}',
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          TextSpan(text: notification.getContent(userId: userEntity.id))
+        ]));
   }
 }

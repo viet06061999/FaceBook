@@ -1,11 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facebook_app/base/base.dart';
+import 'package:facebook_app/data/base_type/notification_type.dart';
 import 'package:facebook_app/data/model/comment.dart';
 import 'package:facebook_app/data/model/friend.dart';
+import 'package:facebook_app/data/model/notification/accept_friend_notification.dart';
+import 'package:facebook_app/data/model/notification/comment_post_notification.dart';
+import 'package:facebook_app/data/model/notification/like_post_notification.dart';
+import 'package:facebook_app/data/model/notification/notification_friend.dart';
+import 'package:facebook_app/data/model/notification/request_friend_notification.dart';
 import 'package:facebook_app/data/model/post.dart';
 import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/data/model/video.dart';
 import 'package:facebook_app/data/repository/friend_repository.dart';
+import 'package:facebook_app/data/repository/notification_repository.dart';
 import 'package:facebook_app/data/repository/photo_repository.dart';
 import 'package:facebook_app/data/repository/post_repository.dart';
 import 'package:facebook_app/data/repository/user_repository.dart';
@@ -16,7 +23,7 @@ class HomeProvide extends BaseProvide {
   final PhotoRepository photoRepository;
   final UserRepository userRepository;
   final FriendRepository friendRepository;
-
+  final NotificationRepository notificationRepository;
   UserEntity _userEntity = UserEntity.origin();
 
   //lay % tien trinh upload anh
@@ -45,6 +52,10 @@ class HomeProvide extends BaseProvide {
 
   List<Post> tmpPosts = [];
 
+  List<NotificationApp> _notifications = [];
+
+  List<NotificationApp> get notifications => _notifications;
+
   List<Friend> _friends = [];
 
   List<Friend> get friends => _friends;
@@ -60,8 +71,6 @@ class HomeProvide extends BaseProvide {
   set isTop(bool isTop) {
     _isTop = isTop;
     if (_isTop) {
-      print('istop');
-      print('tmpPosts $tmpPosts');
       listPost.insertAll(0, tmpPosts);
       tmpPosts.clear();
     }
@@ -103,12 +112,14 @@ class HomeProvide extends BaseProvide {
   }
 
   HomeProvide(this.repository, this.photoRepository, this.userRepository,
-      this.friendRepository) {
+      this.friendRepository, this.notificationRepository) {
     userRepository.getCurrentUser().then((value) {
+      print('vao user');
       userEntity = value;
       _getListPost();
       getFriends(userEntity);
       getPendings(userEntity);
+      getNotifications();
     });
   }
 
@@ -234,6 +245,97 @@ class HomeProvide extends BaseProvide {
     }, onError: (e) => {print("xu ly fail o day")});
   }
 
+  getNotifications() {
+    print('get thong bao nay');
+    notificationRepository.getNotifications(userEntity.id).listen(
+        (event) async {
+      event.docChanges.forEach((element) async {
+        print('vao element');
+        DocumentReference documentReference = element.doc.data()['first_user'];
+        await documentReference.get().then((value) async {
+          UserEntity user = UserEntity.fromJson(value.data());
+          print(user.firstName);
+          NotificationApp notification;
+          var map = element.doc.data();
+          NotificationType type =
+              NotificationType.values[int.parse(map['type'].toString())];
+          switch (type) {
+            case NotificationType.acceptFriend:
+              {
+                notification = NotificationAcceptFriend(
+                    map['id'],
+                    user,
+                    map['update_time'],
+                    map['others'],
+                    (map['receivers'] as List)
+                        .map((e) => e.toString())
+                        .toList());
+                _insertNotification(element.type, notification);
+                notifyListeners();
+              }
+              break;
+            case NotificationType.requestFriend:
+              {
+                notification = NotificationRequestFriend(
+                    map['id'],
+                    user,
+                    map['update_time'],
+                    map['others'],
+                    (map['receivers'] as List)
+                        .map((e) => e.toString())
+                        .toList());
+                _insertNotification(element.type, notification);
+                notifyListeners();
+              }
+              break;
+            case NotificationType.likePost:
+              {
+                DocumentReference documentReference =
+                    element.doc.data()['owner'];
+                documentReference.get().then((value) {
+                  UserEntity userPost = UserEntity.fromJson(value.data());
+                  Post post = Post.fromMap(element.doc.data(), userPost);
+                  notification = NotificationLikePost(
+                      map['id'],
+                      post,
+                      user,
+                      map['update_time'],
+                      map['others'],
+                      (map['receivers'] as List)
+                          .map((e) => e.toString())
+                          .toList());
+                  _insertNotification(element.type, notification);
+                  notifyListeners();
+                });
+              }
+              break;
+            case NotificationType.commentPost:
+              {
+                DocumentReference documentReference =
+                    element.doc.data()['owner'];
+                documentReference.get().then((value) {
+                  UserEntity userPost = UserEntity.fromJson(value.data());
+                  Post post = Post.fromMap(element.doc.data(), userPost);
+                  notification = NotificationCommentPost(
+                      map['id'],
+                      post,
+                      user,
+                      map['update_time'],
+                      map['others'],
+                      (map['receivers'] as List)
+                          .map((e) => e.toString())
+                          .toList());
+                  _insertNotification(element.type, notification);
+                  notifyListeners();
+                });
+              }
+              break;
+          }
+        });
+      });
+    }, onError: (e) => {print("xu ly fail o day")});
+  }
+
   getPendings(UserEntity entity) {
     _friendsPending.clear();
     friendRepository.getRequestFriends(entity.id).listen((event) async {
@@ -264,6 +366,13 @@ class HomeProvide extends BaseProvide {
     }, onError: (e) => {print("xu ly fail o day")});
   }
 
+  bool checkFriend(String idThey) {
+    return _friends.firstWhere((element) {
+              return element.userFirst.id == idThey ||
+                  element.userSecond.id == idThey;
+            }, orElse: null) == null ? false : true;
+  }
+
   void updateLike(Post post) {
     print(post.isLiked);
     if (post.isLiked) {
@@ -289,6 +398,20 @@ class HomeProvide extends BaseProvide {
       tmpPosts.add(post);
     }
     notifyListeners();
+  }
+
+  _insertNotification(DocumentChangeType type, NotificationApp notification) {
+    if (type == DocumentChangeType.added) {
+      _notifications.insert(0, notification);
+    } else if (type == DocumentChangeType.modified) {
+      int position = -1;
+      position = _notifications
+          .indexWhere((element) => (element.id == notification.id));
+      if (position != -1)
+        _notifications[position] = notification;
+      else
+        _notifications.insert(0, notification);
+    }
   }
 
   bool checkLiked(List<UserEntity> users) {

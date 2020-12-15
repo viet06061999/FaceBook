@@ -4,6 +4,7 @@ import 'package:facebook_app/data/model/post.dart';
 import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/data/model/video.dart';
 import 'package:facebook_app/data/repository/friend_repository.dart';
+import 'package:facebook_app/data/repository/notification_repository.dart';
 import 'package:facebook_app/data/repository/photo_repository.dart';
 import 'package:facebook_app/data/repository/post_repository.dart';
 import 'package:facebook_app/data/repository/user_repository.dart';
@@ -32,8 +33,8 @@ class ProfileProvide extends HomeProvide {
   }
 
   ProfileProvide(PostRepository repository, PhotoRepository photoRepository,
-      UserRepository userRepository, FriendRepository friendRepository)
-      : super(repository, photoRepository, userRepository, friendRepository) {
+      UserRepository userRepository, FriendRepository friendRepository, NotificationRepository notificationRepository)
+      : super(repository, photoRepository, userRepository, friendRepository, notificationRepository) {
     userRepository.getCurrentUser().then((value) {
       userEntity = value;
       getUserListPost(userEntity.id);

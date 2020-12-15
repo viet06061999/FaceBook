@@ -1,27 +1,33 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:facebook_app/data/base_type/notification_status.dart';
 import 'package:facebook_app/data/base_type/notification_type.dart';
 import 'package:facebook_app/data/model/user.dart';
 
-abstract class Notification {
+abstract class NotificationApp {
+  String id = "";
   UserEntity userFirst = UserEntity.origin();
   String updateTime = "";
   NotificationType type = NotificationType.requestFriend;
   List<String> receivers = [];
   double others = 0;
+  NotificationStatus status = NotificationStatus.none;
 
-  Notification.origin();
+  NotificationApp.origin();
 
-  Notification(
-      this.userFirst, this.updateTime, this.type, this.others, this.receivers);
+  NotificationApp(this.id, this.userFirst, this.updateTime, this.type,
+      this.others, this.receivers);
 
   String getContent({String userId});
 
-  Notification.fromJson(
+  NotificationApp.fromJson(
     Map map,
     UserEntity userFirst,
   ) {
     this.userFirst = userFirst;
+    this.id = map['id'];
     this.type = NotificationType.values[int.parse(map['type'].toString())];
+    this.status =
+        NotificationStatus.values[int.parse(map['status'].toString())];
     this.updateTime = map['update_time'];
     this.others = map['others'];
     this.receivers =
@@ -29,10 +35,12 @@ abstract class Notification {
   }
 
   Map toMap(DocumentReference userFirst) => new Map<String, dynamic>.from({
+        "id": this.id,
         "first_user": userFirst,
         "type": this.type.index,
         "update_time": this.updateTime,
         "others": this.others,
+        "status": this.status,
         "receivers": this.receivers,
       });
 }

@@ -149,7 +149,7 @@ class _HomePageState extends State<HomePageTmp>
               FriendsTab(),
               WatchTab(),
               ProfileTab(),
-              NotificationsTab(),
+              NotificationsTab(value),
               MenuTab(value)
             ]);
           })),

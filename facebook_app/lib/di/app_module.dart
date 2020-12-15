@@ -38,17 +38,17 @@ final viewModelModule = Module([
   factory<LoginProvide>(({params}) => LoginProvide(get())),
   single<HomeProvide>(({params}) => HomeProvide(get(), get(), get(), get(), get())),
   single<ProfileProvide>(
-      ({params}) => ProfileProvide(get(), get(), get(), get(), get())),
+          ({params}) => ProfileProvide(get(), get(), get(), get(), get())),
   single<ProfileFriendProvide>(
           ({params}) => ProfileFriendProvide(get(), get(), get(), get(), get(), params.get(0))),
   single<FriendProvide>(
-      ({params}) => FriendProvide(get(), get(), get(), get(), get())),
+          ({params}) => FriendProvide(get(), get(), get(), get(), get())),
   single<ChatProvide>(({params}) => ChatProvide(get(), get(), get(), get())),
 ]);
 
 final repoModule = Module([
   factory<UserRepository>(
-      ({params}) => UserRepositoryImpl(get(), get(), get(), get())),
+          ({params}) => UserRepositoryImpl(get(), get(), get(), get())),
   factory<PostRepository>(({params}) => PostRepositoryImpl(get(), get(), get())),
   factory<PhotoRepository>(({params}) => PhotoRepositoryImpl(get(), get())),
   factory<FriendRepository>(({params}) => FriendRepositoryImpl(get(), get())),

@@ -2,7 +2,6 @@ import 'package:facebook_app/view/chat/chats/widgets/searchFriend.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:facebook_app/viewmodel/chat_view_model.dart';
-import 'package:facebook_app/view/chats/widgets/searchFriend.dart';
 
 class SearchBar extends StatefulWidget {
   final ChatProvide provide;
@@ -13,7 +12,6 @@ class SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<SearchBar> {
   ChatProvide provide;
-
   _SearchBarState(this.provide);
   void initState() {
     provide = widget.provide;
@@ -22,6 +20,14 @@ class _SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => searchFriend(provide),
+          ),
+        );
+      },
       child: Container(
         height: 45.0,
         decoration: BoxDecoration(
@@ -42,12 +48,6 @@ class _SearchBarState extends State<SearchBar> {
               ),
             )
           ],
-        ),
-      ),
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => searchFriend(provide),
         ),
       ),
     );

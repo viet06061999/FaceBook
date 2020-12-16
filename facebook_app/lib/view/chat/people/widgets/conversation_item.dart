@@ -22,7 +22,7 @@ class _ConversationItemState extends State<ConversationItem> {
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ChatDetail(friend),
+          builder: (context) => ChatDetail(friend.userSecond),
         ),
       ),
       child: Padding(

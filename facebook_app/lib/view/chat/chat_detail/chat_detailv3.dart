@@ -68,7 +68,7 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
                         friend.id) {
                       return Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 14.0,
+                          horizontal: 16.0,
                           vertical: 2.0,
                         ),
                         child: Row(
@@ -114,7 +114,7 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
                               ),
                               child: Text(
                                 getText(value.messages[value.messages.length-index-1].message),
-                                style: TextStyle(fontSize: 16.0),
+                                style: TextStyle(fontSize: 14.0),
                               ),
                             )
                           ],

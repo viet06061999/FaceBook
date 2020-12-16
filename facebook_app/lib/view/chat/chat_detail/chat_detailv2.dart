@@ -1,5 +1,6 @@
 import 'package:facebook_app/base/base.dart';
 import 'package:facebook_app/data/model/friend.dart';
+import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/viewmodel/chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -13,7 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'dart:io';
 
 class ChatDetail extends PageProvideNode<ChatProvide> {
-  final Friend friend;
+  final UserEntity friend;
 
   ChatDetail(this.friend);
 
@@ -25,10 +26,10 @@ class ChatDetail extends PageProvideNode<ChatProvide> {
 
 class ChatDetailTmp extends StatefulWidget {
   final ChatProvide provide;
-  final Friend friend;
+  final UserEntity friend;
 
   ChatDetailTmp(this.provide, this.friend) {
-    provide.getChatDetail(friend: friend.userSecond);
+    provide.getChatDetail(friend: friend);
   }
 
   @override
@@ -38,7 +39,7 @@ class ChatDetailTmp extends StatefulWidget {
 class _ChatDetailState extends State<ChatDetailTmp>
     with SingleTickerProviderStateMixin {
   ChatProvide _provide;
-  Friend friend;
+  UserEntity friend;
   _ChatDetailState(this.friend);
 
   @override
@@ -64,7 +65,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
                   itemCount: value.messages.length,
                   itemBuilder: (BuildContext context, int index) {
                     if (value.messages[value.messages.length-index-1].from.id ==
-                        friend.userSecond.id) {
+                        friend.id) {
                       return Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16.0,
@@ -76,7 +77,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
                           children: <Widget>[
                             AppBarNetworkRoundedImage(
                               //value.getConservations(friend.userSecond);
-                                imageUrl: friend.userSecond.avatar),
+                                imageUrl: friend.avatar),
                             SizedBox(width: 15.0),
                             Container(
                               alignment: Alignment.center,
@@ -132,13 +133,13 @@ class _ChatDetailState extends State<ChatDetailTmp>
     ));
   }
 
-  buildAppBar(Friend friend) {
+  buildAppBar(UserEntity friend) {
     return MessengerAppBarAction(
       isScroll: true,
       // isScroll: _isScroll,
       isBack: true,
-      title: friend.userSecond.firstName + " " + friend.userSecond.lastName,
-      imageUrl: friend.userSecond.avatar,
+      title: friend.firstName + " " + friend.lastName,
+      imageUrl: friend.avatar,
       subTitle: 'Không hoạt động',
       actions: <Widget>[
         Icon(
@@ -155,7 +156,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
     );
   }
 
-  _buildBottomChat(Friend friend) {
+  _buildBottomChat(UserEntity friend) {
     var myController = TextEditingController();
     return Container(
       decoration: BoxDecoration(
@@ -225,7 +226,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
               onPressed: () {
                 Text mess = Text(myController.text);
                 if(mess.data != null && mess.data != "" ) {
-                  _provide.sendMessage(friend.userSecond,
+                  _provide.sendMessage(friend,
                       content: myController.text);
                 }
               },

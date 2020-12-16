@@ -23,6 +23,7 @@ class ChatProvide extends BaseProvide {
     userRepository.getCurrentUser().then((value) {
       userEntity = value;
       getFriends(value);
+      getUsers();
       getConservations(value);
     });
   }
@@ -47,6 +48,10 @@ class ChatProvide extends BaseProvide {
   List<Message> _messages = [];
 
   List<Message> get messages => _messages;
+
+  List<UserEntity> _users = [];
+
+  List<UserEntity> get users => _users;
 
   getFriends(UserEntity entity) =>
       friendRepository.getFriends(entity.id).listen((event) async {
@@ -131,6 +136,17 @@ class ChatProvide extends BaseProvide {
       });
     }, onError: (e) => {print("xu ly fail o day")});
   }
+
+  getUsers() {
+    _users.clear();
+    userRepository.getAllUsers().listen((event) async {
+      event.docChanges.forEach((element) async {
+        UserEntity entity = UserEntity.fromJson(element.doc.data());
+        _users.add(entity);
+      });
+    }, onError: (e) => {print("xu ly fail o day")});
+  }
+
 
   Future<void> getChatDetail(
       {Conservation conservation, UserEntity friend}) async {

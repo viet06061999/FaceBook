@@ -8,4 +8,5 @@ abstract class ChatRepository {
   Stream<QuerySnapshot> getConservations(String userId);
 
   Stream<DocumentSnapshot> getChat(String conservationId);
+
 }

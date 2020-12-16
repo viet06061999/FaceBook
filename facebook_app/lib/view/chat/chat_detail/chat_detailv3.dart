@@ -7,6 +7,9 @@ import 'package:facebook_app/widgets/messenger_app_bar/app_bar_network_rounded_i
 import 'package:facebook_app/widgets/messenger_app_bar_action/messenger_app_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:facebook_app/data/model/conservation.dart';
+import 'package:flutter_absolute_path/flutter_absolute_path.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:flutter/cupertino.dart';
 
 class ChatDetailV3 extends PageProvideNode<ChatProvide> {
   final Conservation conservation;
@@ -27,6 +30,7 @@ class ChatDetailV3Tmp extends StatefulWidget {
     provide.getChatDetail(conservation: conservation);
   }
 
+
   @override
   State<StatefulWidget> createState() => _ChatDetailState(conservation);
 }
@@ -35,12 +39,10 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
     with SingleTickerProviderStateMixin {
   ChatProvide _provide;
   final Conservation conservation;
-
   _ChatDetailState(this.conservation);
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _provide = widget.provide;
   }
@@ -58,12 +60,10 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
               Expanded(
                 child: ListView.builder(
                   reverse: true,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  // shrinkWrap: true,
+                  // physics: NeverScrollableScrollPhysics(),
                   itemCount: value.messages.length,
                   itemBuilder: (BuildContext context, int index) {
-                    // print('vaof list view roi');
-                    // print('size  ${value.messages.length}');
                     if (value.messages[value.messages.length-index-1].from.id ==
                         friend.id) {
                       return Container(
@@ -76,7 +76,7 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             AppBarNetworkRoundedImage(
-                                //value.getConservations(friend.userSecond);
+                              //value.getConservations(friend.userSecond);
                                 imageUrl: friend.avatar),
                             SizedBox(width: 15.0),
                             Container(
@@ -87,8 +87,8 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
                                 borderRadius: BorderRadius.circular(15.0),
                               ),
                               child: Text(
-                                value.messages[value.messages.length-index-1].message,
-                                style: TextStyle(fontSize: 16.0),
+                                getText(value.messages[value.messages.length-index-1].message),
+                                style: TextStyle(fontSize: 14.0),
                               ),
                             )
                           ],
@@ -113,8 +113,8 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
                                 borderRadius: BorderRadius.circular(15.0),
                               ),
                               child: Text(
-                                value.messages[value.messages.length-index-1].message,
-                                style: TextStyle(fontSize: 16.0),
+                                getText(value.messages[value.messages.length-index-1].message),
+                                style: TextStyle(fontSize: 14.0),
                               ),
                             )
                           ],
@@ -136,6 +136,7 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
     var friend = conservation.checkFriend(_provide.userEntity.id);
     return MessengerAppBarAction(
       isScroll: true,
+      // isScroll: _isScroll,
       isBack: true,
       title: friend.firstName + " " + friend.lastName,
       imageUrl: friend.avatar,
@@ -167,13 +168,28 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
         children: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: IconButton(
-              icon: Icon(
-                FontAwesomeIcons.image,
-                size: 25.0,
-                color: Colors.lightBlue,
-              ),
-              onPressed: () {},
+            child: Row(
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    FontAwesomeIcons.camera,
+                    size: 25.0,
+                    color: Colors.lightBlue,
+                  ),
+                  onPressed: () {},
+
+                ),
+                IconButton(
+                  icon: Icon(
+                    FontAwesomeIcons.image,
+                    size: 25.0,
+                    color: Colors.lightBlue,
+                  ),
+                  onPressed: () {
+                    loadAssets();
+                  },
+                )
+              ],
             ),
           ),
           Expanded(
@@ -216,7 +232,8 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
                 }
               },
               icon: Icon(
-                FontAwesomeIcons.solidThumbsUp,
+                // FontAwesomeIcons.solidThumbsUp,
+                FontAwesomeIcons.paperPlane,
                 size: 25.0,
                 color: Colors.lightBlue,
               ),
@@ -226,4 +243,94 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
       ),
     );
   }
+
+  loadAssets() {
+    String error = 'No Error Dectected';
+
+    try {
+      MultiImagePicker.pickImages(
+        maxImages: 4,
+        enableCamera: true,
+        // selectedAssets: images,
+        cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
+        materialOptions: MaterialOptions(
+          actionBarColor: "#abcdef",
+          actionBarTitle: "Example App",
+          allViewTitle: "All Photos",
+          useDetailsView: false,
+          selectCircleStrokeColor: "#000000",
+        ),
+      ).then((value) {
+        for (int i = 0; i < value.length; i++) {
+          FlutterAbsolutePath.getAbsolutePath(value[i].identifier)
+              .then((value) =>
+              setState(() {
+                print(value);
+                // pathImages.add(value);
+              }));
+        }
+      });
+    } on Exception catch (e) {
+      error = e.toString();
+    }
+    if (!mounted) return;
+  }
+// Future<File> pickImage(ImageSource source) async{
+//   File testImage = await ImagePicker.pickImage(source: source);
+//   setState(() {
+//     pickedImage = testImage;
+//   });
+// }
+
+}
+
+String getText(String message) {
+  int n = message.length;
+  int dem = 0;
+  for(int i = 0; i < n; i++) {
+    if (i == n - 1) {
+      dem++;
+    }
+    else {
+      int j = message.substring(i + 1, n).indexOf(" ");
+      if (j == -1) {
+        dem++;
+      }
+      else {
+        if (j >= 30) {
+          //xuong dong
+          message = message.substring(0, i + 30 - dem + 1) + "\n" +
+              message.substring(i + 30 - dem + 1, n);
+          dem = 0;
+          n += 1;
+          i += 30 - dem;
+        }
+        else if (j >= 30 - dem) {
+          if (message[i] == " ") {
+            message =
+                message.substring(0, i) + "\n" + message.substring(i + 1, n);
+            dem = 0;
+          }
+          else {
+            message = message.substring(0, i) + "\n" +
+                message.substring(i, n);
+            dem = 0;
+            i++;
+            n++;
+          }
+        }
+        else {
+          dem++;
+        }
+      }
+    }
+    // đủ độ dài 30
+    if (dem == 30) {
+      message = message.substring(0, i + 2) + "\n" + message.substring(i + 2, n);
+      n++;
+      i++;
+      dem = 0;
+    }
+  }
+  return message;
 }

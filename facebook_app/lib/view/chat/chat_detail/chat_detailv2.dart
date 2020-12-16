@@ -1,5 +1,6 @@
 import 'package:facebook_app/base/base.dart';
 import 'package:facebook_app/data/model/friend.dart';
+import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/viewmodel/chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -13,7 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'dart:io';
 
 class ChatDetail extends PageProvideNode<ChatProvide> {
-  final Friend friend;
+  final UserEntity friend;
 
   ChatDetail(this.friend);
 
@@ -24,11 +25,11 @@ class ChatDetail extends PageProvideNode<ChatProvide> {
 }
 
 class ChatDetailTmp extends StatefulWidget {
-  final Friend friend;
   final ChatProvide provide;
+  final UserEntity friend;
 
   ChatDetailTmp(this.provide, this.friend) {
-    provide.getChatDetail(friend: friend.userSecond);
+    provide.getChatDetail(friend: friend);
   }
 
   @override
@@ -38,26 +39,11 @@ class ChatDetailTmp extends StatefulWidget {
 class _ChatDetailState extends State<ChatDetailTmp>
     with SingleTickerProviderStateMixin {
   ChatProvide _provide;
-  Friend friend;
-  // ScrollController _controller;
-  // bool _isScroll = false;
-  // _scrollListener() {
-  //   if (_controller.offset > 0) {
-  //     this.setState(() {
-  //       _isScroll = true;
-  //     });
-  //   } else {
-  //     this.setState(() {
-  //       _isScroll = false;
-  //     });
-  //   }
-  // }
+  UserEntity friend;
   _ChatDetailState(this.friend);
 
   @override
   void initState() {
-    // _controller = ScrollController();
-    // _controller.addListener(_scrollListener);
     super.initState();
     _provide = widget.provide;
   }
@@ -79,7 +65,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
                   itemCount: value.messages.length,
                   itemBuilder: (BuildContext context, int index) {
                     if (value.messages[value.messages.length-index-1].from.id ==
-                        friend.userSecond.id) {
+                        friend.id) {
                       return Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16.0,
@@ -91,7 +77,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
                           children: <Widget>[
                             AppBarNetworkRoundedImage(
                               //value.getConservations(friend.userSecond);
-                                imageUrl: friend.userSecond.avatar),
+                                imageUrl: friend.avatar),
                             SizedBox(width: 15.0),
                             Container(
                               alignment: Alignment.center,
@@ -101,8 +87,9 @@ class _ChatDetailState extends State<ChatDetailTmp>
                                 borderRadius: BorderRadius.circular(15.0),
                               ),
                               child: Text(
-                                value.messages[value.messages.length-index-1].message,
-                                style: TextStyle(fontSize: 16.0),
+                                getText(value.messages[value.messages.length-index-1].message),
+                                style: TextStyle(fontSize: 14.0),
+                                textAlign: TextAlign.left,
                               ),
                             )
                           ],
@@ -127,8 +114,8 @@ class _ChatDetailState extends State<ChatDetailTmp>
                                 borderRadius: BorderRadius.circular(15.0),
                               ),
                               child: Text(
-                                value.messages[value.messages.length-index-1].message,
-                                style: TextStyle(fontSize: 16.0),
+                                getText(value.messages[value.messages.length-index-1].message),
+                                style: TextStyle(fontSize: 14.0),
                               ),
                             )
                           ],
@@ -146,13 +133,13 @@ class _ChatDetailState extends State<ChatDetailTmp>
     ));
   }
 
-  buildAppBar(Friend friend) {
+  buildAppBar(UserEntity friend) {
     return MessengerAppBarAction(
       isScroll: true,
       // isScroll: _isScroll,
       isBack: true,
-      title: friend.userSecond.firstName + " " + friend.userSecond.lastName,
-      imageUrl: friend.userSecond.avatar,
+      title: friend.firstName + " " + friend.lastName,
+      imageUrl: friend.avatar,
       subTitle: 'Không hoạt động',
       actions: <Widget>[
         Icon(
@@ -169,7 +156,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
     );
   }
 
-  _buildBottomChat(Friend friend) {
+  _buildBottomChat(UserEntity friend) {
     var myController = TextEditingController();
     return Container(
       decoration: BoxDecoration(
@@ -202,9 +189,6 @@ class _ChatDetailState extends State<ChatDetailTmp>
                   },
                 )
               ],
-
-
-
             ),
           ),
           Expanded(
@@ -242,7 +226,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
               onPressed: () {
                 Text mess = Text(myController.text);
                 if(mess.data != null && mess.data != "" ) {
-                  _provide.sendMessage(friend.userSecond,
+                  _provide.sendMessage(friend,
                       content: myController.text);
                 }
               },
@@ -297,4 +281,55 @@ class _ChatDetailState extends State<ChatDetailTmp>
 //   });
 // }
 
+}
+
+String getText(String message) {
+  int n = message.length;
+  int dem = 0;
+  for(int i = 0; i < n; i++) {
+    if (i == n - 1) {
+      dem++;
+    }
+    else {
+      int j = message.substring(i + 1, n).indexOf(" ");
+      if (j == -1) {
+        dem++;
+      }
+      else {
+        if (j >= 30) {
+          //xuong dong
+          message = message.substring(0, i + 30 - dem + 1) + "\n" +
+              message.substring(i + 30 - dem + 1, n);
+          dem = 0;
+          n += 1;
+          i += 30 - dem;
+        }
+        else if (j >= 30 - dem) {
+          if (message[i] == " ") {
+            message =
+                message.substring(0, i) + "\n" + message.substring(i + 1, n);
+            dem = 0;
+          }
+          else {
+            message = message.substring(0, i) + "\n" +
+                message.substring(i, n);
+            dem = 0;
+            i++;
+            n++;
+          }
+        }
+        else {
+          dem++;
+        }
+      }
+    }
+    // đủ độ dài 30
+    if (dem == 30) {
+      message = message.substring(0, i + 2) + "\n" + message.substring(i + 2, n);
+      n++;
+      i++;
+      dem = 0;
+    }
+  }
+  return message;
 }

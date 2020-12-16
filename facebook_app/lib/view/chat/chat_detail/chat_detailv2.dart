@@ -86,8 +86,9 @@ class _ChatDetailState extends State<ChatDetailTmp>
                                 borderRadius: BorderRadius.circular(15.0),
                               ),
                               child: Text(
-                                value.messages[value.messages.length-index-1].message,
-                                style: TextStyle(fontSize: 16.0),
+                                getText(value.messages[value.messages.length-index-1].message),
+                                style: TextStyle(fontSize: 14.0),
+                                textAlign: TextAlign.left,
                               ),
                             )
                           ],
@@ -112,8 +113,8 @@ class _ChatDetailState extends State<ChatDetailTmp>
                                 borderRadius: BorderRadius.circular(15.0),
                               ),
                               child: Text(
-                                value.messages[value.messages.length-index-1].message,
-                                style: TextStyle(fontSize: 16.0),
+                                getText(value.messages[value.messages.length-index-1].message),
+                                style: TextStyle(fontSize: 14.0),
                               ),
                             )
                           ],
@@ -279,4 +280,55 @@ class _ChatDetailState extends State<ChatDetailTmp>
 //   });
 // }
 
+}
+
+String getText(String message) {
+  int n = message.length;
+  int dem = 0;
+  for(int i = 0; i < n; i++) {
+    if (i == n - 1) {
+      dem++;
+    }
+    else {
+      int j = message.substring(i + 1, n).indexOf(" ");
+      if (j == -1) {
+        dem++;
+      }
+      else {
+        if (j >= 30) {
+          //xuong dong
+          message = message.substring(0, i + 30 - dem + 1) + "\n" +
+              message.substring(i + 30 - dem + 1, n);
+          dem = 0;
+          n += 1;
+          i += 30 - dem;
+        }
+        else if (j >= 30 - dem) {
+          if (message[i] == " ") {
+            message =
+                message.substring(0, i) + "\n" + message.substring(i + 1, n);
+            dem = 0;
+          }
+          else {
+            message = message.substring(0, i) + "\n" +
+                message.substring(i, n);
+            dem = 0;
+            i++;
+            n++;
+          }
+        }
+        else {
+          dem++;
+        }
+      }
+    }
+    // đủ độ dài 30
+    if (dem == 30) {
+      message = message.substring(0, i + 2) + "\n" + message.substring(i + 2, n);
+      n++;
+      i++;
+      dem = 0;
+    }
+  }
+  return message;
 }

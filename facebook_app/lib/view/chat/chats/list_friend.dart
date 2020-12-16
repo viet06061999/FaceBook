@@ -114,7 +114,7 @@ class _ListFriendState extends State<ListFriendTmp>
         itemBuilder: (context, index) {
           if (index == 0) {
             test(value.conservations.length);
-            return _buildSearchBar();
+            return _buildSearchBar(value);
           } else if (index == 1) {
             return _buildStoriesList(value);
           } else {
@@ -126,10 +126,10 @@ class _ListFriendState extends State<ListFriendTmp>
     );
   }
 
-  _buildSearchBar() {
+  _buildSearchBar(ChatProvide provide) {
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-      child: SearchBar(),
+      child: SearchBar(provide),
     );
   }
 

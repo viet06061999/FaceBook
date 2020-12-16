@@ -89,6 +89,7 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
                               child: Text(
                                 getText(value.messages[value.messages.length-index-1].message),
                                 style: TextStyle(fontSize: 14.0),
+                                textAlign: TextAlign.left,
                               ),
                             )
                           ],
@@ -115,6 +116,7 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
                               child: Text(
                                 getText(value.messages[value.messages.length-index-1].message),
                                 style: TextStyle(fontSize: 14.0),
+                                textAlign: TextAlign.left,
                               ),
                             )
                           ],

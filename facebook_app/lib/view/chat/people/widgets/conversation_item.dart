@@ -1,4 +1,5 @@
 import 'package:facebook_app/data/model/friend.dart';
+import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/viewmodel/chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -6,7 +7,7 @@ import 'package:facebook_app/view/chat/chat_detail/chat_detailv2.dart';
 
 class ConversationItem extends StatefulWidget {
   final ChatProvide provide;
-  final Friend friend;
+  final UserEntity friend;
   ConversationItem(this.provide, this.friend);
 
   _ConversationItemState createState() => _ConversationItemState(provide, friend);
@@ -14,7 +15,7 @@ class ConversationItem extends StatefulWidget {
 
 class _ConversationItemState extends State<ConversationItem> {
   final ChatProvide provide;
-  final Friend friend;
+  final UserEntity friend;
   _ConversationItemState(this.provide, this.friend);
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class _ConversationItemState extends State<ConversationItem> {
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ChatDetail(friend.userSecond),
+          builder: (context) => ChatDetail(friend),
         ),
       ),
       child: Padding(
@@ -142,7 +143,7 @@ class _ConversationItemState extends State<ConversationItem> {
             _buildConverastionTitle(),
             SizedBox(width: 2),
             Container(
-              child: Column(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   _buildLatestMessage(),
@@ -158,7 +159,7 @@ class _ConversationItemState extends State<ConversationItem> {
 
   _buildConverastionTitle() {
     return Text(
-      friend.userSecond.firstName + " " + friend.userSecond.lastName,
+      friend.firstName + " " + friend.lastName,
       textAlign: TextAlign.center,
       style: TextStyle(
           fontSize: 16, color: Colors.grey.shade700, fontWeight: FontWeight.bold, fontFamily:"Roboto" ),
@@ -188,7 +189,7 @@ class _ConversationItemState extends State<ConversationItem> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30.0),
         image: DecorationImage(
-          image: NetworkImage(friend.userSecond.avatar),
+          image: NetworkImage(friend.avatar),
           fit: BoxFit.cover,
         ),
       ),

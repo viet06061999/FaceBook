@@ -101,12 +101,8 @@ class ChatProvide extends BaseProvide {
             Conservation.fromMap(element.doc.data(), from, to);
             print(conservation.currentMessage.message);
             if (element.type == DocumentChangeType.added) {
-              print('add');
-              print('conservation ${conservation.currentMessage.from.lastName} ${conservation.currentMessage.to.lastName}');
               _conservations.insert(0, conservation);
-              _conservations.forEach((element) {
-                print('conservationfor ${conservation.currentMessage.from.lastName} ${conservation.currentMessage.to.lastName}');
-              });
+              notifyListeners();
             } else if (element.type == DocumentChangeType.modified) {
               print('modified');
               print('conservation ${conservation.currentMessage.from.lastName} ${conservation.currentMessage.to.lastName}');
@@ -120,19 +116,14 @@ class ChatProvide extends BaseProvide {
                 _conservations.removeAt(index);
                 _conservations.insert(0, conservation);
               }
-              _conservations.forEach((element) {
-                print('conservationfor ${conservation.currentMessage.from.lastName} ${conservation.currentMessage.to.lastName}');
-              });
+              notifyListeners();
             } else if (element.type == DocumentChangeType.removed) {
               _conservations
                   .removeWhere((element) => element.id == conservation.id);
+              notifyListeners();
             }
-
           });
         });
-        if (event.docChanges.length != 0) {
-          notifyListeners();
-        }
       });
     }, onError: (e) => {print("xu ly fail o day")});
   }
@@ -146,7 +137,6 @@ class ChatProvide extends BaseProvide {
       });
     }, onError: (e) => {print("xu ly fail o day")});
   }
-
 
   Future<void> getChatDetail(
       {Conservation conservation, UserEntity friend}) async {
@@ -185,7 +175,6 @@ class ChatProvide extends BaseProvide {
           .doc(conservationId)
           .set({});
       chatRepository.getChat(conservationId).listen((event) async {
-        print('thay doi roi');
         _messages = (event.data()['messages'] as List)
             .map((e) => convertToMessage(e, userEntity, friend))
             .toList();

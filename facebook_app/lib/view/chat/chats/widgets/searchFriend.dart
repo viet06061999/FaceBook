@@ -1,3 +1,4 @@
+import 'package:facebook_app/routes/routes.dart';
 import 'package:facebook_app/viewmodel/chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -19,6 +20,7 @@ class _searchFriendState extends State<searchFriend> {
   final ChatProvide _provide;
 
   _searchFriendState(this._provide);
+
   _scrollListener() {
     if (_controller.offset > 0) {
       this.setState(() {
@@ -39,16 +41,37 @@ class _searchFriendState extends State<searchFriend> {
 
   @override
   Widget build(BuildContext context) {
-    return NotificationListener<OverscrollIndicatorNotification>(
-      onNotification: (overscroll) {
-        overscroll.disallowGlow();
-      },
-      child: Container(
+    return Scaffold(
+      body: Container(
         decoration: BoxDecoration(color: Colors.white),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _buildMessengerAppBar(_isScroll),
-            _buildRootListView(),
+          Padding(
+            padding: EdgeInsets.only(left: 16.0),
+            child : Text(
+                "Gợi ý",
+                style: TextStyle(
+                  color: Colors.grey.shade600,
+                  fontSize: 14.0,
+                ),
+                textAlign: TextAlign.left,
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                padding: EdgeInsets.only(top: 10.0),
+                controller: _controller,
+                itemBuilder: (context, index) {
+                  return ConversationItem(
+                    _provide,
+                    _provide.users[index],
+                  );
+                },
+                itemCount: _provide.users.length,
+              ),
+            )
           ],
         ),
       ),
@@ -56,52 +79,66 @@ class _searchFriendState extends State<searchFriend> {
   }
 
   _buildMessengerAppBar(_isScroll) {
-    return (MessengerAppBar(
-      _provide,
-      isScroll: _isScroll,
-      title: 'Danh bạ',
-      actions: <Widget>[
-        Container(
-          width: 35.0,
-          height: 35.0,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.grey.shade200,
-          ),
-          child: Icon(
-            FontAwesomeIcons.solidAddressBook,
-            size: 15.0,
-          ),
+    return Container(
+      height: 90.0,
+      padding: EdgeInsets.only(right: 12.0, top: 16.0),
+      decoration: BoxDecoration(color: Colors.white, boxShadow: [
+        BoxShadow(
+          color: _isScroll ? Colors.black12 : Colors.white,
+          offset: Offset(0.0, 1.0),
+          blurRadius: 10.0,
         ),
-        Container(
-          width: 35.0,
-          height: 35.0,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.grey.shade200,
+      ]),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(left: 16.0),
+                child: InkWell(
+                  onTap: () {
+                    Routes.goBack(context);
+                  },
+                  child: Icon(
+                    FontAwesomeIcons.arrowLeft,
+                    size: 15.0,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 10.0,
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 16.0),
+                child: Text(
+                  'Tin nhắn mới',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold),
+                ),
+              )
+            ],
           ),
-          child: Icon(
-            FontAwesomeIcons.userPlus,
-            size: 15.0,
-          ),
-        ),
-      ],
-    ));
-  }
-
-  _buildRootListView() {
-    return Expanded(
-      child: ListView.builder(
-        padding: EdgeInsets.only(top: 10.0),
-        controller: _controller,
-        itemBuilder: (context, index) {
-          return ConversationItem(
-            _provide,
-            _provide.friends[index],
-          );
-        },
-        itemCount: _provide.friends.length,
+          Container(
+            child: Row(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(left: 20.0),
+                  child: Icon(
+                    FontAwesomeIcons.camera,
+                    color: Colors.black,
+                    size: 20.0,
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
 }
+

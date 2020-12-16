@@ -1,7 +1,10 @@
+import 'package:facebook_app/view/chat/chat_detail/chat_detailv2.dart';
 import 'package:facebook_app/view/chat/chats/widgets/searchFriend.dart';
+import 'package:facebook_app/view/chat/people/list_people.dart';
+import 'package:facebook_app/viewmodel/chat_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:facebook_app/viewmodel/chat_view_model.dart';
+
 
 class SearchBar extends StatefulWidget {
   final ChatProvide provide;
@@ -20,17 +23,15 @@ class _SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => searchFriend(provide),
-          ),
-        );
-      },
-      child: Container(
-        height: 45.0,
-        decoration: BoxDecoration(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => searchFriend(provide),
+         ),
+        ),
+        child: Container(
+          height: 45.0,
+          decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(21),
           color: Colors.grey.shade200,
         ),

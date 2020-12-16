@@ -97,7 +97,7 @@ class _ListPeopleState extends State<ListPeople> {
         itemBuilder: (context, index) {
             return ConversationItem(
               _provide,
-              _provide.friends[index],
+              _provide.friends[index].userSecond,
             );
         },
         itemCount: _provide.friends.length,

@@ -1,3 +1,6 @@
+import 'dart:html';
+
+import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/routes/routes.dart';
 import 'package:facebook_app/viewmodel/chat_view_model.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:facebook_app/models/list_friend_model.dart';
 import 'package:facebook_app/view/chat/people/widgets/conversation_item.dart';
 import 'package:facebook_app/widgets/messenger_app_bar/messenger_app_bar.dart';
-
+int a =0;
 class searchFriend extends StatefulWidget {
   final ChatProvide _provide;
 
@@ -60,14 +63,15 @@ class _searchFriendState extends State<searchFriend> {
               ),
             ),
             Expanded(
+
               child: ListView.builder(
                 padding: EdgeInsets.only(top: 10.0),
                 controller: _controller,
                 itemBuilder: (context, index) {
-                  return ConversationItem(
-                    _provide,
-                    _provide.users[index],
-                  );
+                    return ConversationItem(
+                      _provide,
+                      _provide.users[index],
+                    );
                 },
                 itemCount: _provide.users.length,
               ),
@@ -139,6 +143,16 @@ class _searchFriendState extends State<searchFriend> {
         ],
       ),
     );
+  }
+}
+
+UserEntity getProvide(List<UserEntity> users,ChatProvide provide, int index) {
+  if(users[index+a]==provide.userEntity){
+    a++;
+    return users[index+a];
+  }
+  else {
+    return users[index+a];
   }
 }
 

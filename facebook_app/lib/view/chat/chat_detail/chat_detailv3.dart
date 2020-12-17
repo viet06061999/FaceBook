@@ -258,6 +258,10 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
                   myController.text="";
                   content ="";
                 }
+                else {
+                  _provide.sendMessage(friend,
+                      content: "👍");
+                }
               },
               icon: Icon(
                 // FontAwesomeIcons.solidThumbsUp,

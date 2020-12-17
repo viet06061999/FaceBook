@@ -36,13 +36,13 @@ class _HomeScreenState extends State<HomeScreenTmp>
 
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   List<Widget> _widgetOptions(ChatProvide provide) => <Widget>[
-        ListFriend(),
-        ListPeople(provide),
-        ListDicovery(provide),
-      ];
+    ListFriend(),
+    ListPeople(provide),
+    ListDicovery(provide),
+  ];
 
   void _onItemTapped(int index) {
     setState(() {

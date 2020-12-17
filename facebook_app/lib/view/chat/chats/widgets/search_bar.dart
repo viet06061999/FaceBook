@@ -27,11 +27,11 @@ class _SearchBarState extends State<SearchBar> {
         context,
         MaterialPageRoute(
           builder: (context) => searchFriend(provide),
-         ),
         ),
-        child: Container(
-          height: 45.0,
-          decoration: BoxDecoration(
+      ),
+      child: Container(
+        height: 45.0,
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(21),
           color: Colors.grey.shade200,
         ),

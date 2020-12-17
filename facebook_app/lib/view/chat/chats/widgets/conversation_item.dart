@@ -249,7 +249,7 @@ String getTimeMess(String sendTime) {
   var format = new DateFormat('yyyy-MM-dd');
 
   String now = DateFormat('yyyy-MM-dd').format(Now);
- // print("hôm nay là $now");
+  // print("hôm nay là $now");
 
   String past = format.parse(sendTime).toString();
   int n = past.length;
@@ -262,7 +262,7 @@ String getTimeMess(String sendTime) {
   }
   past = past.substring(0,k);
   String past2 = past;
- // print("hôm nay là 11 $past 1");
+  // print("hôm nay là 11 $past 1");
 
   if(past==now){
     format = new DateFormat('yyyy-MM-dd HH:mm:ss');

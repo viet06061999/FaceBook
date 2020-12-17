@@ -95,10 +95,10 @@ class _ListPeopleState extends State<ListPeople> {
         padding: EdgeInsets.only(top: 10.0),
         controller: _controller,
         itemBuilder: (context, index) {
-            return ConversationItem(
-              _provide,
-              _provide.friends[index].userSecond,
-            );
+          return ConversationItem(
+            _provide,
+            _provide.friends[index].userSecond,
+          );
         },
         itemCount: _provide.friends.length,
       ),

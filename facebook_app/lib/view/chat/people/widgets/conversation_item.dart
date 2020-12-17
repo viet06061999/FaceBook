@@ -136,16 +136,16 @@ class _ConversationItemState extends State<ConversationItem> {
   _buildTitleAndLatestMessage() {
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.only(left: 12.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _buildConverastionTitle(),
-            SizedBox(width: 2),
-          ],
+          padding: const EdgeInsets.only(left: 12.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              _buildConverastionTitle(),
+              SizedBox(width: 2),
+            ],
           )
-        ),
-      );
+      ),
+    );
   }
 
   _buildConverastionTitle() {

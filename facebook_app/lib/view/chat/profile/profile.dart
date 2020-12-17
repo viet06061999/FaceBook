@@ -89,27 +89,28 @@ class _ProfilePageState extends State<ProfilePageTmp>
                       SizedBox(
                         height: 10.0,
                       ),
-                      _buildSettingItem3('Chế độ bóng tối', '', false,FontAwesomeIcons.arrowLeft,FontAwesomeIcons.arrowLeft),
-                      _buildSettingItem3('Chuyển tài khoản', '', false,FontAwesomeIcons.arrowLeft,FontAwesomeIcons.arrowLeft),
-                      _buildSettingItem('Tin nhắn chờ', '', false,FontAwesomeIcons.arrowLeft),
+                      _buildSettingItem3('Chế độ bóng tối', '', false,FontAwesomeIcons.solidMoon,Icons.toggle_off,Colors.black),
+                      _buildSettingItem('Chuyển tài khoản', '', false,FontAwesomeIcons.users,Colors.purpleAccent,Colors.white),
+                      _buildSettingItem('Tin nhắn chờ', '', false,FontAwesomeIcons.facebookMessenger,Colors.lightBlueAccent,Colors.white),
                       _buildTitleSetting('Trang cá nhân'),
-                      _buildSettingItem2('Trang thái hoạt động', 'Bật', false,FontAwesomeIcons.arrowLeft),
-                      _buildSettingItem2('Tên người dùng', provide.userEntity.email, false,FontAwesomeIcons.arrowLeft),
+                      _buildSettingItem2('Trang thái hoạt động', 'Bật', false,FontAwesomeIcons.userMinus,Colors.lightGreenAccent.shade400),
+                      _buildSettingItem2('Tên người dùng', provide.userEntity.email, false,FontAwesomeIcons.userSecret,Colors.deepOrange),
                       _buildTitleSetting('Tuỳ chọn'),
-                      _buildSettingItem('Quyền riêng tư', '', false,FontAwesomeIcons.arrowLeft),
-                      _buildSettingItem('Âm thanh & thông báo', '', false,FontAwesomeIcons.arrowLeft),
-                      _buildSettingItem('Trình tiết kiệm dữ liệu', '', false,FontAwesomeIcons.arrowLeft),
-                      _buildSettingItem('Tin', '', false,FontAwesomeIcons.arrowLeft),
-                      _buildSettingItem('SMS', '', false,FontAwesomeIcons.arrowLeft),
-                      _buildSettingItem('Danh bạ thư điện thoại', '', false,FontAwesomeIcons.arrowLeft),
-                      _buildSettingItem('Ảnh & phương tiện', '', false,FontAwesomeIcons.arrowLeft),
-                      _buildSettingItem3('Bong bóng chat', '', false,FontAwesomeIcons.arrowLeft,FontAwesomeIcons.arrowLeft),
-                      _buildSettingItem('Cập nhật ứng dụng', '', false,FontAwesomeIcons.arrowLeft),
+                      _buildSettingItem('Quyền riêng tư', '', false,FontAwesomeIcons.shieldAlt,Colors.lightBlueAccent,Colors.white),
+                      _buildSettingItem('Âm thanh & thông báo', '', false,FontAwesomeIcons.bell,Colors.purpleAccent,Colors.white),
+                      _buildSettingItem('Trình tiết kiệm dữ liệu', '', false,FontAwesomeIcons.shieldVirus,Colors.deepPurple,Colors.white),
+                      _buildSettingItem('Tin', '', false,FontAwesomeIcons.video,Colors.indigoAccent,Colors.white),
+                      _buildSettingItem('SMS', '', false,FontAwesomeIcons.comment,Colors.purpleAccent,Colors.white),
+                      _buildSettingItem('Danh bạ thư điện thoại', '', false,FontAwesomeIcons.userFriends,Colors.lightBlueAccent,Colors.white),
+                      _buildSettingItem('Ảnh & phương tiện', '', false,FontAwesomeIcons.image,Colors.purpleAccent,Colors.white),
+                      _buildSettingItem3('Bong bóng chat', '', false,FontAwesomeIcons.comments,Icons.toggle_off,
+                          Colors.lightGreenAccent),
+                      _buildSettingItem('Cập nhật ứng dụng', '', false,FontAwesomeIcons.mobile,Colors.deepPurple,Colors.white),
                       _buildTitleSetting('Tài khoản'),
-                      _buildSettingItem('Cài đặt tài khoản', '', false,FontAwesomeIcons.arrowLeft),
-                      _buildSettingItem('Báo cáo vấn đề kỹ thuật', '', false,FontAwesomeIcons.arrowLeft),
-                      _buildSettingItem('Trợ giúp', '', false,FontAwesomeIcons.arrowLeft),
-                      _buildSettingItem('Pháp lý và chính sách', '', false,FontAwesomeIcons.arrowLeft),
+                      _buildSettingItem('Cài đặt tài khoản', '', false,FontAwesomeIcons.cog,Colors.indigoAccent,Colors.white),
+                      _buildSettingItem('Báo cáo vấn đề kỹ thuật', '', false,FontAwesomeIcons.exclamation,Colors.deepOrangeAccent,Colors.white),
+                      _buildSettingItem('Trợ giúp', '', false,FontAwesomeIcons.questionCircle,Colors.lightBlueAccent,Colors.white),
+                      _buildSettingItem('Pháp lý và chính sách', '', false,FontAwesomeIcons.scroll,Colors.grey,Colors.white),
                       SizedBox(height: 16.0)
                     ],
                   ),
@@ -213,7 +214,7 @@ class _ProfilePageState extends State<ProfilePageTmp>
     );
   }
 
-  _buildSettingItem(title, subtitle, isBorderBottom, icon) {
+  _buildSettingItem(title, subtitle, isBorderBottom, icon,color1,color2) {
     return Container(
       margin: EdgeInsets.only(left: 16.0),
       padding: EdgeInsets.only(
@@ -223,30 +224,48 @@ class _ProfilePageState extends State<ProfilePageTmp>
       ),
       decoration: BoxDecoration(
           border: Border(
-        bottom: BorderSide(
-          width: isBorderBottom ? 0.5 : 0.0,
-          color: isBorderBottom ? Colors.grey.shade300 : Colors.transparent,
-        ),
-      )),
+            bottom: BorderSide(
+              width: isBorderBottom ? 0.5 : 0.0,
+              color: isBorderBottom ? Colors.grey.shade300 : Colors.transparent,
+            ),
+          )),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Row(
             children: <Widget>[
-              Icon(
-                icon,
-                //FontAwesomeIcons.chevronRight,
-                color: Colors.grey.shade500,
-                size: 18.0,
+              Container(
+                width: 35,
+                height: 35,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(80.0),
+                  color: color1,
+                  // image: DecorationImage(
+                  //   image: NetworkImage(provide.userEntity.avatar),
+                  //   fit: BoxFit.cover,
+                  // ),
+                ),
+                child: Icon(
+                  icon,
+                  //FontAwesomeIcons.chevronRight,
+                  color: color2,
+                  size: 18.0,
+                ),
               ),
+              // Icon(
+              //   icon,
+              //   //FontAwesomeIcons.chevronRight,
+              //   color: Colors.grey.shade500,
+              //   size: 18.0,
+              // ),
               SizedBox(width: 10.0),
               Text(
-                title,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16.0,
-                )
+                  title,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16.0,
+                  )
               ),
             ],
           ),
@@ -274,7 +293,7 @@ class _ProfilePageState extends State<ProfilePageTmp>
   }
 }
 
-_buildSettingItem2(title, subtitle, isBorderBottom, icon) {
+_buildSettingItem2(title, subtitle, isBorderBottom, icon,color1) {
   return Container(
     margin: EdgeInsets.only(left: 16.0),
     padding: EdgeInsets.only(
@@ -295,41 +314,53 @@ _buildSettingItem2(title, subtitle, isBorderBottom, icon) {
       children: <Widget>[
         Row(
           children: <Widget>[
-            Icon(
-              icon,
-              //FontAwesomeIcons.chevronRight,
-              color: Colors.grey.shade500,
-              size: 18.0,
+            Container(
+              width: 35,
+              height: 35,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(80.0),
+                color: color1,
+                // image: DecorationImage(
+                //   image: NetworkImage(provide.userEntity.avatar),
+                //   fit: BoxFit.cover,
+                // ),
+              ),
+              child: Icon(
+                icon,
+                //FontAwesomeIcons.chevronRight,
+                color: Colors.white,
+                size: 18.0,
+              ),
             ),
             SizedBox(width: 10.0),
             Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-              Text(
-                  title,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16.0,
-                  )
-              ),
-                  SizedBox(width: 10.0),
-                  Text(
-                    subtitle,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                    title,
                     style: TextStyle(
-                      color: Colors.grey.shade600,
-                      fontSize: 14.0,
-                    ),
+                      color: Colors.black,
+                      fontSize: 16.0,
+                    )
+                ),
+                SizedBox(width: 10.0),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    color: Colors.grey.shade600,
+                    fontSize: 14.0,
                   ),
-            ],
+                ),
+              ],
+            ),
+          ],
         ),
       ],
-        ),
-    ],
-  ),
+    ),
   );
 }
 
-_buildSettingItem3(title, subtitle, isBorderBottom, icon1, icon2) {
+_buildSettingItem3(title, subtitle, isBorderBottom, icon1, icon2,color1) {
   return Container(
     margin: EdgeInsets.only(left: 16.0),
     padding: EdgeInsets.only(
@@ -350,11 +381,23 @@ _buildSettingItem3(title, subtitle, isBorderBottom, icon1, icon2) {
       children: <Widget>[
         Row(
           children: <Widget>[
-            Icon(
-              icon1,
-              //FontAwesomeIcons.chevronRight,
-              color: Colors.grey.shade500,
-              size: 18.0,
+            Container(
+              width: 35,
+              height: 35,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(80.0),
+                color: color1,
+                // image: DecorationImage(
+                //   image: NetworkImage(provide.userEntity.avatar),
+                //   fit: BoxFit.cover,
+                // ),
+              ),
+              child: Icon(
+                icon1,
+                //FontAwesomeIcons.chevronRight,
+                color: Colors.white,
+                size: 18.0,
+              ),
             ),
             SizedBox(width: 10.0),
             Text(
@@ -379,8 +422,8 @@ _buildSettingItem3(title, subtitle, isBorderBottom, icon1, icon2) {
             SizedBox(width: 10.0),
             Icon(
               icon2,
-              color: Colors.grey.shade500,
-              size: 18.0,
+              color: Colors.grey.shade300,
+              size: 50.0,
             )
           ],
         )

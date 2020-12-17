@@ -48,9 +48,9 @@ class _searchFriendState extends State<searchFriend> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _buildMessengerAppBar(_isScroll),
-          Padding(
-            padding: EdgeInsets.only(left: 16.0),
-            child : Text(
+            Padding(
+              padding: EdgeInsets.only(left: 16.0),
+              child : Text(
                 "Gợi ý",
                 style: TextStyle(
                   color: Colors.grey.shade600,
@@ -128,9 +128,9 @@ class _searchFriendState extends State<searchFriend> {
                 Container(
                   padding: EdgeInsets.only(left: 20.0),
                   child: Icon(
-                    FontAwesomeIcons.camera,
-                    color: Colors.black,
-                    size: 20.0,
+                    Icons.toggle_off,
+                    color: Colors.grey.shade300,
+                    size: 45.0,
                   ),
                 ),
               ],

@@ -137,24 +137,15 @@ class _ConversationItemState extends State<ConversationItem> {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.only(left: 12.0),
-        child: Column(
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _buildConverastionTitle(),
             SizedBox(width: 2),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  _buildLatestMessage(),
-                  //_buildTimeOfLatestMessage()
-                ],
-              ),
-            )
           ],
+          )
         ),
-      ),
-    );
+      );
   }
 
   _buildConverastionTitle() {
@@ -166,16 +157,6 @@ class _ConversationItemState extends State<ConversationItem> {
     );
   }
 
-  _buildLatestMessage() {
-    return Container(
-      width: 150.0,
-      child: Text(
-        " ",
-        style: TextStyle(color: Colors.grey.shade700, fontSize: 16),
-        overflow: TextOverflow.ellipsis,
-      ),
-    );
-  }
 
   // _buildTimeOfLatestMessage() {
   //   return Text('1:21PM',

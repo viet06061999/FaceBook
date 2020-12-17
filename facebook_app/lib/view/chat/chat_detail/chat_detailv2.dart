@@ -269,7 +269,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
                     },
                   );
                   _provide.sendMessage(friend,
-                      content: mess.toString());
+                      content: "👍");
                 }
               },
               icon: Icon(

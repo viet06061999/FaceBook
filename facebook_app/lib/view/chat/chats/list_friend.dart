@@ -1,5 +1,6 @@
 import 'package:facebook_app/viewmodel/chat_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:facebook_app/view/chat/chats/widgets/searchFriend.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:facebook_app/models/list_friend_model.dart';
 import 'package:facebook_app/view/chat/chats/widgets/conversation_item.dart';
@@ -20,14 +21,14 @@ class ListFriendTmp extends StatefulWidget {
   final ChatProvide provide;
 
   ListFriendTmp(this.provide){
-   // provide.getConservations(provide.userEntity);
+    // provide.getConservations(provide.userEntity);
   }
   @override
   State<StatefulWidget> createState() => _ListFriendState(provide);
 }
 
 class _ListFriendState extends State<ListFriendTmp>
-  with SingleTickerProviderStateMixin{
+    with SingleTickerProviderStateMixin{
   ChatProvide _provide;
   _ListFriendState(this._provide);
 
@@ -73,37 +74,45 @@ class _ListFriendState extends State<ListFriendTmp>
   }
 
   _buildMessengerAppBar(_isScroll) {
-    return (MessengerAppBar(
-      _provide,
-      isScroll: _isScroll,
-      title: 'Chat',
-      actions: <Widget>[
-        Container(
-          width: 33.0,
-          height: 33.0,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.grey.shade200,
+    return  (MessengerAppBar(
+        _provide,
+        isScroll: _isScroll,
+        title: 'Chat',
+        actions: <Widget>[
+          Container(
+            width: 33.0,
+            height: 33.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: Colors.grey.shade200,
+            ),
+            child: Icon(
+              FontAwesomeIcons.camera,
+              size: 15.0,
+            ),
           ),
-          child: Icon(
-            FontAwesomeIcons.camera,
-            size: 15.0,
-          ),
-        ),
-        Container(
-          width: 33.0,
-          height: 33.0,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.grey.shade200,
-          ),
-          child: Icon(
-            FontAwesomeIcons.pen,
-            size: 15.0,
-          ),
-        ),
-      ],
-    ));
+          InkWell(
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => searchFriend(_provide),
+              ),
+            ),
+            child: Container(
+              width: 33.0,
+              height: 33.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.grey.shade200,
+              ),
+              child: Icon(
+                FontAwesomeIcons.pen,
+                size: 15.0,
+              ),
+            ),
+          )
+        ])
+    );
   }
 
   _buildRootListView(ChatProvide value) {

@@ -13,7 +13,8 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:io';
-
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:url_launcher/url_launcher.dart';
 class ChatDetail extends PageProvideNode<ChatProvide> {
   final UserEntity friend;
 
@@ -39,6 +40,8 @@ class ChatDetailTmp extends StatefulWidget {
 
 class _ChatDetailState extends State<ChatDetailTmp>
     with SingleTickerProviderStateMixin {
+  String content = "";
+  var myController = TextEditingController();
   ChatProvide _provide;
   UserEntity friend;
   _ChatDetailState(this.friend);
@@ -87,10 +90,18 @@ class _ChatDetailState extends State<ChatDetailTmp>
                                 color: Colors.grey.shade200,
                                 borderRadius: BorderRadius.circular(15.0),
                               ),
-                              child: Text(
-                                getText(value.messages[value.messages.length-index-1].message),
-                                style: TextStyle(fontSize: 14.0),
+                              child:  Linkify(
+                                onOpen: (link) async {
+                                  if (await canLaunch(link.url)) {
+                                    await launch(link.url);
+                                  } else {
+                                    throw 'Could not launch $link';
+                                  }
+                                },
+                                text: getText(value.messages[value.messages.length-index-1].message),
                                 textAlign: TextAlign.left,
+                                style: TextStyle(fontSize: 14.0),
+                                linkStyle: TextStyle(color: Colors.black),
                               ),
                             )
                           ],
@@ -114,11 +125,26 @@ class _ChatDetailState extends State<ChatDetailTmp>
                                 color: Colors.grey.shade200,
                                 borderRadius: BorderRadius.circular(15.0),
                               ),
-                              child: Text(
-                                getText(value.messages[value.messages.length-index-1].message),
-                                style: TextStyle(fontSize: 14.0),
+                              child:
+                              Linkify(
+                                onOpen: (link) async {
+                                  if (await canLaunch(link.url)) {
+                                    await launch(link.url);
+                                  } else {
+                                    throw 'Could not launch $link';
+                                  }
+                                },
+                                text: getText(value.messages[value.messages.length-index-1].message),
                                 textAlign: TextAlign.left,
+                                style: TextStyle(fontSize: 14.0),
+                                linkStyle: TextStyle(color: Colors.black),
                               ),
+
+                              // Text(
+                              //    text: getText(value.messages[value.messages.length-index-1].message),
+                              //    textAlign: TextAlign.left,
+                              //    style: TextStyle(fontSize: 14.0),
+                              // ),
                             )
                           ],
                         ),
@@ -159,7 +185,6 @@ class _ChatDetailState extends State<ChatDetailTmp>
   }
 
   _buildBottomChat(UserEntity friend) {
-    var myController = TextEditingController();
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -169,35 +194,37 @@ class _ChatDetailState extends State<ChatDetailTmp>
         children: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: Row(
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(
-                    FontAwesomeIcons.camera,
-                    size: 25.0,
-                    color: Colors.lightBlue,
-                  ),
-                  onPressed: () {},
-
-                ),
-                IconButton(
-                  icon: Icon(
-                    FontAwesomeIcons.image,
-                    size: 25.0,
-                    color: Colors.lightBlue,
-                  ),
-                  onPressed: () {
-                    loadAssets();
-                  },
-                )
-              ],
-            ),
+            // child: Row(
+            //   children: <Widget>[
+            //     IconButton(
+            //       icon: Icon(
+            //         FontAwesomeIcons.camera,
+            //         size: 25.0,
+            //         color: Colors.lightBlue,
+            //       ),
+            //       onPressed: () {},
+            //
+            //     ),
+            //     IconButton(
+            //       icon: Icon(
+            //         FontAwesomeIcons.image,
+            //         size: 25.0,
+            //         color: Colors.lightBlue,
+            //       ),
+            //       onPressed: () {
+            //         loadAssets();
+            //       },
+            //     )
+            //   ],
+            // ),
           ),
           Expanded(
             child: Container(
               child: TextField(
                 onChanged: (text) {
-                  print("First text field: $text");
+                  setState(() {
+                    content = text;
+                  });
                 },
                 controller: myController,
                 decoration: InputDecoration(
@@ -229,10 +256,12 @@ class _ChatDetailState extends State<ChatDetailTmp>
             padding: EdgeInsets.symmetric(horizontal: 8.0),
             child: IconButton(
               onPressed: () {
-                Text mess = Text(myController.text);
-                if(mess.data != null && mess.data != "" ) {
+                String mess = content;
+                if(mess != null && mess != "" ) {
                   _provide.sendMessage(friend,
-                      content: myController.text);
+                      content: content);
+                  myController.text="";
+                  content ="";
                 }
                 else {
                   var mess = EmojiPicker(
@@ -250,7 +279,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
               },
               icon: Icon(
                 // FontAwesomeIcons.solidThumbsUp,
-                FontAwesomeIcons.paperPlane,
+                content.isEmpty ? FontAwesomeIcons.solidThumbsUp : FontAwesomeIcons.paperPlane,
                 size: 25.0,
                 color: Colors.lightBlue,
               ),
@@ -350,7 +379,4 @@ String getText(String message) {
     }
   }
   return message;
-}
-_printLatestValue(TextEditingController myController) {
-  print("Second text field: ${myController.text}");
 }

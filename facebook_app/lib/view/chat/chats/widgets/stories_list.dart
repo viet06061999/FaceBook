@@ -158,5 +158,5 @@ _notViewedStoryListItemTextStyle() {
 
 _viewedStoryListItemTextStyle() {
   return  TextStyle(fontSize: 9, color: Colors.black, fontWeight: FontWeight.bold, );
-    //TextStyle(fontSize: 8, color: Colors.grey);
+  //TextStyle(fontSize: 8, color: Colors.grey);
 }

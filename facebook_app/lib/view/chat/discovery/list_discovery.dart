@@ -5,6 +5,7 @@ import 'package:facebook_app/view/chat/discovery/widgets/stories_list.dart';
 import 'package:facebook_app/view/chat/discovery/widgets/search_bar.dart';
 import 'package:facebook_app/widgets/messenger_app_bar/messenger_app_bar.dart';
 import 'package:facebook_app/viewmodel/chat_view_model.dart';
+import 'package:emoji_picker/emoji_picker.dart';
 
 class ListDicovery extends StatefulWidget {
   final ChatProvide _provide;

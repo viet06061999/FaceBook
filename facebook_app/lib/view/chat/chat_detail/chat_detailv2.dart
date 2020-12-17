@@ -1,3 +1,4 @@
+import 'package:emoji_picker/emoji_picker.dart';
 import 'package:facebook_app/base/base.dart';
 import 'package:facebook_app/data/model/friend.dart';
 import 'package:facebook_app/data/model/user.dart';
@@ -195,6 +196,9 @@ class _ChatDetailState extends State<ChatDetailTmp>
           Expanded(
             child: Container(
               child: TextField(
+                onChanged: (text) {
+                  print("First text field: $text");
+                },
                 controller: myController,
                 decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10.0),
@@ -229,6 +233,19 @@ class _ChatDetailState extends State<ChatDetailTmp>
                 if(mess.data != null && mess.data != "" ) {
                   _provide.sendMessage(friend,
                       content: myController.text);
+                }
+                else {
+                  var mess = EmojiPicker(
+                    rows: 3,
+                    columns: 7,
+                    recommendKeywords: ["racing", "horse"],
+                    numRecommended: 10,
+                    onEmojiSelected: (emoji, category) {
+                      print(emoji);
+                    },
+                  );
+                  _provide.sendMessage(friend,
+                      content: mess.toString());
                 }
               },
               icon: Icon(
@@ -333,4 +350,7 @@ String getText(String message) {
     }
   }
   return message;
+}
+_printLatestValue(TextEditingController myController) {
+  print("Second text field: ${myController.text}");
 }

@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/routes/routes.dart';
 import 'package:facebook_app/viewmodel/chat_view_model.dart';
@@ -8,21 +6,21 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:facebook_app/models/list_friend_model.dart';
 import 'package:facebook_app/view/chat/people/widgets/conversation_item.dart';
 import 'package:facebook_app/widgets/messenger_app_bar/messenger_app_bar.dart';
-int a =0;
+int a = 0;
 class searchFriend extends StatefulWidget {
-  final ChatProvide _provide;
+  final ChatProvide provide;
 
-  searchFriend(this._provide);
+  searchFriend(this.provide);
 
-  _searchFriendState createState() => _searchFriendState(_provide);
+  _searchFriendState createState() => _searchFriendState(provide);
 }
 
 class _searchFriendState extends State<searchFriend> {
   ScrollController _controller;
   bool _isScroll = false;
-  final ChatProvide _provide;
+  final ChatProvide provide;
 
-  _searchFriendState(this._provide);
+  _searchFriendState(this.provide);
 
   _scrollListener() {
     if (_controller.offset > 0) {
@@ -63,17 +61,16 @@ class _searchFriendState extends State<searchFriend> {
               ),
             ),
             Expanded(
-
               child: ListView.builder(
                 padding: EdgeInsets.only(top: 10.0),
                 controller: _controller,
                 itemBuilder: (context, index) {
-                    return ConversationItem(
-                      _provide,
-                      _provide.users[index],
-                    );
+                  return ConversationItem(
+                    provide,
+                    getProvide(provide,index),
+                  );
                 },
-                itemCount: _provide.users.length,
+                itemCount: provide.users.length-1,
               ),
             )
           ],
@@ -146,13 +143,13 @@ class _searchFriendState extends State<searchFriend> {
   }
 }
 
-UserEntity getProvide(List<UserEntity> users,ChatProvide provide, int index) {
-  if(users[index+a]==provide.userEntity){
-    a++;
-    return users[index+a];
+UserEntity getProvide(ChatProvide provide, int index) {
+  if(provide.users[index+a].id==provide.userEntity.id){
+    print(provide.userEntity.lastName);
+    a=1;
+    return provide.users[index+a];
   }
   else {
-    return users[index+a];
+    return provide.users[index+a];
   }
 }
-

@@ -17,8 +17,7 @@ import 'package:flutter/cupertino.dart';
 import 'dart:io';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-
+import 'package:flutter_emoji/flutter_emoji.dart';
 class ChatDetail extends PageProvideNode<ChatProvide> {
   final UserEntity friend;
 
@@ -29,7 +28,6 @@ class ChatDetail extends PageProvideNode<ChatProvide> {
     return ChatDetailTmp(mProvider, friend);
   }
 }
-
 class ChatDetailTmp extends StatefulWidget {
   final ChatProvide provide;
   final UserEntity friend;
@@ -46,6 +44,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
     with SingleTickerProviderStateMixin {
   String content = "";
   var myController = TextEditingController();
+  String cont=" ";
 
   ChatProvide _provide;
   UserEntity friend;
@@ -72,9 +71,12 @@ class _ChatDetailState extends State<ChatDetailTmp>
                         reverse: true,
                           // shrinkWrap: true,
                           // physics: NeverScrollableScrollPhysics(),
-                        itemCount: value.messages.length,
+                        itemCount: value.messages.length+1,
                         itemBuilder: (BuildContext context, int index) {
-                        if (value.messages[value.messages.length-index-1].from.id ==
+                          if(index==value.messages.length){
+                            return _buildNewFriend(friend);
+                          }
+                        else if (value.messages[value.messages.length-index-1].from.id ==
                             friend.id) {
                           return Container(
                             padding: const EdgeInsets.symmetric(
@@ -82,7 +84,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
                               vertical: 2.0,
                             ),
                             child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                              //crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 AppBarNetworkRoundedImage(
@@ -104,8 +106,8 @@ class _ChatDetailState extends State<ChatDetailTmp>
                                         throw 'Could not launch $link';
                                       }
                                     },
-                                    text: getText(value.messages[value.messages.length-index-1].message),
-                                    textAlign: TextAlign.left,
+                                    text: getMyText(getText(value.messages[value.messages.length-index-1].message)),
+                                    //textAlign: TextAlign.left,
                                     style: TextStyle(fontSize: 14.0),
                                     linkStyle: TextStyle(color: Colors.black),
                                   ),
@@ -120,7 +122,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
                               vertical: 2.0,
                             ),
                             child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                              //crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
                                 SizedBox(width: 55.0),
@@ -140,8 +142,8 @@ class _ChatDetailState extends State<ChatDetailTmp>
                                         throw 'Could not launch $link';
                                       }
                                     },
-                                    text: getText(value.messages[value.messages.length-index-1].message),
-                                    textAlign: TextAlign.left,
+                                    text: getMyText(getText(value.messages[value.messages.length-index-1].message)),
+                                    //textAlign: TextAlign.left,
                                     style: TextStyle(fontSize: 14.0),
                                     linkStyle: TextStyle(color: Colors.black),
                                   ),
@@ -232,9 +234,21 @@ class _ChatDetailState extends State<ChatDetailTmp>
               child: TextField(
                 onChanged: (text) {
                   setState(() {
+                    int n = myController.text.length;
+                    if(myController.text[n-1]==" "&&n>=2) {
+                      cont = myController.text;
+                      cont = getMyTextSpace(cont);
+                      if(myController.text!=cont){
+                        myController.text=cont;
+                        myController.selection = TextSelection.fromPosition(
+                          TextPosition(offset: myController.text.length),
+                        );
+                      }
+                    }
                     content = text;
                   });
                 },
+
                 controller: myController,
                 decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10.0),
@@ -273,15 +287,8 @@ class _ChatDetailState extends State<ChatDetailTmp>
                   content ="";
                 }
                 else {
-                  var mess = EmojiPicker(
-                    rows: 3,
-                    columns: 7,
-                    recommendKeywords: ["racing", "horse"],
-                    numRecommended: 10,
-                    onEmojiSelected: (emoji, category) {
-                      print(emoji);
-                    },
-                  );
+                  var parser = EmojiParser();
+                  mess = parser.emojify('I :heart: :coffee: :like:'); // returns: 'I ❤️ ☕'
                   _provide.sendMessage(friend,
                       content: "👍");
                 }
@@ -339,10 +346,139 @@ class _ChatDetailState extends State<ChatDetailTmp>
 
 }
 
+String getMyTextSpace(String text) {
+  String s = text;
+  int n = s.length;
+  if(n>=3&&s[n-3]==":"&&s[n-2]=="(") {
+    if(n>=4) s = s.substring(0,n-3) + "😞 ";
+    else{
+      s = s.substring(0,n-3) + "😞 ";
+    }
+  } // icon fine
+  else if(n>=3&&s[n-3]==":"&&s[n-2]==")") {
+    if(n>=4) s = s.substring(0,n-3) + "🙂 ";
+    else{
+      s = s.substring(0,n-3) + "🙂 ";
+    }
+  }
+  else if(n>=3&&s[n-3]==":"&&s[n-2]=="D") {
+    if(n>=4)s = s.substring(0,n-3) + "😃 ";
+    else{
+      s = s.substring(0,n-3) + "😃 ";
+    }
+  }
+  else if(n>=3&&s[n-3]==":"&&s[n-2]=="P") {
+    if(n>=4)s = s.substring(0,n-3) + "😛 ";
+    else{
+      s = s.substring(0,n-3) + "😛 ";
+    }
+  }
+  else if(n>=3&&s[n-3]==":"&&s[n-2]=="O") {
+    if(n>=4)s = s.substring(0,n-3) + "😮 ";
+    else{
+      s = s.substring(0,n-3) + "😮 ";
+    }
+  }
+  else if(n>=3&&s[n-3]==":"&&s[n-2]=="/") {
+    if(n>=4)s = s.substring(0,n-3) + "😕 ";
+    else{
+      s = s.substring(0,n-3) + "😕 ";
+    }
+  }
+  else if(n>=3&&s[n-3]==":"&&s[n-2]=="*") {
+    if(n>=4)s = s.substring(0,n-3) + "😘 ";
+    else{
+      s = s.substring(0,n-3) + "😘 ";
+    }
+  }
+  else if(n>=3&&s[n-3]=="<"&&s[n-2]=="3") {
+    if(n>=4)s = s.substring(0,n-3) + "❤ ";
+    else{
+      s = s.substring(0,n-3) + "❤ ";
+    }
+  }
+  else if(n>=3&&s[n-3]=="="&&s[n-2]=="b"){
+    if(n>=4)s = s.substring(0,n-3) + "👍 ";
+    else{
+      s = s.substring(0,n-3) + "👍 ";
+    }
+  }
+  else if(n>=3&&s[n-3]==";"&&s[n-2]==")"){
+    if(n>=4)s = s.substring(0,n-3) + "😉 ";
+    else{
+      s = s.substring(0,n-3) + "😉 ";
+    }
+  }
+  else if(n>=7&&s[n-7]==":"&&s[n-6]=="p"&&s[n-5]=="o"&&s[n-4]=="o"&&s[n-3]=="p"&&s[n-2]==":"){
+    if(n>=8) s = s.substring(0,n-7) + "💩 ";
+    else{
+      s = s.substring(0,n-7) + "💩 ";
+    }
+  }
+  // code thêm thì làm theo form trên
+
+  return s;
+}
+
+String getMyText(String myController) {
+  String s = myController;
+  int n = s.length;
+  for(int i=0;i<n;i++){
+    // icon buồn
+    if(i<n-1&&s[i]==":"&&s[i+1]=="(") {
+      s = s.substring(0,i) + "😞"+ s.substring(i+2,n);
+      i++;
+    } // icon fine
+    else if(i<n-1&&s[i]==":"&&s[i+1]==")") {
+      s = s.substring(0,i) + "🙂"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-1&&s[i]==":"&&s[i+1]=="D") {
+      s = s.substring(0,i) + "😃"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-1&&s[i]==":"&&s[i+1]=="P") {
+      s = s.substring(0,i) + "😛"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-1&&s[i]==":"&&s[i+1]=="O") {
+      s = s.substring(0,i) + "😮"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-1&&s[i]==":"&&s[i+1]=="/") {
+      s = s.substring(0,i) + "😕"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-1&&s[i]==":"&&s[i+1]=="*") {
+      s = s.substring(0,i) + "😘"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-1&&s[i]=="<"&&s[i+1]=="3") {
+      s = s.substring(0,i) + "❤"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-1&&s[i]=="="&&s[i+1]=="b"){
+      s = s.substring(0,i) + "👍"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-1&&s[i]==";"&&s[i+1]==")"){
+      s = s.substring(0,i) + "😉"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-5&&s[i]==":"&&s[i+1]=="p"&&s[i+2]=="o"&&s[i+3]=="o"&&s[i+4]=="p"&&s[i+5]==":"){
+      s = s.substring(0,i) + "💩"+ s.substring(i+6,n);
+      i++;
+    }
+    // code thêm thì làm theo form trên
+  }
+  return s;
+}
+
+
 
 _buildNewFriend(UserEntity friend) {
   return Container(
-    //padding: EdgeInsets.o( top: 100.0),
+    padding: EdgeInsets.only(top: 100,bottom: 80),
 
     child: Column(
         children: <Widget>[

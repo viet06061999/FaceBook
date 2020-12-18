@@ -1,7 +1,10 @@
 import 'package:facebook_app/base/base.dart';
 import 'package:facebook_app/data/model/friend.dart';
+import 'package:facebook_app/data/model/user.dart';
+import 'package:facebook_app/view/chat/chats/widgets/conversation_item.dart';
 import 'package:facebook_app/viewmodel/chat_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:facebook_app/widgets/messenger_app_bar/AppBarNetworkRoundedImage2.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:facebook_app/widgets/messenger_app_bar/app_bar_network_rounded_image.dart';
 import 'package:facebook_app/widgets/messenger_app_bar_action/messenger_app_bar.dart';
@@ -42,6 +45,7 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
     with SingleTickerProviderStateMixin {
   String content = "";
   var myController = TextEditingController();
+  String cont="";
   ChatProvide _provide;
   final Conservation conservation;
   _ChatDetailState(this.conservation);
@@ -65,9 +69,15 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
               Expanded(
                 child: ListView.builder(
                   reverse: true,
-                  itemCount: value.messages.length,
+                  // shrinkWrap: true,
+                  // physics: NeverScrollableScrollPhysics(),
+                  itemCount: value.messages.length+1,
+
                   itemBuilder: (BuildContext context, int index) {
-                    if (value.messages[value.messages.length-index-1].from.id ==
+                    if(index==value.messages.length){
+                      return _buildNewFriend(friend);
+                    }
+                    else if (value.messages[value.messages.length-index-1].from.id ==
                         friend.id) {
                       return Container(
                         padding: const EdgeInsets.symmetric(
@@ -75,7 +85,7 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
                           vertical: 2.0,
                         ),
                         child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                        //  crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             AppBarNetworkRoundedImage(
@@ -96,8 +106,8 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
                                     throw 'Could not launch $link';
                                   }
                                 },
-                                text: getText(value.messages[value.messages.length-index-1].message),
-                                textAlign: TextAlign.left,
+                                text: getMyText(getText(value.messages[value.messages.length-index-1].message)),
+                              //  textAlign: TextAlign.left,
                                 style: TextStyle(fontSize: 14.0),
                                 linkStyle: TextStyle(color: Colors.black),
                               ),
@@ -112,7 +122,7 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
                           vertical: 2.0,
                         ),
                         child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          //crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
                             SizedBox(width: 55.0),
@@ -131,8 +141,7 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
                                     throw 'Could not launch $link';
                                   }
                                 },
-                                text: getText(value.messages[value.messages.length-index-1].message),
-                                textAlign: TextAlign.left,
+                                text: getMyText(getText(value.messages[value.messages.length-index-1].message)),
                                 style: TextStyle(fontSize: 14.0),
                                 linkStyle: TextStyle(color: Colors.black),
                               ),
@@ -151,7 +160,29 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
       },
     ));
   }
+  _buildNewFriend(UserEntity friend) {
+    return Container(
+      padding: EdgeInsets.only(top: 100,bottom: 80),
 
+      child: Column(
+          children: <Widget>[
+            AppBarNetworkRoundedImage2(
+              imageUrl: friend.avatar,
+            ),
+            Container(
+              child: Text(
+                friend.firstName+" "+friend.lastName,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+            )
+          ]
+      ),
+    );
+  }
   buildAppBar(Conservation conservation) {
     var friend = conservation.checkFriend(_provide.userEntity.id);
     return MessengerAppBarAction(
@@ -226,6 +257,18 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
               child: TextField(
                 onChanged: (text) {
                   setState(() {
+                    int n = myController.text.length;
+                    if(myController.text[n-1]==" "&&n>=2) {
+                      cont = myController.text;
+                      cont = getMyTextSpace(cont);
+                      if(myController.text!=cont){
+                        myController.text=cont;
+                        myController.selection = TextSelection.fromPosition(
+                          TextPosition(offset: myController.text.length),
+                        );
+                      }
+                    }
+                    content = text;
                     content = text;
                   });
                 },
@@ -259,7 +302,7 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
             padding: EdgeInsets.symmetric(horizontal: 8.0),
             child: IconButton(
               onPressed: () {
-                String mess = content;
+                String mess = myController.text;
                 if(mess != null && mess != "" ) {
                   _provide.sendMessage(friend,
                       content: content);
@@ -374,4 +417,131 @@ String getText(String message) {
     }
   }
   return message;
+}
+String getMyText(String myController) {
+  String s = myController;
+  int n = s.length;
+  for(int i=0;i<n;i++){
+    // icon buồn
+    if(i<n-1&&s[i]==":"&&s[i+1]=="(") {
+      s = s.substring(0,i) + "😞"+ s.substring(i+2,n);
+      i++;
+    } // icon fine
+    else if(i<n-1&&s[i]==":"&&s[i+1]==")") {
+      s = s.substring(0,i) + "🙂"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-1&&s[i]==":"&&s[i+1]=="D") {
+      s = s.substring(0,i) + "😃"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-1&&s[i]==":"&&s[i+1]=="P") {
+      s = s.substring(0,i) + "😛"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-1&&s[i]==":"&&s[i+1]=="O") {
+      s = s.substring(0,i) + "😮"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-1&&s[i]==":"&&s[i+1]=="/") {
+      s = s.substring(0,i) + "😕"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-1&&s[i]==":"&&s[i+1]=="*") {
+      s = s.substring(0,i) + "😘"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-1&&s[i]=="<"&&s[i+1]=="3") {
+      s = s.substring(0,i) + "❤"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-1&&s[i]=="="&&s[i+1]=="b"){
+      s = s.substring(0,i) + "👍"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-1&&s[i]==";"&&s[i+1]==")"){
+      s = s.substring(0,i) + "😉"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-5&&s[i]==":"&&s[i+1]=="p"&&s[i+2]=="o"&&s[i+3]=="o"&&s[i+4]=="p"&&s[i+5]==":"){
+      s = s.substring(0,i) + "💩"+ s.substring(i+6,n);
+      i++;
+    }
+    // code thêm thì làm theo form trên
+  }
+  return s;
+}
+
+String getMyTextSpace(String text) {
+  String s = text;
+  int n = s.length;
+  if(n>=3&&s[n-3]==":"&&s[n-2]=="(") {
+    if(n>=4) s = s.substring(0,n-3) + "😞 ";
+    else{
+      s = s.substring(0,n-3) + "😞 ";
+    }
+  } // icon fine
+  else if(n>=3&&s[n-3]==":"&&s[n-2]==")") {
+    if(n>=4) s = s.substring(0,n-3) + "🙂 ";
+    else{
+      s = s.substring(0,n-3) + "🙂 ";
+    }
+  }
+  else if(n>=3&&s[n-3]==":"&&s[n-2]=="D") {
+    if(n>=4)s = s.substring(0,n-3) + "😃 ";
+    else{
+      s = s.substring(0,n-3) + "😃 ";
+    }
+  }
+  else if(n>=3&&s[n-3]==":"&&s[n-2]=="P") {
+    if(n>=4)s = s.substring(0,n-3) + "😛 ";
+    else{
+      s = s.substring(0,n-3) + "😛 ";
+    }
+  }
+  else if(n>=3&&s[n-3]==":"&&s[n-2]=="O") {
+    if(n>=4)s = s.substring(0,n-3) + "😮 ";
+    else{
+      s = s.substring(0,n-3) + "😮 ";
+    }
+  }
+  else if(n>=3&&s[n-3]==":"&&s[n-2]=="/") {
+    if(n>=4)s = s.substring(0,n-3) + "😕 ";
+    else{
+      s = s.substring(0,n-3) + "😕 ";
+    }
+  }
+  else if(n>=3&&s[n-3]==":"&&s[n-2]=="*") {
+    if(n>=4)s = s.substring(0,n-3) + "😘 ";
+    else{
+      s = s.substring(0,n-3) + "😘 ";
+    }
+  }
+  else if(n>=3&&s[n-3]=="<"&&s[n-2]=="3") {
+    if(n>=4)s = s.substring(0,n-3) + "❤ ";
+    else{
+      s = s.substring(0,n-3) + "❤ ";
+    }
+  }
+  else if(n>=3&&s[n-3]=="="&&s[n-2]=="b"){
+    if(n>=4)s = s.substring(0,n-3) + "👍 ";
+    else{
+      s = s.substring(0,n-3) + "👍 ";
+    }
+  }
+  else if(n>=3&&s[n-3]==";"&&s[n-2]==")"){
+    if(n>=4)s = s.substring(0,n-3) + "😉 ";
+    else{
+      s = s.substring(0,n-3) + "😉 ";
+    }
+  }
+  else if(n>=7&&s[n-7]==":"&&s[n-6]=="p"&&s[n-5]=="o"&&s[n-4]=="o"&&s[n-3]=="p"&&s[n-2]==":"){
+    if(n>=8) s = s.substring(0,n-7) + "💩 ";
+    else{
+      s = s.substring(0,n-7) + "💩 ";
+    }
+  }
+  // code thêm thì làm theo form trên
+
+  return s;
 }

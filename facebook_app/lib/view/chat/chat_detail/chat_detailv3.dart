@@ -12,6 +12,7 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:facebook_app/view/chat/profile/profile_firend.dart';
 
 class ChatDetailV3 extends PageProvideNode<ChatProvide> {
   final Conservation conservation;
@@ -64,8 +65,6 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
               Expanded(
                 child: ListView.builder(
                   reverse: true,
-                  // shrinkWrap: true,
-                  // physics: NeverScrollableScrollPhysics(),
                   itemCount: value.messages.length,
                   itemBuilder: (BuildContext context, int index) {
                     if (value.messages[value.messages.length-index-1].from.id ==
@@ -80,7 +79,6 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             AppBarNetworkRoundedImage(
-                              //value.getConservations(friend.userSecond);
                                 imageUrl: friend.avatar),
                             SizedBox(width: 15.0),
                             Container(
@@ -169,10 +167,20 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
           color: Colors.lightBlue,
           size: 20.0,
         ),
-        Icon(
-          FontAwesomeIcons.infoCircle,
-          color: Colors.lightBlue,
-          size: 20.0,
+        InkWell(
+          onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProfilePageFriend(conservation),
+          ),
+          ),
+          child:
+          Icon(
+            FontAwesomeIcons.infoCircle,
+            color: Colors.lightBlue,
+            size: 20.0,
+
+          ),
         ),
       ],
     );

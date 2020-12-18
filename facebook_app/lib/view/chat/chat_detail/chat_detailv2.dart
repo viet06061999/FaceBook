@@ -2,6 +2,7 @@ import 'package:emoji_picker/emoji_picker.dart';
 import 'package:facebook_app/base/base.dart';
 import 'package:facebook_app/data/model/friend.dart';
 import 'package:facebook_app/data/model/user.dart';
+import 'package:facebook_app/view/chat/profile/profile_firendv1.dart';
 import 'package:facebook_app/viewmodel/chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,6 +17,8 @@ import 'package:flutter/cupertino.dart';
 import 'dart:io';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+
 class ChatDetail extends PageProvideNode<ChatProvide> {
   final UserEntity friend;
 
@@ -43,6 +46,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
     with SingleTickerProviderStateMixin {
   String content = "";
   var myController = TextEditingController();
+
   ChatProvide _provide;
   UserEntity friend;
   _ChatDetailState(this.friend);
@@ -170,10 +174,20 @@ class _ChatDetailState extends State<ChatDetailTmp>
           color: Colors.lightBlue,
           size: 20.0,
         ),
-        Icon(
-          FontAwesomeIcons.infoCircle,
-          color: Colors.lightBlue,
-          size: 20.0,
+        InkWell(
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfilePageFriendV1(friend),
+            ),
+          ),
+          child:
+          Icon(
+            FontAwesomeIcons.infoCircle,
+            color: Colors.lightBlue,
+            size: 20.0,
+
+          ),
         ),
       ],
     );

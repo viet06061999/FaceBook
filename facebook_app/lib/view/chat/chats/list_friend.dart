@@ -9,6 +9,7 @@ import 'package:facebook_app/view/chat/chats/widgets/stories_list.dart';
 import 'package:facebook_app/widgets/messenger_app_bar/messenger_app_bar.dart';
 import 'package:facebook_app/base/base.dart';
 import 'package:provider/provider.dart';
+import 'package:facebook_app/view/chat/chats/camera.dart';
 
 class ListFriend extends PageProvideNode<ChatProvide> {
   @override
@@ -79,38 +80,54 @@ class _ListFriendState extends State<ListFriendTmp>
         isScroll: _isScroll,
         title: 'Chat',
         actions: <Widget>[
-          Container(
-            width: 33.0,
-            height: 33.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: Colors.grey.shade200,
-            ),
-            child: Icon(
-              FontAwesomeIcons.camera,
-              size: 15.0,
-            ),
-          ),
-          InkWell(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => searchFriend(_provide),
+          Row (
+            children: <Widget>[
+              InkWell(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AccessCamera(),
+                  ),
+                ),
+                child: Container(
+                  margin: const EdgeInsets.only( right: 15.0),
+                  width: 33.0,
+                  height: 33.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.grey.shade200,
+                  ),
+                  child: Icon(
+                    FontAwesomeIcons.camera,
+                    size: 15.0,
+                  ),
+                ),
               ),
-            ),
-            child: Container(
-              width: 33.0,
-              height: 33.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.grey.shade200,
-              ),
-              child: Icon(
-                FontAwesomeIcons.pen,
-                size: 15.0,
-              ),
-            ),
+              InkWell(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => searchFriend(_provide),
+                  ),
+                ),
+                child: Container(
+                  width: 33.0,
+                  height: 33.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.grey.shade200,
+                  ),
+                  child: Icon(
+                    FontAwesomeIcons.pen,
+                    size: 15.0,
+                  ),
+                ),
+              )
+            ],
           )
+
+
+
         ])
     );
   }

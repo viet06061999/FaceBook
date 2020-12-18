@@ -2,10 +2,12 @@ import 'package:emoji_picker/emoji_picker.dart';
 import 'package:facebook_app/base/base.dart';
 import 'package:facebook_app/data/model/friend.dart';
 import 'package:facebook_app/data/model/user.dart';
+import 'package:facebook_app/view/chat/profile/profile_firendv1.dart';
 import 'package:facebook_app/viewmodel/chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:facebook_app/widgets/messenger_app_bar/app_bar_network_rounded_image.dart';
+import 'package:facebook_app/widgets/messenger_app_bar/AppBarNetworkRoundedImage2.dart';
 import 'package:facebook_app/widgets/messenger_app_bar_action/messenger_app_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
@@ -15,6 +17,8 @@ import 'package:flutter/cupertino.dart';
 import 'dart:io';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+
 class ChatDetail extends PageProvideNode<ChatProvide> {
   final UserEntity friend;
 
@@ -42,6 +46,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
     with SingleTickerProviderStateMixin {
   String content = "";
   var myController = TextEditingController();
+
   ChatProvide _provide;
   UserEntity friend;
   _ChatDetailState(this.friend);
@@ -63,94 +68,88 @@ class _ChatDetailState extends State<ChatDetailTmp>
               buildAppBar(friend),
               Expanded(
                 child: ListView.builder(
-                  reverse: true,
-                  // shrinkWrap: true,
-                  // physics: NeverScrollableScrollPhysics(),
-                  itemCount: value.messages.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (value.messages[value.messages.length-index-1].from.id ==
-                        friend.id) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0,
-                          vertical: 2.0,
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            AppBarNetworkRoundedImage(
-                              //value.getConservations(friend.userSecond);
-                                imageUrl: friend.avatar),
-                            SizedBox(width: 15.0),
-                            Container(
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade200,
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              child:  Linkify(
-                                onOpen: (link) async {
-                                  if (await canLaunch(link.url)) {
-                                    await launch(link.url);
-                                  } else {
-                                    throw 'Could not launch $link';
-                                  }
-                                },
-                                text: getText(value.messages[value.messages.length-index-1].message),
-                                textAlign: TextAlign.left,
-                                style: TextStyle(fontSize: 14.0),
-                                linkStyle: TextStyle(color: Colors.black),
-                              ),
-                            )
-                          ],
-                        ),
-                      );
-                    } else {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0,
-                          vertical: 2.0,
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            SizedBox(width: 55.0),
-                            Container(
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade200,
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              child:
-                              Linkify(
-                                onOpen: (link) async {
-                                  if (await canLaunch(link.url)) {
-                                    await launch(link.url);
-                                  } else {
-                                    throw 'Could not launch $link';
-                                  }
-                                },
-                                text: getText(value.messages[value.messages.length-index-1].message),
-                                textAlign: TextAlign.left,
-                                style: TextStyle(fontSize: 14.0),
-                                linkStyle: TextStyle(color: Colors.black),
-                              ),
-
-                              // Text(
-                              //    text: getText(value.messages[value.messages.length-index-1].message),
-                              //    textAlign: TextAlign.left,
-                              //    style: TextStyle(fontSize: 14.0),
-                              // ),
-                            )
-                          ],
-                        ),
-                      );
-                    }
-                  },
+                        reverse: true,
+                          // shrinkWrap: true,
+                          // physics: NeverScrollableScrollPhysics(),
+                        itemCount: value.messages.length,
+                        itemBuilder: (BuildContext context, int index) {
+                        if (value.messages[value.messages.length-index-1].from.id ==
+                            friend.id) {
+                          return Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 2.0,
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                AppBarNetworkRoundedImage(
+                                  //value.getConservations(friend.userSecond);
+                                    imageUrl: friend.avatar),
+                                SizedBox(width: 15.0),
+                                Container(
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.all(8.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade200,
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                  child:  Linkify(
+                                    onOpen: (link) async {
+                                      if (await canLaunch(link.url)) {
+                                        await launch(link.url);
+                                      } else {
+                                        throw 'Could not launch $link';
+                                      }
+                                    },
+                                    text: getText(value.messages[value.messages.length-index-1].message),
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(fontSize: 14.0),
+                                    linkStyle: TextStyle(color: Colors.black),
+                                  ),
+                                )
+                              ],
+                            ),
+                          );
+                        } else {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 2.0,
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                SizedBox(width: 55.0),
+                                Container(
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.all(8.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade200,
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                  child:
+                                  Linkify(
+                                    onOpen: (link) async {
+                                      if (await canLaunch(link.url)) {
+                                        await launch(link.url);
+                                      } else {
+                                        throw 'Could not launch $link';
+                                      }
+                                    },
+                                    text: getText(value.messages[value.messages.length-index-1].message),
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(fontSize: 14.0),
+                                    linkStyle: TextStyle(color: Colors.black),
+                                  ),
+                                )
+                              ],
+                            ),
+                          );
+                        }
+                        },
                 ),
               ),
               _buildBottomChat(friend),
@@ -175,10 +174,20 @@ class _ChatDetailState extends State<ChatDetailTmp>
           color: Colors.lightBlue,
           size: 20.0,
         ),
-        Icon(
-          FontAwesomeIcons.infoCircle,
-          color: Colors.lightBlue,
-          size: 20.0,
+        InkWell(
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfilePageFriendV1(friend),
+            ),
+          ),
+          child:
+          Icon(
+            FontAwesomeIcons.infoCircle,
+            color: Colors.lightBlue,
+            size: 20.0,
+
+          ),
         ),
       ],
     );
@@ -274,7 +283,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
                     },
                   );
                   _provide.sendMessage(friend,
-                      content: mess.toString());
+                      content: "👍");
                 }
               },
               icon: Icon(
@@ -328,6 +337,31 @@ class _ChatDetailState extends State<ChatDetailTmp>
 //   });
 // }
 
+}
+
+
+_buildNewFriend(UserEntity friend) {
+  return Container(
+    //padding: EdgeInsets.o( top: 100.0),
+
+    child: Column(
+        children: <Widget>[
+          AppBarNetworkRoundedImage2(
+            imageUrl: friend.avatar,
+           ),
+          Container(
+            child: Text(
+              friend.firstName+" "+friend.lastName,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+          )
+          ]
+    ),
+  );
 }
 
 String getText(String message) {

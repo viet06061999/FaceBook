@@ -1,3 +1,4 @@
+import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/routes/routes.dart';
 import 'package:facebook_app/viewmodel/chat_view_model.dart';
 import 'package:flutter/material.dart';
@@ -5,21 +6,21 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:facebook_app/models/list_friend_model.dart';
 import 'package:facebook_app/view/chat/people/widgets/conversation_item.dart';
 import 'package:facebook_app/widgets/messenger_app_bar/messenger_app_bar.dart';
-
+int a = 0;
 class searchFriend extends StatefulWidget {
-  final ChatProvide _provide;
+  final ChatProvide provide;
 
-  searchFriend(this._provide);
+  searchFriend(this.provide);
 
-  _searchFriendState createState() => _searchFriendState(_provide);
+  _searchFriendState createState() => _searchFriendState(provide);
 }
 
 class _searchFriendState extends State<searchFriend> {
   ScrollController _controller;
   bool _isScroll = false;
-  final ChatProvide _provide;
+  final ChatProvide provide;
 
-  _searchFriendState(this._provide);
+  _searchFriendState(this.provide);
 
   _scrollListener() {
     if (_controller.offset > 0) {
@@ -65,11 +66,11 @@ class _searchFriendState extends State<searchFriend> {
                 controller: _controller,
                 itemBuilder: (context, index) {
                   return ConversationItem(
-                    _provide,
-                    _provide.users[index],
+                    provide,
+                    getProvide(provide,index),
                   );
                 },
-                itemCount: _provide.users.length,
+                itemCount: provide.users.length-1,
               ),
             )
           ],
@@ -142,3 +143,13 @@ class _searchFriendState extends State<searchFriend> {
   }
 }
 
+UserEntity getProvide(ChatProvide provide, int index) {
+  if(provide.users[index+a].id==provide.userEntity.id){
+    print(provide.userEntity.lastName);
+    a=1;
+    return provide.users[index+a];
+  }
+  else {
+    return provide.users[index+a];
+  }
+}

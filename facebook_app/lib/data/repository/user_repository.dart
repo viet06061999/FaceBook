@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facebook_app/data/model/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rxdart/rxdart.dart';
@@ -12,12 +13,18 @@ abstract class UserRepository {
 
   Future<UserEntity> getCurrentUser();
 
-  Future<void> updateAvatar(String pathAvatar, UserEntity userEntity, Function onError);
+  Future<void> updateAvatar(
+      String pathAvatar, UserEntity userEntity, Function onError);
 
-  Future<void> updateCoverImage(String pathCover, UserEntity userEntity, Function onError);
+  Future<void> updateCoverImage(
+      String pathCover, UserEntity userEntity, Function onError);
 
   Observable<void> updateUser(UserEntity userEntity);
 
-  Observable<void> updateDescriptionUser(UserEntity userEntity, String description);
+  Observable<void> updateDescriptionUser(
+      UserEntity userEntity, String description);
+
+  Stream<QuerySnapshot> getAllUsers();
+
   void logOut();
 }

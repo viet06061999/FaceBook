@@ -3,25 +3,32 @@ import 'package:facebook_app/viewmodel/chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:facebook_app/routes/routes.dart';
+import 'package:facebook_app/data/model/user.dart';
+import 'package:facebook_app/view/chat/profile/profile_firend_compactv1.dart';
 
-class ProfilePage extends PageProvideNode<ChatProvide> {
+class ProfilePageFriendV1 extends PageProvideNode<ChatProvide> {
+  final UserEntity friend;
+  ProfilePageFriendV1(this.friend);
   @override
   Widget buildContent(BuildContext context) {
-    return ProfilePageTmp(mProvider);
+    return ProfilePageFriendV1Tmp(mProvider, friend);
   }
 }
-class ProfilePageTmp extends StatefulWidget {
+class ProfilePageFriendV1Tmp extends StatefulWidget {
+ final UserEntity friend;
   final ChatProvide provide;
-  const ProfilePageTmp(this.provide);
+  const ProfilePageFriendV1Tmp(this.provide, this.friend);
 
   @override
-  State<StatefulWidget> createState() => _ProfilePageState();
+  State<StatefulWidget> createState() => _ProfilePageFriendV1State(friend);
 }
 
 
-class _ProfilePageState extends State<ProfilePageTmp>
+class _ProfilePageFriendV1State extends State<ProfilePageFriendV1Tmp>
     with SingleTickerProviderStateMixin {
-  ChatProvide provide;
+  ChatProvide _provide;
+ final UserEntity friend;
+  _ProfilePageFriendV1State(this.friend);
   bool _isScroll = false;
   ScrollController _controller;
 
@@ -41,11 +48,12 @@ class _ProfilePageState extends State<ProfilePageTmp>
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
     super.initState();
-    provide = widget.provide;
+    _provide = widget.provide;
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: NotificationListener<OverscrollIndicatorNotification>(
         onNotification: (overscroll) {
@@ -69,7 +77,7 @@ class _ProfilePageState extends State<ProfilePageTmp>
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(80.0),
                             image: DecorationImage(
-                              image: NetworkImage(provide.userEntity.avatar),
+                              image: NetworkImage(friend.avatar),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -78,7 +86,7 @@ class _ProfilePageState extends State<ProfilePageTmp>
                       SizedBox(height: 10.0),
                       Center(
                         child: Text(
-                          provide.userEntity.firstName +" " +  provide.userEntity.lastName,
+                          friend.firstName +" "+ friend.lastName,
                           style: TextStyle(
                             fontSize: 22.0,
                             color: Colors.black,
@@ -89,12 +97,42 @@ class _ProfilePageState extends State<ProfilePageTmp>
                       SizedBox(
                         height: 10.0,
                       ),
-                      _buildSettingItem3('Chế độ bóng tối', '', false,FontAwesomeIcons.solidMoon,Icons.toggle_off,Colors.black),
-                      _buildSettingItem('Chuyển tài khoản', '', false,FontAwesomeIcons.users,Colors.purpleAccent,Colors.white),
+                      Row(
+                        // crossAxisAlignment: CrossAxisAlignment.center,
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        // alignment: Alignment.centerRight,
+                        children: <Widget>[
+
+                          SizedBox(width: 10.0),
+                          GestureDetector(
+                              onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProfilePageFriendCompactV1(friend),
+                                ),
+                              ),
+                            child: Center(
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 15.0, vertical: 10.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  // borderRadius: BorderRadius.circular(30.0)),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(Icons.toggle_off),
+                              ),
+
+                            )
+                          ),
+                        ],
+                      ),
+                      _buildSettingItem3('Chủ đề', '', false,FontAwesomeIcons.solidMoon,Icons.toggle_off,Colors.black),
+                      _buildSettingItem('Biểu tượng cảm xúc', '', false,FontAwesomeIcons.users,Colors.purpleAccent,Colors.white),
                       _buildSettingItem('Tin nhắn chờ', '', false,FontAwesomeIcons.facebookMessenger,Colors.lightBlueAccent,Colors.white),
                       _buildTitleSetting('Trang cá nhân'),
                       _buildSettingItem2('Trang thái hoạt động', 'Bật', false,FontAwesomeIcons.userMinus,Colors.lightGreenAccent.shade400),
-                      _buildSettingItem2('Tên người dùng', provide.userEntity.email, false,Icons.alternate_email,Colors.deepOrange),
+                      // _buildSettingItem2('Tên người dùng', provide.userEntity.email, false,FontAwesomeIcons.userSecret,Colors.deepOrange),
                       _buildTitleSetting('Tuỳ chọn'),
                       _buildSettingItem('Quyền riêng tư', '', false,FontAwesomeIcons.shieldAlt,Colors.lightBlueAccent,Colors.white),
                       _buildSettingItem('Âm thanh & thông báo', '', false,FontAwesomeIcons.bell,Colors.purpleAccent,Colors.white),
@@ -108,9 +146,9 @@ class _ProfilePageState extends State<ProfilePageTmp>
                       _buildSettingItem('Cập nhật ứng dụng', '', false,FontAwesomeIcons.mobile,Colors.deepPurple,Colors.white),
                       _buildTitleSetting('Tài khoản'),
                       _buildSettingItem('Cài đặt tài khoản', '', false,FontAwesomeIcons.cog,Colors.indigoAccent,Colors.white),
-                      _buildSettingItem('Báo cáo vấn đề kỹ thuật', '', false,Icons.warning_amber_sharp,Colors.deepOrangeAccent,Colors.white),
+                      _buildSettingItem('Báo cáo vấn đề kỹ thuật', '', false,FontAwesomeIcons.exclamation,Colors.deepOrangeAccent,Colors.white),
                       _buildSettingItem('Trợ giúp', '', false,FontAwesomeIcons.questionCircle,Colors.lightBlueAccent,Colors.white),
-                      _buildSettingItem('Pháp lý và chính sách', '', false,Icons.article_outlined,Colors.grey,Colors.white),
+                      _buildSettingItem('Pháp lý và chính sách', '', false,FontAwesomeIcons.scroll,Colors.grey,Colors.white),
                       SizedBox(height: 16.0)
                     ],
                   ),
@@ -157,7 +195,7 @@ class _ProfilePageState extends State<ProfilePageTmp>
               ),
               Container(
                 child: Text(
-                  'Profile',
+                  '',
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 20.0,
@@ -169,22 +207,16 @@ class _ProfilePageState extends State<ProfilePageTmp>
           Container(
             child: Row(
               children: <Widget>[
-                // Container(
-                //   padding: EdgeInsets.only(left: 20.0),
-                //   child: Icon(
-                //     FontAwesomeIcons.camera,
-                //     color: Colors.black,
-                //     size: 20.0,
-                //   ),
-                // ),
-                // Container(
-                //   padding: EdgeInsets.only(left: 20.0),
-                //   child: Icon(
-                //     FontAwesomeIcons.solidEdit,
-                //     color: Colors.black,
-                //     size: 20.0,
-                //   ),
-                // ),
+                Container(
+                  padding: EdgeInsets.only(left: 20.0),
+                  child: Icon(
+                    Icons.more_vert,
+
+                    color: Colors.black,
+                    size: 20.0,
+                  ),
+
+                ),
               ],
             ),
           )

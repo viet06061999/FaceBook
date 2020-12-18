@@ -52,7 +52,7 @@ final repoModule = Module([
   factory<PostRepository>(({params}) => PostRepositoryImpl(get(), get(), get())),
   factory<PhotoRepository>(({params}) => PhotoRepositoryImpl(get(), get())),
   factory<FriendRepository>(({params}) => FriendRepositoryImpl(get(), get())),
-  factory<ChatRepository>(({params}) => ChatRepositoryImpl(get())),
+  factory<ChatRepository>(({params}) => ChatRepositoryImpl(get(), get())),
   factory<NotificationRepository>(({params}) => NotificationRepositoryImpl(get())),
 ]);
 

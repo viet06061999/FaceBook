@@ -1,9 +1,13 @@
+import 'package:emoji_picker/emoji_picker.dart';
 import 'package:facebook_app/base/base.dart';
 import 'package:facebook_app/data/model/friend.dart';
+import 'package:facebook_app/data/model/user.dart';
+import 'package:facebook_app/view/chat/profile/profile_firendv1.dart';
 import 'package:facebook_app/viewmodel/chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:facebook_app/widgets/messenger_app_bar/app_bar_network_rounded_image.dart';
+import 'package:facebook_app/widgets/messenger_app_bar/AppBarNetworkRoundedImage2.dart';
 import 'package:facebook_app/widgets/messenger_app_bar_action/messenger_app_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
@@ -11,9 +15,11 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:io';
-
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_emoji/flutter_emoji.dart';
 class ChatDetail extends PageProvideNode<ChatProvide> {
-  final Friend friend;
+  final UserEntity friend;
 
   ChatDetail(this.friend);
 
@@ -22,13 +28,12 @@ class ChatDetail extends PageProvideNode<ChatProvide> {
     return ChatDetailTmp(mProvider, friend);
   }
 }
-
 class ChatDetailTmp extends StatefulWidget {
-  final Friend friend;
   final ChatProvide provide;
+  final UserEntity friend;
 
   ChatDetailTmp(this.provide, this.friend) {
-    provide.getChatDetail(friend: friend.userSecond);
+    provide.getChatDetail(friend: friend);
   }
 
   @override
@@ -37,27 +42,16 @@ class ChatDetailTmp extends StatefulWidget {
 
 class _ChatDetailState extends State<ChatDetailTmp>
     with SingleTickerProviderStateMixin {
+  String content = "";
+  var myController = TextEditingController();
+  String cont=" ";
+
   ChatProvide _provide;
-  Friend friend;
-  // ScrollController _controller;
-  // bool _isScroll = false;
-  // _scrollListener() {
-  //   if (_controller.offset > 0) {
-  //     this.setState(() {
-  //       _isScroll = true;
-  //     });
-  //   } else {
-  //     this.setState(() {
-  //       _isScroll = false;
-  //     });
-  //   }
-  // }
+  UserEntity friend;
   _ChatDetailState(this.friend);
 
   @override
   void initState() {
-    // _controller = ScrollController();
-    // _controller.addListener(_scrollListener);
     super.initState();
     _provide = widget.provide;
   }
@@ -71,88 +65,110 @@ class _ChatDetailState extends State<ChatDetailTmp>
           child: Column(
             children: <Widget>[
               buildAppBar(friend),
+              //_buildNewFriend(friend),
               Expanded(
                 child: ListView.builder(
-                  reverse: true,
-                  // shrinkWrap: true,
-                  // physics: NeverScrollableScrollPhysics(),
-                  itemCount: value.messages.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (value.messages[value.messages.length-index-1].from.id ==
-                        friend.userSecond.id) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0,
-                          vertical: 2.0,
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            AppBarNetworkRoundedImage(
-                              //value.getConservations(friend.userSecond);
-                                imageUrl: friend.userSecond.avatar),
-                            SizedBox(width: 15.0),
-                            Container(
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade200,
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              child: Text(
-                                value.messages[value.messages.length-index-1].message,
-                                style: TextStyle(fontSize: 16.0),
-                              ),
-                            )
-                          ],
-                        ),
-                      );
-                    } else {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0,
-                          vertical: 2.0,
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            SizedBox(width: 55.0),
-                            Container(
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade200,
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              child: Text(
-                                value.messages[value.messages.length-index-1].message,
-                                style: TextStyle(fontSize: 16.0),
-                              ),
-                            )
-                          ],
-                        ),
-                      );
-                    }
-                  },
+                        reverse: true,
+                          // shrinkWrap: true,
+                          // physics: NeverScrollableScrollPhysics(),
+                        itemCount: value.messages.length+1,
+                        itemBuilder: (BuildContext context, int index) {
+                          if(index==value.messages.length){
+                            return _buildNewFriend(friend);
+                          }
+                        else if (value.messages[value.messages.length-index-1].from.id ==
+                            friend.id) {
+                          return Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 2.0,
+                            ),
+                            child: Row(
+                              //crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                AppBarNetworkRoundedImage(
+                                  //value.getConservations(friend.userSecond);
+                                    imageUrl: friend.avatar),
+                                SizedBox(width: 15.0),
+                                Container(
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.all(8.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade200,
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                  child:  Linkify(
+                                    onOpen: (link) async {
+                                      if (await canLaunch(link.url)) {
+                                        await launch(link.url);
+                                      } else {
+                                        throw 'Could not launch $link';
+                                      }
+                                    },
+                                    text: getMyText(getText(value.messages[value.messages.length-index-1].message)),
+                                    //textAlign: TextAlign.left,
+                                    style: TextStyle(fontSize: 14.0),
+                                    linkStyle: TextStyle(color: Colors.black),
+                                  ),
+                                )
+                              ],
+                            ),
+                          );
+                        } else {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 2.0,
+                            ),
+                            child: Row(
+                              //crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                SizedBox(width: 55.0),
+                                Container(
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.all(8.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade200,
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                  child:
+                                  Linkify(
+                                    onOpen: (link) async {
+                                      if (await canLaunch(link.url)) {
+                                        await launch(link.url);
+                                      } else {
+                                        throw 'Could not launch $link';
+                                      }
+                                    },
+                                    text: getMyText(getText(value.messages[value.messages.length-index-1].message)),
+                                    //textAlign: TextAlign.left,
+                                    style: TextStyle(fontSize: 14.0),
+                                    linkStyle: TextStyle(color: Colors.black),
+                                  ),
+                                )
+                              ],
+                            ),
+                          );
+                        }
+                        },
                 ),
               ),
               _buildBottomChat(friend),
-            ],
-          ),
-        );
+              ],
+              ),
+              );
       },
     ));
   }
-
-  buildAppBar(Friend friend) {
+  buildAppBar(UserEntity friend) {
     return MessengerAppBarAction(
       isScroll: true,
       // isScroll: _isScroll,
       isBack: true,
-      title: friend.userSecond.firstName + " " + friend.userSecond.lastName,
-      imageUrl: friend.userSecond.avatar,
+      title: friend.firstName + " " + friend.lastName,
+      imageUrl: friend.avatar,
       subTitle: 'Không hoạt động',
       actions: <Widget>[
         Icon(
@@ -160,17 +176,26 @@ class _ChatDetailState extends State<ChatDetailTmp>
           color: Colors.lightBlue,
           size: 20.0,
         ),
-        Icon(
-          FontAwesomeIcons.infoCircle,
-          color: Colors.lightBlue,
-          size: 20.0,
+        InkWell(
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfilePageFriendV1(friend),
+            ),
+          ),
+          child:
+          Icon(
+            FontAwesomeIcons.infoCircle,
+            color: Colors.lightBlue,
+            size: 20.0,
+
+          ),
         ),
       ],
     );
   }
 
-  _buildBottomChat(Friend friend) {
-    var myController = TextEditingController();
+  _buildBottomChat(UserEntity friend) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -180,36 +205,50 @@ class _ChatDetailState extends State<ChatDetailTmp>
         children: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: Row(
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(
-                    FontAwesomeIcons.camera,
-                    size: 25.0,
-                    color: Colors.lightBlue,
-                  ),
-                  onPressed: () {},
-
-                ),
-                IconButton(
-                  icon: Icon(
-                    FontAwesomeIcons.image,
-                    size: 25.0,
-                    color: Colors.lightBlue,
-                  ),
-                  onPressed: () {
-                    loadAssets();
-                  },
-                )
-              ],
-
-
-
-            ),
+            // child: Row(
+            //   children: <Widget>[
+            //     IconButton(
+            //       icon: Icon(
+            //         FontAwesomeIcons.camera,
+            //         size: 25.0,
+            //         color: Colors.lightBlue,
+            //       ),
+            //       onPressed: () {},
+            //
+            //     ),
+            //     IconButton(
+            //       icon: Icon(
+            //         FontAwesomeIcons.image,
+            //         size: 25.0,
+            //         color: Colors.lightBlue,
+            //       ),
+            //       onPressed: () {
+            //         loadAssets();
+            //       },
+            //     )
+            //   ],
+            // ),
           ),
           Expanded(
             child: Container(
               child: TextField(
+                onChanged: (text) {
+                  setState(() {
+                    int n = myController.text.length;
+                    if(myController.text[n-1]==" "&&n>=2) {
+                      cont = myController.text;
+                      cont = getMyTextSpace(cont);
+                      if(myController.text!=cont){
+                        myController.text=cont;
+                        myController.selection = TextSelection.fromPosition(
+                          TextPosition(offset: myController.text.length),
+                        );
+                      }
+                    }
+                    content = text;
+                  });
+                },
+
                 controller: myController,
                 decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10.0),
@@ -240,15 +279,23 @@ class _ChatDetailState extends State<ChatDetailTmp>
             padding: EdgeInsets.symmetric(horizontal: 8.0),
             child: IconButton(
               onPressed: () {
-                Text mess = Text(myController.text);
-                if(mess.data != null && mess.data != "" ) {
-                  _provide.sendMessage(friend.userSecond,
-                      content: myController.text);
+                String mess = content;
+                if(mess != null && mess != "" ) {
+                  _provide.sendMessage(friend,
+                      content: content);
+                  myController.text="";
+                  content ="";
+                }
+                else {
+                  var parser = EmojiParser();
+                  mess = parser.emojify('I :heart: :coffee: :like:'); // returns: 'I ❤️ ☕'
+                  _provide.sendMessage(friend,
+                      content: "👍");
                 }
               },
               icon: Icon(
                 // FontAwesomeIcons.solidThumbsUp,
-                FontAwesomeIcons.paperPlane,
+                content.isEmpty ? FontAwesomeIcons.solidThumbsUp : FontAwesomeIcons.paperPlane,
                 size: 25.0,
                 color: Colors.lightBlue,
               ),
@@ -297,4 +344,209 @@ class _ChatDetailState extends State<ChatDetailTmp>
 //   });
 // }
 
+}
+
+String getMyTextSpace(String text) {
+  String s = text;
+  int n = s.length;
+  if(n>=3&&s[n-3]==":"&&s[n-2]=="(") {
+    if(n>=4) s = s.substring(0,n-3) + "😞 ";
+    else{
+      s = s.substring(0,n-3) + "😞 ";
+    }
+  } // icon fine
+  else if(n>=3&&s[n-3]==":"&&s[n-2]==")") {
+    if(n>=4) s = s.substring(0,n-3) + "🙂 ";
+    else{
+      s = s.substring(0,n-3) + "🙂 ";
+    }
+  }
+  else if(n>=3&&s[n-3]==":"&&s[n-2]=="D") {
+    if(n>=4)s = s.substring(0,n-3) + "😃 ";
+    else{
+      s = s.substring(0,n-3) + "😃 ";
+    }
+  }
+  else if(n>=3&&s[n-3]==":"&&s[n-2]=="P") {
+    if(n>=4)s = s.substring(0,n-3) + "😛 ";
+    else{
+      s = s.substring(0,n-3) + "😛 ";
+    }
+  }
+  else if(n>=3&&s[n-3]==":"&&s[n-2]=="O") {
+    if(n>=4)s = s.substring(0,n-3) + "😮 ";
+    else{
+      s = s.substring(0,n-3) + "😮 ";
+    }
+  }
+  else if(n>=3&&s[n-3]==":"&&s[n-2]=="/") {
+    if(n>=4)s = s.substring(0,n-3) + "😕 ";
+    else{
+      s = s.substring(0,n-3) + "😕 ";
+    }
+  }
+  else if(n>=3&&s[n-3]==":"&&s[n-2]=="*") {
+    if(n>=4)s = s.substring(0,n-3) + "😘 ";
+    else{
+      s = s.substring(0,n-3) + "😘 ";
+    }
+  }
+  else if(n>=3&&s[n-3]=="<"&&s[n-2]=="3") {
+    if(n>=4)s = s.substring(0,n-3) + "❤ ";
+    else{
+      s = s.substring(0,n-3) + "❤ ";
+    }
+  }
+  else if(n>=3&&s[n-3]=="="&&s[n-2]=="b"){
+    if(n>=4)s = s.substring(0,n-3) + "👍 ";
+    else{
+      s = s.substring(0,n-3) + "👍 ";
+    }
+  }
+  else if(n>=3&&s[n-3]==";"&&s[n-2]==")"){
+    if(n>=4)s = s.substring(0,n-3) + "😉 ";
+    else{
+      s = s.substring(0,n-3) + "😉 ";
+    }
+  }
+  else if(n>=7&&s[n-7]==":"&&s[n-6]=="p"&&s[n-5]=="o"&&s[n-4]=="o"&&s[n-3]=="p"&&s[n-2]==":"){
+    if(n>=8) s = s.substring(0,n-7) + "💩 ";
+    else{
+      s = s.substring(0,n-7) + "💩 ";
+    }
+  }
+  // code thêm thì làm theo form trên
+
+  return s;
+}
+
+String getMyText(String myController) {
+  String s = myController;
+  int n = s.length;
+  for(int i=0;i<n;i++){
+    // icon buồn
+    if(i<n-1&&s[i]==":"&&s[i+1]=="(") {
+      s = s.substring(0,i) + "😞"+ s.substring(i+2,n);
+      i++;
+    } // icon fine
+    else if(i<n-1&&s[i]==":"&&s[i+1]==")") {
+      s = s.substring(0,i) + "🙂"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-1&&s[i]==":"&&s[i+1]=="D") {
+      s = s.substring(0,i) + "😃"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-1&&s[i]==":"&&s[i+1]=="P") {
+      s = s.substring(0,i) + "😛"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-1&&s[i]==":"&&s[i+1]=="O") {
+      s = s.substring(0,i) + "😮"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-1&&s[i]==":"&&s[i+1]=="/") {
+      s = s.substring(0,i) + "😕"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-1&&s[i]==":"&&s[i+1]=="*") {
+      s = s.substring(0,i) + "😘"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-1&&s[i]=="<"&&s[i+1]=="3") {
+      s = s.substring(0,i) + "❤"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-1&&s[i]=="="&&s[i+1]=="b"){
+      s = s.substring(0,i) + "👍"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-1&&s[i]==";"&&s[i+1]==")"){
+      s = s.substring(0,i) + "😉"+ s.substring(i+2,n);
+      i++;
+    }
+    else if(i<n-5&&s[i]==":"&&s[i+1]=="p"&&s[i+2]=="o"&&s[i+3]=="o"&&s[i+4]=="p"&&s[i+5]==":"){
+      s = s.substring(0,i) + "💩"+ s.substring(i+6,n);
+      i++;
+    }
+    // code thêm thì làm theo form trên
+  }
+  return s;
+}
+
+
+
+_buildNewFriend(UserEntity friend) {
+  return Container(
+    padding: EdgeInsets.only(top: 100,bottom: 80),
+
+    child: Column(
+        children: <Widget>[
+          AppBarNetworkRoundedImage2(
+            imageUrl: friend.avatar,
+           ),
+          Container(
+            child: Text(
+              friend.firstName+" "+friend.lastName,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+          )
+          ]
+    ),
+  );
+}
+
+String getText(String message) {
+  int n = message.length;
+  int dem = 0;
+  for(int i = 0; i < n; i++) {
+    if (i == n - 1) {
+      dem++;
+    }
+    else {
+      int j = message.substring(i + 1, n).indexOf(" ");
+      if (j == -1) {
+        dem++;
+      }
+      else {
+        if (j >= 30) {
+          //xuong dong
+          message = message.substring(0, i + 30 - dem + 1) + "\n" +
+              message.substring(i + 30 - dem + 1, n);
+          dem = 0;
+          n += 1;
+          i += 30 - dem;
+        }
+        else if (j >= 30 - dem) {
+          if (message[i] == " ") {
+            message =
+                message.substring(0, i) + "\n" + message.substring(i + 1, n);
+            dem = 0;
+          }
+          else {
+            message = message.substring(0, i) + "\n" +
+                message.substring(i, n);
+            dem = 0;
+            i++;
+            n++;
+          }
+        }
+        else {
+          dem++;
+        }
+      }
+    }
+    // đủ độ dài 30
+    if (dem == 30) {
+      message = message.substring(0, i + 2) + "\n" + message.substring(i + 2, n);
+      n++;
+      i++;
+      dem = 0;
+    }
+  }
+  return message;
 }

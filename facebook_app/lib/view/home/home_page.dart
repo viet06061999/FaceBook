@@ -23,7 +23,9 @@ class HomePage extends PageProvideNode<HomeProvide> {
 class HomePageTmp extends StatefulWidget {
   final HomeProvide provide;
 
-  const HomePageTmp(this.provide);
+   HomePageTmp(this.provide){
+   provide.init();
+  }
 
   @override
   State<StatefulWidget> createState() => _HomePageState();

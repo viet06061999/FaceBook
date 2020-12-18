@@ -12,7 +12,7 @@ class UserRepositoryImpl implements UserRepository {
   final FirAuth _firAuth;
   final FirUploadPhoto firPhoto;
   final FirUserUpload firUserUpload;
-
+  static UserEntity currentUser;
   final UserLocalDatasource _localDatasource;
 
   UserRepositoryImpl(this._firAuth, this._localDatasource, this.firPhoto, this.firUserUpload);
@@ -42,6 +42,7 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<void> setCurrentUser(UserEntity userEntity) {
+    currentUser = userEntity;
     return _localDatasource.setCurrentUser(userEntity);
   }
 

@@ -1,5 +1,6 @@
 import 'package:facebook_app/data/model/post.dart';
 import 'package:facebook_app/view/profile_friend.dart';
+import 'package:facebook_app/viewmodel/friend_profile_view_model.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:facebook_app/viewmodel/profile_view_model.dart';
 import 'package:flutter/material.dart';
@@ -12,11 +13,11 @@ import 'comment_widget.dart';
 import 'black_background_image.dart';
 import 'post_detail.dart';
 
-class PostWidgetProfile extends StatelessWidget {
+class PostWidgetFriend extends StatelessWidget {
   final Post post;
-  final ProfileProvide provide;
+  final ProfileFriendProvide provide;
 
-  PostWidgetProfile({this.post, this.provide});
+  PostWidgetFriend({this.post, this.provide});
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +132,7 @@ class PostWidgetProfile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Consumer<ProfileProvide>(builder: (key, value, child) {
+                Consumer<ProfileFriendProvide>(builder: (key, value, child) {
                   return FlatButton(
                     onPressed: () => {value.updateLike(post)},
                     padding: EdgeInsets.all(10.0),

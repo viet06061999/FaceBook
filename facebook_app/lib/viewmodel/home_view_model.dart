@@ -120,6 +120,7 @@ class HomeProvide extends BaseProvide {
   init() {
     userRepository.getCurrentUser().then((value) {
       userEntity = value;
+      print('user Entity ${value.firstName}');
       _getListPost();
       getFriends(userEntity);
       getNotifications();

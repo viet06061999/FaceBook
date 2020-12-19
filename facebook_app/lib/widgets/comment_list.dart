@@ -1,4 +1,6 @@
+import 'package:facebook_app/data/repository/user_repository_impl.dart';
 import 'package:facebook_app/view/profile_friend.dart';
+import 'package:facebook_app/view/profile_me.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:facebook_app/data/model/comment.dart';
@@ -21,11 +23,22 @@ class CommentWidget extends StatelessWidget {
               children: <Widget>[
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProfileFriend(comment.user)),
-                    );
+                    if (comment.user.id ==
+                        UserRepositoryImpl.currentUser.id) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProfileMe()),
+                      );
+                    } else {
+                      int status = provide.checkStatusFriend(comment.user.id);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ProfileFriend(comment.user)),
+                      );
+                    }
                   },
                   child: CircleAvatar(
                     backgroundImage: NetworkImage(comment.user.avatar),
@@ -42,12 +55,21 @@ class CommentWidget extends StatelessWidget {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        ProfileFriend(comment.user)),
-                              );
+                              if (comment.user.id ==
+                                  UserRepositoryImpl.currentUser.id) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ProfileMe()),
+                                );
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ProfileFriend(comment.user)),
+                                );
+                              }
                             },
                             child: Text(
                                 comment.user.firstName +

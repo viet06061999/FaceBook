@@ -1,5 +1,7 @@
 import 'package:facebook_app/data/model/post.dart';
+import 'package:facebook_app/data/repository/user_repository_impl.dart';
 import 'package:facebook_app/view/profile_friend.dart';
+import 'package:facebook_app/view/profile_me.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -33,11 +35,19 @@ class PostWidget extends StatelessWidget {
               children: <Widget>[
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProfileFriend(post.owner)),
-                    );
+                    if (post.owner.id == UserRepositoryImpl.currentUser.id) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ProfileMe()),
+                      );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ProfileFriend(post.owner)),
+                      );
+                    }
                   },
                   child: CircleAvatar(
                     backgroundImage: NetworkImage(post.owner.avatar),
@@ -51,11 +61,21 @@ class PostWidget extends StatelessWidget {
                   children: <Widget>[
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProfileFriend(post.owner)),
-                        );
+                        if (post.owner.id ==
+                            UserRepositoryImpl.currentUser.id) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProfileMe()),
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ProfileFriend(post.owner)),
+                          );
+                        }
                       },
                       child: Text(
                           post.owner.firstName + ' ' + post.owner.lastName,
@@ -104,7 +124,7 @@ class PostWidget extends StatelessWidget {
                 Row(
                   children: <Widget>[
                     GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         showMaterialModalBottomSheet(
                           context: context,
                           backgroundColor: Colors.transparent,

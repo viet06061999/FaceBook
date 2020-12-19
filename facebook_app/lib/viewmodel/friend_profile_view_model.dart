@@ -25,6 +25,9 @@ class ProfileFriendProvide extends ProfileProvide {
   void initChild() {
     // print('init child');
     getFriends(userEntity);
+    // getNotFriends(userEntity);
+    getFriendsRequest(userEntity);
+    getFriendsWaitConfirm(userEntity);
     getUserListPost(userEntity.id);
     getUserPhotos(userEntity.id);
     getUserVideos(userEntity.id);

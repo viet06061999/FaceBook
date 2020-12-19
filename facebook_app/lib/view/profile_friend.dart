@@ -191,9 +191,9 @@ class _ProfileFriend extends State<ProfilePageTmp>
                               children: <Widget>[
                                 if (checkFriend())
                                   buildDestroyFriend(value)
-                                else if (checkWaitingFriend()) //frWaitingConfirm
+                                else if (checkWaitingFriend())  //tra loi ket ban
                                   buildReply(value)
-                                else if (checkRequestFriend())
+                                else if (checkRequestFriend()) //huy loi moi
                                   buildCancelRequest(value)
                                 else
                                   buildSendResquest(value),

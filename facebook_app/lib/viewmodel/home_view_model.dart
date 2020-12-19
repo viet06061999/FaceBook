@@ -340,7 +340,7 @@ class HomeProvide extends BaseProvide {
       friendRepository.getRequestedFriends(entity.id).listen((event) async {
         event.docChanges.forEach((element) async {
           DocumentReference documentReference =
-              element.doc.data()['second_user'];
+              element.doc.data()['first_user'];
           await documentReference.get().then((value) {
             UserEntity firstUser = UserEntity.fromJson(value.data());
             Friend friend =

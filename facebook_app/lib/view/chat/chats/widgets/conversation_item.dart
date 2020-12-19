@@ -8,45 +8,22 @@ import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/view/chat/chat_detail/chat_detailv3.dart';
 import 'package:facebook_app/data/model/conservation.dart';
 import 'package:intl/intl.dart';
+import 'package:facebook_app/data/repository/user_repository_impl.dart';
 
-class ConversationItem extends PageProvideNode<ChatProvide> {
-  final Conservation conservation;
-  ConversationItem(this.conservation);
-
-  @override
-  Widget buildContent(BuildContext context) {
-    return ConversationItemTmp(mProvider, conservation);
-  }
-}
-
-class ConversationItemTmp extends StatefulWidget {
+class ConversationItem extends StatelessWidget {
   final ChatProvide provide;
   final Conservation conservation;
-  ConversationItemTmp(this.provide, this.conservation){
-  }
-  @override
-  State<StatefulWidget> createState() => _ConversationItemState(conservation);
-}
 
-class _ConversationItemState extends State<ConversationItemTmp>
-    with SingleTickerProviderStateMixin{
-  ChatProvide _provide;
-  Conservation conservation;
-  _ConversationItemState(this.conservation);
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _provide = widget.provide;
-  }
+  const ConversationItem(this.provide, this.conservation);
+
   @override
   Widget build(BuildContext context) {
-    var friend = conservation.checkFriend(_provide.userEntity.id);
+    UserEntity friend = conservation.checkFriend(UserRepositoryImpl.currentUser.id);
     return InkWell(
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ChatDetailV3(conservation),
+          builder: (context) => ChatDetailV3(conservation, friend),
         ),
       ),
       child: Padding(
@@ -157,7 +134,7 @@ class _ConversationItemState extends State<ConversationItemTmp>
   }
 
   _buildTitleAndLatestMessage(Conservation conservation) {
-    var friend = conservation.checkFriend(_provide.userEntity.id);
+    var friend = conservation.checkFriend(provide.userEntity.id);
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.only(left: 12.0),
@@ -185,7 +162,9 @@ class _ConversationItemState extends State<ConversationItemTmp>
     return Text(
       userEntity.firstName + " " + userEntity.lastName,
       style: TextStyle(
-          fontSize: 14, color: Colors.grey.shade700, fontWeight: FontWeight.bold),
+          fontSize: 14,
+          color: Colors.grey.shade700,
+          fontWeight: FontWeight.bold),
     );
   }
 
@@ -193,7 +172,7 @@ class _ConversationItemState extends State<ConversationItemTmp>
     return Container(
       width: 150.0,
       child: Text(
-        getTextMess(conservation, _provide),
+        getTextMess(conservation, provide),
         //conservation.currentMessage.message,
         style: TextStyle(color: Colors.grey.shade700, fontSize: 14),
         overflow: TextOverflow.ellipsis,
@@ -202,8 +181,7 @@ class _ConversationItemState extends State<ConversationItemTmp>
   }
 
   _buildTimeOfLatestMessage(Conservation conservation) {
-    return Text(
-        getTimeMess(conservation.currentMessage.sendTime),
+    return Text(getTimeMess(conservation.currentMessage.sendTime),
         style: TextStyle(color: Colors.grey.shade700, fontSize: 11));
   }
 
@@ -224,23 +202,22 @@ class _ConversationItemState extends State<ConversationItemTmp>
 
 String getTextMess(Conservation conservation, ChatProvide provide) {
   var friend = conservation.checkFriend(provide.userEntity.id);
-  if(friend.id == conservation.currentMessage.to.id){
-    String a = "Bạn: "+ conservation.currentMessage.message;
+  if (friend.id == conservation.currentMessage.to.id) {
+    String a = "Bạn: " + conservation.currentMessage.message;
     int n = a.length;
-    if(n>20){
-      a = a.substring(0,17) + "...";
+    if (n > 20) {
+      a = a.substring(0, 17) + "...";
       return a;
-    }
-    else return a;
-  }
-  else {
+    } else
+      return a;
+  } else {
     String a = conservation.currentMessage.message;
     int n = a.length;
-    if(n>20){
-      a = a.substring(0,17) + "...";
+    if (n > 20) {
+      a = a.substring(0, 17) + "...";
       return a;
-    }
-    else return a;
+    } else
+      return a;
   }
 }
 
@@ -249,53 +226,55 @@ String getTimeMess(String sendTime) {
   var format = new DateFormat('yyyy-MM-dd');
 
   String now = DateFormat('yyyy-MM-dd').format(Now);
- // print("hôm nay là $now");
+  // print("hôm nay là $now");
 
   String past = format.parse(sendTime).toString();
   int n = past.length;
   int k = -1;
-  for(int j = 0; j<n;j++){
-    if(past[j]==" "){
-      k=j;
+  for (int j = 0; j < n; j++) {
+    if (past[j] == " ") {
+      k = j;
       break;
     }
   }
-  past = past.substring(0,k);
+  past = past.substring(0, k);
   String past2 = past;
- // print("hôm nay là 11 $past 1");
+  // print("hôm nay là 11 $past 1");
 
-  if(past==now){
+  if (past == now) {
     format = new DateFormat('yyyy-MM-dd HH:mm:ss');
     String s = format.parse(sendTime).toString();
     n = s.length;
     int k1 = -1, k2 = -1;
-    for(int j = 0; j < n; j++){
-      if(s[j]==" "){
+    for (int j = 0; j < n; j++) {
+      if (s[j] == " ") {
         k1 = j;
       }
-      if(s[j]==":"){
+      if (s[j] == ":") {
         k2 = j;
       }
     }
     //print("hôm nay là ssss $s");
     s = s.substring(0, k2);
-    s = s.substring(k1 , k2);
+    s = s.substring(k1, k2);
     //print("hôm nay là ssss $s");
     return s;
-
-  }
-  else{
+  } else {
     DateTime s = format.parse(sendTime);
     String a = DateFormat('E').format(s);
-    if(a== "Mon") return "T.2";
-    else if(a== "Tue") return "T.3";
-    else if(a== "Wed") return "T.4";
-    else if(a== "Thu") return "T.5";
-    else if(a== "Fri") return "T.6";
-    else if(a== "Sat") return "T.7";
-    else return "CN";
+    if (a == "Mon")
+      return "T.2";
+    else if (a == "Tue")
+      return "T.3";
+    else if (a == "Wed")
+      return "T.4";
+    else if (a == "Thu")
+      return "T.5";
+    else if (a == "Fri")
+      return "T.6";
+    else if (a == "Sat")
+      return "T.7";
+    else
+      return "CN";
   }
 }
-
-
-

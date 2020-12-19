@@ -19,9 +19,9 @@ class NotificationCommentPost extends NotificationPost {
   String getContent({String userId}) {
     if (others > 0) {
       if (userId == post.owner.id)
-        return "và $others đã bình luận bài viết của bạn";
+        return "và ${others.toInt()} người khác đã bình luận bài viết của bạn";
       else
-        return "và $others đã bình luận bài viết của bạn đang theo dõi";
+        return "và ${others.toInt()} người khác đã bình luận bài viết của bạn đang theo dõi";
     } else {
       if (userId == post.owner.id)
         return " đã bình luận bài viết của bạn";

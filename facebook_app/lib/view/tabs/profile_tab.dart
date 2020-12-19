@@ -258,7 +258,8 @@ class _ProfilePageState extends State<ProfilePageTmp>
                                           NetworkImage(value.userEntity.avatar),
                                       fit: BoxFit.cover,
                                     ),
-                                  )),
+                                  )
+                              ),
                             ),
                           ],
                         ),

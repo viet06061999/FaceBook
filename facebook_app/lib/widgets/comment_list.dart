@@ -4,6 +4,7 @@ import 'package:facebook_app/view/profile_me.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:facebook_app/data/model/comment.dart';
+import 'package:facebook_app/ultils/string_ext.dart';
 
 class CommentWidget extends StatelessWidget {
   final Comment comment;
@@ -92,7 +93,7 @@ class CommentWidget extends StatelessWidget {
                       Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
-                              child: Text(comment.comment,
+                              child: Text(comment.comment.getMyText(),
                                   style: TextStyle(fontSize: 15.0)))),
                     ],
                   ),

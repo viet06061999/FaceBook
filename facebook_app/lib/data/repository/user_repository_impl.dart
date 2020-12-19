@@ -12,10 +12,11 @@ class UserRepositoryImpl implements UserRepository {
   final FirAuth _firAuth;
   final FirUploadPhoto firPhoto;
   final FirUserUpload firUserUpload;
-  static UserEntity currentUser;
   final UserLocalDatasource _localDatasource;
+  static UserEntity currentUser ;
 
-  UserRepositoryImpl(this._firAuth, this._localDatasource, this.firPhoto, this.firUserUpload);
+  UserRepositoryImpl(
+      this._firAuth, this._localDatasource, this.firPhoto, this.firUserUpload);
 
   @override
   void signUp(
@@ -35,6 +36,7 @@ class UserRepositoryImpl implements UserRepository {
     if (isNetworkAvailable) {
       UserEntity entity = await _firAuth.curentUser();
       if (entity != null) setCurrentUser(entity);
+      currentUser = entity;
       return entity;
     }
     return Future.value(_localDatasource.getCurrentUserLocal());
@@ -78,7 +80,11 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Observable<void> updateDescriptionUser(UserEntity userEntity, String description) {
+  Observable<void> updateDescriptionUser(
+      UserEntity userEntity, String description) {
     _firAuth.updateDescriptionUser(userEntity, description);
   }
+
+  @override
+  Stream<QuerySnapshot> getAllUsers() => _firAuth.getAllUsers();
 }

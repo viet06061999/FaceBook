@@ -26,3 +26,4 @@ class NotificationsTab extends StatelessWidget {
     );
   }
 }
+

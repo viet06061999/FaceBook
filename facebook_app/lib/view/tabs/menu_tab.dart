@@ -44,12 +44,24 @@ class MenuTab extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                      provide.userEntity.firstName +
-                          " " +
-                          provide.userEntity.lastName,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 18.0)),
+                  Row(
+                    children: [
+                      Text(
+                          provide.userEntity.firstName +
+                              " " +
+                              provide.userEntity.lastName,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18.0)),
+                      SizedBox(
+                        width: 5.0,
+                      ),
+                      Icon(
+                        Icons.check_circle,
+                        size: 15,
+                        color: Colors.blueAccent,
+                      ),
+                    ],
+                  ),
                   SizedBox(height: 5.0),
                   Text(
                     'Xem trang cá nhân',

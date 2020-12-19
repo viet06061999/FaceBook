@@ -4,7 +4,10 @@ import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:facebook_app/widgets/photo_grid_offline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:video_player/video_player.dart';
 
 class CreatePostWidget extends StatefulWidget {
   final HomeProvide provide;
@@ -20,10 +23,29 @@ class CreatePostWidget extends StatefulWidget {
 class _CreatePostState extends State<CreatePostWidget> {
   String content = "";
   final HomeProvide provide;
+  VideoPlayerController _controller;
+  Future<void> _initializeVideoPlayerFuture;
+
+  File videoFile;
+
+  // VideoPlayerController _videoPlayerController;
+  // File _video;
+  // final picker = ImagePicker();
+  // _pickVideo() async {
+  //   final video = await picker.getVideo(source: ImageSource.gallery);
+  //   _video = File(video.path) ;
+  //   _videoPlayerController = VideoPlayerController.file(_video)..initialize().then((_) {
+  //     setState((){
+  //
+  //     });
+  //     _videoPlayerController.play();
+  //   });
+  // }
 
   _CreatePostState(this.provide);
 
   List<String> pathImages = [];
+  String pathVideo = null;
   List<Asset> images = List<Asset>();
 
   @override
@@ -60,7 +82,7 @@ class _CreatePostState extends State<CreatePostWidget> {
                 ),
                 TextButton(
                     onPressed: () {
-                      provide.uploadPost(content, pathImages: pathImages);
+                      provide.uploadPost(content, pathImages: pathImages, pathVideos: pathVideo);
                       Navigator.pop(context);
                     },
                     child: Text(
@@ -89,23 +111,45 @@ class _CreatePostState extends State<CreatePostWidget> {
           SizedBox(height: 10.0),
           buildImages(context),
           Divider(height: 30.0),
-          Container(
-            height: 40.0,
-            decoration: BoxDecoration(
-              color: Colors.lightBlueAccent.withOpacity(0.25),
-              borderRadius: BorderRadius.circular(5.0),
-            ),
-            child: Center(
-                child: GestureDetector(
-                    onTap: () {
-                      loadAssets();
-                    },
-                    child: Text('Tải ảnh lên',
-                        style: TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.0)))),
-          ),
+          GestureDetector(
+              onTap: () {
+                loadAssets();
+              },
+              child: Container(
+                  height: 20.0,
+                  width: 400.0,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.25),
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  child: Row(children: <Widget>[
+                    Icon(FontAwesomeIcons.images,
+                        size: 20.0, color: Colors.green),
+                    SizedBox(
+                      width: 10.0,
+                    ),
+                    Text('Tải ảnh lên', style: TextStyle(fontSize: 16.0)),
+                  ]))),
+          Divider(height: 30.0),
+          GestureDetector(
+              onTap: () {
+                getVideo();
+              },
+              child: Container(
+                  height: 20.0,
+                  width: 400.0,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.25),
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  child: Row(children: <Widget>[
+                    Icon(FontAwesomeIcons.video, size: 20.0, color: Colors.red),
+                    SizedBox(
+                      width: 10.0,
+                    ),
+                    Text('Tải video lên', style: TextStyle(fontSize: 16.0)),
+                  ]))),
+          Divider(height: 30.0),
         ],
       ),
     );
@@ -189,8 +233,8 @@ class _CreatePostState extends State<CreatePostWidget> {
         cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
         materialOptions: MaterialOptions(
           actionBarColor: "#abcdef",
-          actionBarTitle: "Example App",
-          allViewTitle: "All Photos",
+          actionBarTitle: "Chọn ảnh",
+          allViewTitle: "Tất cả ảnh",
           useDetailsView: false,
           selectCircleStrokeColor: "#000000",
         ),
@@ -198,7 +242,6 @@ class _CreatePostState extends State<CreatePostWidget> {
         for (int i = 0; i < value.length; i++) {
           FlutterAbsolutePath.getAbsolutePath(value[i].identifier)
               .then((value) => setState(() {
-                    print(value);
                     pathImages.add(value);
                   }));
         }
@@ -207,5 +250,20 @@ class _CreatePostState extends State<CreatePostWidget> {
       error = e.toString();
     }
     if (!mounted) return;
+  }
+
+  Future getVideo() async {
+    Future<File> _videoFile =
+        ImagePicker.pickVideo(source: ImageSource.gallery);
+    _videoFile.then((file) async {
+      print("path video======="+ file.path);
+      pathVideo = file.path;
+      setState(() {
+        videoFile = file;
+        _controller = VideoPlayerController.file(videoFile);
+        _initializeVideoPlayerFuture = _controller.initialize();
+        _controller.setLooping(true);
+      });
+    });
   }
 }

@@ -82,13 +82,14 @@ class _ListFriendState extends State<ListFriendTmp>
         actions: <Widget>[
           Row (
             children: <Widget>[
-              InkWell(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AccessCamera(),
-                  ),
-                ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AccessCamera()),
+                  );
+                },
                 child: Container(
                   margin: const EdgeInsets.only( right: 15.0),
                   width: 33.0,
@@ -103,13 +104,15 @@ class _ListFriendState extends State<ListFriendTmp>
                   ),
                 ),
               ),
-              InkWell(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => searchFriend(_provide),
-                  ),
-                ),
+
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => searchFriend(_provide)),
+                  );
+                },
                 child: Container(
                   width: 33.0,
                   height: 33.0,

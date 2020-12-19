@@ -9,7 +9,7 @@ import 'package:facebook_app/view/chat/chat_detail/chat_detailv3.dart';
 import 'package:facebook_app/data/model/conservation.dart';
 import 'package:intl/intl.dart';
 import 'package:facebook_app/data/repository/user_repository_impl.dart';
-
+import 'package:facebook_app/ultils/string_ext.dart';
 class ConversationItem extends StatelessWidget {
   final ChatProvide provide;
   final Conservation conservation;
@@ -172,7 +172,7 @@ class ConversationItem extends StatelessWidget {
     return Container(
       width: 150.0,
       child: Text(
-        getTextMess(conservation, provide),
+        getTextMess(conservation, provide).getMyText(),
         //conservation.currentMessage.message,
         style: TextStyle(color: Colors.grey.shade700, fontSize: 14),
         overflow: TextOverflow.ellipsis,

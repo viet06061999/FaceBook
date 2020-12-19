@@ -362,7 +362,7 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
   }
   _getvalue(ChatProvide value) {
     _provide=value;
-    return value.messages.length;
+    return value.messages.length + 1;
   }
 // Future<File> pickImage(ImageSource source) async{
 //   File testImage = await ImagePicker.pickImage(source: source);

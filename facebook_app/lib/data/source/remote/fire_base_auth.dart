@@ -79,6 +79,11 @@ class FirAuth {
     return userEntity;
   }
 
+  Stream<QuerySnapshot> getAllUsers() =>
+      FirebaseFirestore.instance
+          .collection('users')
+          .snapshots(includeMetadataChanges: true);
+
   _createUser(UserEntity user, String document, Function onSuccess) {
     var db = FirebaseFirestore.instance;
     db

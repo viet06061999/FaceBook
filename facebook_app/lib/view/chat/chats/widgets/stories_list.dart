@@ -71,7 +71,7 @@ class _StoryListItemState extends State<StoryListItem> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ChatDetail(friends),
+            builder: (context) => ChatDetail(friends.userSecond),
           ),
         );
       },
@@ -158,5 +158,5 @@ _notViewedStoryListItemTextStyle() {
 
 _viewedStoryListItemTextStyle() {
   return  TextStyle(fontSize: 9, color: Colors.black, fontWeight: FontWeight.bold, );
-    //TextStyle(fontSize: 8, color: Colors.grey);
+  //TextStyle(fontSize: 8, color: Colors.grey);
 }

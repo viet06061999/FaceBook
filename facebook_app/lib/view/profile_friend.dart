@@ -1,4 +1,5 @@
 import 'package:facebook_app/base/base.dart';
+import 'package:facebook_app/data/base_type/friend_status.dart';
 import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/viewmodel/friend_profile_view_model.dart';
 import 'package:facebook_app/viewmodel/profile_view_model.dart';
@@ -13,6 +14,7 @@ import 'package:image_picker/image_picker.dart';
 
 class ProfileFriend extends PageProvideNode<ProfileFriendProvide> {
   ProfileFriend(UserEntity entity) : super(params: [entity]);
+
   @override
   Widget buildContent(BuildContext context) {
     return ProfilePageTmp(mProvider);
@@ -21,9 +23,11 @@ class ProfileFriend extends PageProvideNode<ProfileFriendProvide> {
 
 class ProfilePageTmp extends StatefulWidget {
   final ProfileFriendProvide provide;
+
   ProfilePageTmp(this.provide) {
     provide.initChild();
   }
+
   @override
   State<StatefulWidget> createState() => _ProfileFriend();
 }
@@ -67,61 +71,17 @@ class _ProfileFriend extends State<ProfilePageTmp>
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          new GestureDetector(
-                            onTap: () {
-                              showModalBottomSheet(
-                                  context: context,
-                                  builder: (builder) {
-                                    return new Container(
-                                      // height: 350.0,
-                                      color: Color(0xFF737373),
-                                      child: new Container(
-                                          decoration: new BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  new BorderRadius.only(
-                                                      topLeft:
-                                                          const Radius.circular(
-                                                              10.0),
-                                                      topRight:
-                                                          const Radius.circular(
-                                                              10.0))),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: <Widget>[
-                                              _createTile(
-                                                  context,
-                                                  'Xem ảnh bìa',
-                                                  Icon(
-                                                    Icons.image,
-                                                    color: Colors.black,
-                                                  ),
-                                                  _action1),
-                                              _createTile(
-                                                  context,
-                                                  'Tải ảnh lên',
-                                                  Icon(
-                                                    Icons.upload_sharp,
-                                                    color: Colors.black,
-                                                  ),
-                                                  _changeCoverImage),
-                                            ],
-                                          )),
-                                    );
-                                  });
-                            },
-                            child: Container(
-                                width: MediaQuery.of(context).size.width - 30,
-                                height: 200.0,
-                                decoration: new BoxDecoration(
-                                    image: DecorationImage(
-                                        image: NetworkImage(
-                                            provide.userEntity.coverImage),
-                                        fit: BoxFit.cover),
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(10.0),
-                                        topRight: Radius.circular(10.0)))),
-                          )
+                          Container(
+                              width: MediaQuery.of(context).size.width - 30,
+                              height: 200.0,
+                              decoration: new BoxDecoration(
+                                  image: DecorationImage(
+                                      image: NetworkImage(
+                                          provide.userEntity.coverImage),
+                                      fit: BoxFit.cover),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10.0),
+                                      topRight: Radius.circular(10.0)))),
                         ],
                       ),
                     ]),
@@ -191,79 +151,165 @@ class _ProfileFriend extends State<ProfilePageTmp>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          Container(
-                            margin: const EdgeInsets.only(right: 6.0),
-                            height: 40.0,
-                            width: MediaQuery.of(context).size.width - 150,
-                            decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(5.0)),
-                            child: Center(
-                                child: GestureDetector(
-                              onTap: () {
-                                showModalBottomSheet(
-                                    context: context,
-                                    builder: (builder) {
-                                      return new Container(
-                                        // height: 350.0,
-                                        color: Color(0xFF737373),
-                                        child: new Container(
-                                            decoration: new BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius: new BorderRadius
-                                                        .only(
-                                                    topLeft:
-                                                        const Radius.circular(
-                                                            10.0),
-                                                    topRight:
-                                                        const Radius.circular(
-                                                            10.0))),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: <Widget>[
-                                                _createTile(
-                                                    context,
-                                                    'Đồng ý',
-                                                    Icon(
-                                                      Icons.check,
-                                                      color: Colors.black,
-                                                    ),
-                                                    _action1),
-                                                _createTile(
-                                                    context,
-                                                    'Từ chối',
-                                                    Icon(
-                                                      Icons.close,
-                                                      color: Colors.black,
-                                                    ),
-                                                    _changeCoverImage),
-                                              ],
-                                            )),
-                                      );
-                                    });
-                              },
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  Icon(
-                                    FontAwesomeIcons.userCheck,
-                                    color: Colors.white,
-                                    size: 22.0,
-                                  ),
-                                  Text('  Trả lời',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16.0)),
-                                ],
-                              ),
-                            )
-                                // child: Text('Trả lời',
-                                //     style: TextStyle(
-                                //         color: Colors.white,
-                                //         fontWeight: FontWeight.bold,
-                                //         fontSize: 16.0))
+                          //tra loi loi moi ket ban
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     showModalBottomSheet(
+                          //         context: context,
+                          //         builder: (builder) {
+                          //           return new Container(
+                          //             // height: 350.0,
+                          //             color: Color(0xFF737373),
+                          //             child: new Container(
+                          //                 decoration: new BoxDecoration(
+                          //                     color: Colors.white,
+                          //                     borderRadius:
+                          //                         new BorderRadius.only(
+                          //                             topLeft:
+                          //                                 const Radius.circular(
+                          //                                     10.0),
+                          //                             topRight:
+                          //                                 const Radius.circular(
+                          //                                     10.0))),
+                          //                 child: Column(
+                          //                   mainAxisSize: MainAxisSize.min,
+                          //                   children: <Widget>[
+                          //                     _createTile(
+                          //                         context,
+                          //                         'Đồng ý',
+                          //                         Icon(
+                          //                           Icons.check,
+                          //                           color: Colors.black,
+                          //                         ),
+                          //                         _action1),
+                          //                     _createTile(
+                          //                         context,
+                          //                         'Từ chối',
+                          //                         Icon(
+                          //                           Icons.close,
+                          //                           color: Colors.black,
+                          //                         ),
+                          //                         _action1),
+                          //                   ],
+                          //                 )),
+                          //           );
+                          //         });
+                          //   },
+                          //   child: Container(
+                          //     margin: const EdgeInsets.only(right: 6.0),
+                          //     height: 40.0,
+                          //     width: MediaQuery.of(context).size.width - 150,
+                          //     decoration: BoxDecoration(
+                          //         color: Colors.blue,
+                          //         borderRadius: BorderRadius.circular(5.0)),
+                          //     child: Center(
+                          //       child: Row(
+                          //         mainAxisSize: MainAxisSize.min,
+                          //         children: <Widget>[
+                          //           Icon(
+                          //             FontAwesomeIcons.userCheck,
+                          //             color: Colors.white,
+                          //             size: 22.0,
+                          //           ),
+                          //           Text('  Trả lời',
+                          //               style: TextStyle(
+                          //                   color: Colors.white,
+                          //                   fontWeight: FontWeight.bold,
+                          //                   fontSize: 16.0)),
+                          //         ],
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
+
+                          //gui loi moi
+                          // GestureDetector(
+                          //   onTap: () {},
+                          //   child: Container(
+                          //     margin: const EdgeInsets.only(right: 6.0),
+                          //     height: 40.0,
+                          //     width: MediaQuery.of(context).size.width - 150,
+                          //     decoration: BoxDecoration(
+                          //         color: Colors.blue,
+                          //         borderRadius: BorderRadius.circular(5.0)),
+                          //     child: Center(
+                          //       child: Row(
+                          //         mainAxisSize: MainAxisSize.min,
+                          //         children: <Widget>[
+                          //           Icon(
+                          //             FontAwesomeIcons.userPlus,
+                          //             color: Colors.white,
+                          //             size: 22.0,
+                          //           ),
+                          //           Text('  Gửi lời mời',
+                          //               style: TextStyle(
+                          //                   color: Colors.white,
+                          //                   fontWeight: FontWeight.bold,
+                          //                   fontSize: 16.0)),
+                          //         ],
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
+
+                          //huy loi moi ket ban
+                          // GestureDetector(
+                          //   onTap: () {},
+                          //   child: Container(
+                          //     margin: const EdgeInsets.only(right: 6.0),
+                          //     height: 40.0,
+                          //     width: MediaQuery.of(context).size.width - 150,
+                          //     decoration: BoxDecoration(
+                          //         color: Colors.blue,
+                          //         borderRadius: BorderRadius.circular(5.0)),
+                          //     child: Center(
+                          //       child: Row(
+                          //         mainAxisSize: MainAxisSize.min,
+                          //         children: <Widget>[
+                          //           Icon(
+                          //             FontAwesomeIcons.userMinus,
+                          //             color: Colors.white,
+                          //             size: 22.0,
+                          //           ),
+                          //           Text('  Hủy lời mời',
+                          //               style: TextStyle(
+                          //                   color: Colors.white,
+                          //                   fontWeight: FontWeight.bold,
+                          //                   fontSize: 16.0)),
+                          //         ],
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
+
+                          //huy ket ban
+                          GestureDetector(
+                            onTap: () {},
+                            child: Container(
+                              margin: const EdgeInsets.only(right: 6.0),
+                              height: 40.0,
+                              width: MediaQuery.of(context).size.width - 150,
+                              decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  borderRadius: BorderRadius.circular(5.0)),
+                              child: Center(
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Icon(
+                                      FontAwesomeIcons.userTimes,
+                                      color: Colors.white,
+                                      size: 22.0,
+                                    ),
+                                    Text('  Hủy kết bạn',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16.0)),
+                                  ],
                                 ),
+                              ),
+                            ),
                           ),
                           GestureDetector(
                               onTap: () {},
@@ -392,6 +438,7 @@ class _ProfileFriend extends State<ProfilePageTmp>
                           style: TextStyle(fontSize: 16.0, color: Colors.blue)),
                     ],
                   ),
+                // Future.delayed(const Duration(milliseconds: 10), checkFriend("123"))
                   FriendGrid(
                       friends: provide.friends,
                       onImageClicked: null,
@@ -455,17 +502,14 @@ class _ProfileFriend extends State<ProfilePageTmp>
     print('action 1');
   }
 
-  _changeAvatar() {
-    print('change avatar');
-    ImagePicker().getImage(source: ImageSource.gallery).then((path) {
-      provide.updateAvatar(path.path);
-    });
-  }
-
-  _changeCoverImage() {
-    print('change cover img');
-    ImagePicker().getImage(source: ImageSource.gallery).then((path) {
-      provide.updateCover(path.path);
-    });
+  bool checkFriend(String idThey) {
+    return provide.friends.firstWhere((element) {
+              return (element.userFirst.id == idThey ||
+                      element.userSecond.id == idThey) &&
+                  element.status == FriendStatus.accepted;
+            }, orElse: null) ==
+            null
+        ? false
+        : true;
   }
 }

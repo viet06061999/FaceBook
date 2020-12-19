@@ -268,7 +268,7 @@ var friendList = [
     name: "Wanda Upton",
     imageAvatarUrl:
         "assets/images/list_friend/8.jpg",
-    shortDescription: "Avon withdrawal",
+    shortDescription: "Avon withdrawal        ",
     isActive: true,
   )
 ];

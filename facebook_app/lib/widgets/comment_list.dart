@@ -1,6 +1,8 @@
+import 'package:facebook_app/view/profile_friend.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:facebook_app/data/model/comment.dart';
+import 'package:facebook_app/ultils/string_ext.dart';
 
 class CommentWidget extends StatelessWidget {
   final Comment comment;
@@ -17,9 +19,18 @@ class CommentWidget extends StatelessWidget {
             padding: EdgeInsets.all(5),
             child: Row(
               children: <Widget>[
-                CircleAvatar(
-                  backgroundImage: NetworkImage(comment.user.avatar),
-                  radius: 20.0,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProfileFriend(comment.user)),
+                    );
+                  },
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage(comment.user.avatar),
+                    radius: 20.0,
+                  ),
                 ),
                 SizedBox(width: 10.0),
                 Flexible(
@@ -29,9 +40,23 @@ class CommentWidget extends StatelessWidget {
                     children: <Widget>[
                       Row(
                         children: [
-                          Text(comment.user.firstName +' '+ comment.user.lastName,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 17.0)),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ProfileFriend(comment.user)),
+                              );
+                            },
+                            child: Text(
+                                comment.user.firstName +
+                                    ' ' +
+                                    comment.user.lastName,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 17.0)),
+                          ),
                           SizedBox(
                             width: 5.0,
                           ),
@@ -46,11 +71,8 @@ class CommentWidget extends StatelessWidget {
                       Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
-                              child: Text(
-                                  comment.comment, style: TextStyle(fontSize: 15.0)
-                              )
-                          )
-                      ),
+                              child: Text(comment.comment.getMyText(),
+                                  style: TextStyle(fontSize: 15.0)))),
                     ],
                   ),
                 ),
@@ -62,5 +84,4 @@ class CommentWidget extends StatelessWidget {
       ),
     );
   }
-
 }

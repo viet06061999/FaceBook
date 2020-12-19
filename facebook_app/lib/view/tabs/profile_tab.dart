@@ -1,8 +1,10 @@
 import 'package:facebook_app/viewmodel/profile_view_model.dart';
 import 'package:facebook_app/base/base.dart';
+import 'package:facebook_app/widgets/black_background_show_image.dart';
 import 'package:facebook_app/widgets/friend_grid.dart';
 import 'package:facebook_app/widgets/list_friend.dart';
 import 'package:facebook_app/widgets/post_widget.dart';
+import 'package:facebook_app/widgets/post_widget_profile.dart';
 import 'package:facebook_app/widgets/separator_widget.dart';
 import 'package:facebook_app/widgets/setting_profile.dart';
 import 'package:facebook_app/widgets/write_something_widget.dart';
@@ -19,7 +21,9 @@ class ProfileTab extends PageProvideNode<ProfileProvide> {
 
 class ProfilePageTmp extends StatefulWidget {
   final ProfileProvide provide;
-  ProfilePageTmp(this.provide);
+  ProfilePageTmp(this.provide){
+    provide.init();
+  }
 
   @override
   State<StatefulWidget> createState() => _ProfilePageState();
@@ -71,14 +75,21 @@ class _ProfilePageState extends State<ProfilePageTmp>
                                         child: Column(
                                           mainAxisSize: MainAxisSize.min,
                                           children: <Widget>[
-                                            _createTile(
-                                                context,
-                                                'Xem ảnh bìa',
-                                                Icon(
-                                                  Icons.image,
-                                                  color: Colors.black,
-                                                ),
-                                                _action1),
+                                            ListTile(
+                                              leading: Icon(
+                                                Icons.image,
+                                                color: Colors.black,
+                                              ),
+                                              title: Text('Xem ảnh bìa'),
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          BlackBackgroundShowImage(value.userEntity.coverImage)),
+                                                );
+                                              },
+                                            ),
                                             _createTile(
                                                 context,
                                                 'Tải ảnh lên',
@@ -131,14 +142,21 @@ class _ProfilePageState extends State<ProfilePageTmp>
                                               child: Column(
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: <Widget>[
-                                                  _createTile(
-                                                      context,
-                                                      'Xem ảnh bìa',
-                                                      Icon(
-                                                        Icons.image,
-                                                        color: Colors.black,
-                                                      ),
-                                                      _action1),
+                                                  ListTile(
+                                                    leading: Icon(
+                                                      Icons.image,
+                                                      color: Colors.black,
+                                                    ),
+                                                    title: Text('Xem ảnh bìa'),
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                BlackBackgroundShowImage(value.userEntity.coverImage)),
+                                                      );
+                                                    },
+                                                  ),
                                                   _createTile(
                                                       context,
                                                       'Tải ảnh lên',
@@ -197,14 +215,21 @@ class _ProfilePageState extends State<ProfilePageTmp>
                                             child: Column(
                                               mainAxisSize: MainAxisSize.min,
                                               children: <Widget>[
-                                                _createTile(
-                                                    context,
-                                                    'Xem ảnh đại diện',
-                                                    Icon(
-                                                      Icons.image,
-                                                      color: Colors.black,
-                                                    ),
-                                                    _action1),
+                                                ListTile(
+                                                  leading: Icon(
+                                                    Icons.image,
+                                                    color: Colors.black,
+                                                  ),
+                                                  title: Text('Xem ảnh đại diện'),
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              BlackBackgroundShowImage(value.userEntity.avatar)),
+                                                    );
+                                                  },
+                                                ),
                                                 _createTile(
                                                     context,
                                                     'Chọn ảnh đại diện',
@@ -264,14 +289,21 @@ class _ProfilePageState extends State<ProfilePageTmp>
                                                     mainAxisSize:
                                                         MainAxisSize.min,
                                                     children: <Widget>[
-                                                      _createTile(
-                                                          context,
-                                                          'Xem ảnh đại diện',
-                                                          Icon(
-                                                            Icons.image,
-                                                            color: Colors.black,
-                                                          ),
-                                                          _action1),
+                                                      ListTile(
+                                                        leading: Icon(
+                                                          Icons.image,
+                                                          color: Colors.black,
+                                                        ),
+                                                        title: Text('Xem ảnh đại diện'),
+                                                        onTap: () {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    BlackBackgroundShowImage(value.userEntity.avatar)),
+                                                          );
+                                                        },
+                                                      ),
                                                       _createTile(
                                                           context,
                                                           'Chọn ảnh đại diện',
@@ -498,7 +530,7 @@ class _ProfilePageState extends State<ProfilePageTmp>
               physics: NeverScrollableScrollPhysics(),
               itemCount: value.userListPost.length,
               itemBuilder: (context, index) {
-                return PostWidget(
+                return PostWidgetProfile(
                     post: value.userListPost[index], provide: value);
               }),
         ],

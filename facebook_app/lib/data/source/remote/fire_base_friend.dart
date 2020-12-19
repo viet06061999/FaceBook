@@ -23,12 +23,28 @@ class FirFriend {
         .catchError((error) => onError());
   }
 
+  deleteRequest(Friend friend, Function onError) {
+    _deleteRequest(friend.userFirst.id, friend.userSecond.id)
+        .catchError((error) => onError());
+    _deleteRequest(friend.userSecond.id, friend.userFirst.id)
+        .catchError((error) => onError());
+  }
+
   Stream<QuerySnapshot> getFriends(String id) {
     DocumentReference first = _firestore.doc('users/' + id);
     return _firestore
         .collection('friends')
         .where('first_user', isEqualTo: first)
         .where('status', isEqualTo: FriendStatus.accepted.index)
+        .snapshots(includeMetadataChanges: true);
+  }
+
+  Stream<QuerySnapshot> getNotFriends(String id) {
+    DocumentReference first = _firestore.doc('users/' + id);
+    return _firestore
+        .collection('friends')
+        .where('first_user', isEqualTo: first)
+        .where('status', isNotEqualTo: FriendStatus.accepted.index)
         .snapshots(includeMetadataChanges: true);
   }
 
@@ -79,6 +95,22 @@ class FirFriend {
         .update({
       'modified': DateTime.now().toString(),
       'status': FriendStatus.accepted.index
+    });
+  }
+
+  Future<void> _deleteRequest(String idUserFirst, String idUserSecond) async {
+    print('vao delete $idUserFirst $idUserSecond');
+    var ref = await _firestore
+        .collection("friends")
+        .doc(idUserFirst.xorString(idUserSecond))
+        .get();
+    print(ref.exists);
+    return _firestore
+        .collection("friends")
+        .doc(idUserFirst.xorString(idUserSecond))
+        .update({
+      'modified': DateTime.now().toString(),
+      'status': FriendStatus.none.index
     });
   }
 }

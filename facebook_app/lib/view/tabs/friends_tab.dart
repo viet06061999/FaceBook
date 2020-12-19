@@ -10,6 +10,8 @@ import 'package:facebook_app/widgets/list_friend.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../profile_friend.dart';
+
 class FriendsTab extends PageProvideNode<FriendProvide> {
   @override
   Widget buildContent(BuildContext context) {
@@ -115,63 +117,6 @@ class _FriendsPageState extends State<FriendsPageTmp>
                   itemBuilder: (context, index) {
                     return buildFriend(value.friendRequest[index]);
                   }),
-              // SizedBox(height: 25.0),
-              // Row(
-              //   children: <Widget>[
-              //     GestureDetector(
-              //       onTap: () {},
-              //       child: CircleAvatar(
-              //         backgroundImage: NetworkImage(provide.userEntity.avatar),
-              //         radius: 40.0,
-              //       ),
-              //     ),
-              //     SizedBox(width: 25.0),
-              //     Column(
-              //       mainAxisAlignment: MainAxisAlignment.center,
-              //       crossAxisAlignment: CrossAxisAlignment.start,
-              //       children: <Widget>[
-              //         GestureDetector(
-              //           onTap: () {},
-              //           child: Text(provide.userEntity.firstName,
-              //               style: TextStyle(
-              //                   fontSize: 16.0, fontWeight: FontWeight.bold)),
-              //         ),
-              //         SizedBox(height: 15.0),
-              //         Row(
-              //           children: <Widget>[
-              //             GestureDetector(
-              //               onTap: () {},
-              //               child: Container(
-              //                 padding: EdgeInsets.symmetric(
-              //                     horizontal: 25.0, vertical: 10.0),
-              //                 decoration: BoxDecoration(
-              //                     color: Colors.blue,
-              //                     borderRadius: BorderRadius.circular(5.0)),
-              //                 child: Text('Chấp nhận',
-              //                     style: TextStyle(
-              //                         color: Colors.white, fontSize: 15.0)),
-              //               ),
-              //             ),
-              //             SizedBox(width: 10.0),
-              //             GestureDetector(
-              //               onTap: () {},
-              //               child: Container(
-              //                 padding: EdgeInsets.symmetric(
-              //                     horizontal: 25.0, vertical: 10.0),
-              //                 decoration: BoxDecoration(
-              //                     color: Colors.grey[300],
-              //                     borderRadius: BorderRadius.circular(5.0)),
-              //                 child: Text('Xóa',
-              //                     style: TextStyle(
-              //                         color: Colors.black, fontSize: 15.0)),
-              //               ),
-              //             ),
-              //           ],
-              //         )
-              //       ],
-              //     )
-              //   ],
-              // ),
               Divider(height: 30.0),
               Text('Bạn có thể biết',
                   style:
@@ -280,7 +225,14 @@ class _FriendsPageState extends State<FriendsPageTmp>
       child: Row(
         children: <Widget>[
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ProfileFriend(friend.userSecond)),
+              );
+            },
             child: CircleAvatar(
               backgroundImage: NetworkImage(friend.userSecond.avatar),
               radius: 40.0,
@@ -292,7 +244,14 @@ class _FriendsPageState extends State<FriendsPageTmp>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            ProfileFriend(friend.userSecond)),
+                  );
+                },
                 child: Text(
                     friend.userSecond.firstName +
                         " " +
@@ -321,7 +280,9 @@ class _FriendsPageState extends State<FriendsPageTmp>
                   ),
                   SizedBox(width: 10.0),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      provide.deleteRequest(friend);
+                    },
                     child: Container(
                       padding: EdgeInsets.symmetric(
                           horizontal: 25.0, vertical: 10.0),

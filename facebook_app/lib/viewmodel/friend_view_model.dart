@@ -11,12 +11,12 @@ import 'package:facebook_app/data/repository/user_repository.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 
 class FriendProvide extends HomeProvide {
-  //Danh sách lời mời kết bạn chờ xác nhận (firstUser là người gửi lời mời kết bạn)
+  //Danh sách lời mời kết bạn chờ xác nhận (firstUser là người gửi lời mời kết bạn, currentUser gui)
   List<Friend> _friendWaitConfirm = [];
 
   List<Friend> get friendWaitConfirm => _friendWaitConfirm;
 
-  //Danh sách lời mời kết bạn đã gửi (firstUser là người gửi lời mời kết bạn)
+  //Danh sách lời mời kết bạn tới currentUser (firstUser là người gửi lời mời kết bạn)
   List<Friend> _friendRequest = [];
 
   List<Friend> get friendRequest => _friendRequest;
@@ -72,7 +72,7 @@ class FriendProvide extends HomeProvide {
       friendRepository.getRequestedFriends(entity.id).listen((event) async {
         event.docChanges.forEach((element) async {
           DocumentReference documentReference =
-              element.doc.data()['first_user'];
+              element.doc.data()['second_user'];
           await documentReference.get().then((value) {
             UserEntity firstUser = UserEntity.fromJson(value.data());
             Friend friend =
@@ -100,9 +100,24 @@ class FriendProvide extends HomeProvide {
         });
       }, onError: (e) => {print("xu ly fail o day")});
 
+  //tao fr
+  createRequest(UserEntity userEntity, String idSecondUser) {
+    print('create fr');
+    friendRepository.createRequestFriend(userEntity, idSecondUser, () {});
+    notifyListeners();
+  }
+
   //dong y ket ban
   acceptRequest(Friend friend) {
+    print('accrpt fr');
     friendRepository.acceptRequest(friend, () {});
+    notifyListeners();
+  }
+
+  //huy ket ban
+  deleteRequest(Friend friend) {
+    print('delete fr');
+    friendRepository.deleteRequest(friend, () {});
     notifyListeners();
   }
 }

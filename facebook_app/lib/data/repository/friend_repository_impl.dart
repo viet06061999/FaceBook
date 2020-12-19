@@ -14,6 +14,7 @@ class FriendRepositoryImpl extends FriendRepository {
 
   FriendRepositoryImpl(this._firFriend, this._firNotification);
 
+  //dong y ket ban
   @override
   acceptRequest(Friend friend, Function onError) {
     _firFriend.acceptRequest(friend, onError);
@@ -21,6 +22,14 @@ class FriendRepositoryImpl extends FriendRepository {
         friend.userSecond, friend.userFirst.id);
   }
 
+  //xoa ket ban
+  deleteRequest(Friend friend, Function onError) {
+    _firFriend.deleteRequest(friend, onError);
+    // _firNotification.createNotificationFriend(
+    //     friend.userSecond, friend.userFirst.id);
+  }
+
+  //tao ket ban
   @override
   createRequestFriend(
       UserEntity userFirst, String idUserSecond, Function onError) {
@@ -31,6 +40,10 @@ class FriendRepositoryImpl extends FriendRepository {
   @override
   Stream<QuerySnapshot> getFriends(String id) {
     return _firFriend.getFriends(id);
+  }
+
+  Stream<QuerySnapshot> getNotFriends(String id) {
+    return _firFriend.getNotFriends(id);
   }
 
   @override

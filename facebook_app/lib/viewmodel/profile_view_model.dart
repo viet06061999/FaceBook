@@ -30,6 +30,9 @@ class ProfileProvide extends HomeProvide {
     userRepository.getCurrentUser().then((value) {
       userEntity = value;
       getFriends(userEntity);
+      // getNotFriends(userEntity);
+      getFriendsRequest(userEntity);
+      getFriendsWaitConfirm(userEntity);
       getUserListPost(userEntity.id);
       getUserPhotos(userEntity.id);
       getUserVideos(userEntity.id);
@@ -40,9 +43,7 @@ class ProfileProvide extends HomeProvide {
       UserRepository userRepository, FriendRepository friendRepository,
       NotificationRepository notificationRepository)
       : super(repository, photoRepository, userRepository, friendRepository,
-      notificationRepository) {
-    init();
-  }
+      notificationRepository);
 
   getUserListPost(String userId) {
     _userListPost.clear();

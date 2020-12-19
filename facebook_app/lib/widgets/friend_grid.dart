@@ -1,7 +1,9 @@
 import 'dart:math';
 
 import 'package:facebook_app/data/model/friend.dart';
+import 'package:facebook_app/data/repository/user_repository_impl.dart';
 import 'package:facebook_app/view/profile_friend.dart';
+import 'package:facebook_app/view/profile_me.dart';
 import 'package:facebook_app/viewmodel/profile_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +17,9 @@ class FriendGrid extends StatefulWidget {
 
   FriendGrid(
       // {@required this.provide,
-          { @required this.friends,
+      {
+        // @required this.provide,
+        @required this.friends,
       @required this.onImageClicked,
       @required this.onExpandClicked,
       Key key})
@@ -95,13 +99,20 @@ class _FriendGridState extends State<FriendGrid> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           GestureDetector(
-            onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        ProfileFriend(friend.userSecond)),
-              );
+            onTap: () {
+              if (friend.userSecond.id == UserRepositoryImpl.currentUser.id) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfileMe()),
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ProfileFriend(friend.userSecond)),
+                );
+              }
             },
             child: Container(
               height: MediaQuery.of(context).size.width / 3 - 20,
@@ -114,8 +125,26 @@ class _FriendGridState extends State<FriendGrid> {
             ),
           ),
           SizedBox(height: 5.0),
-          Text(friend.userSecond.firstName + " " + friend.userSecond.lastName,
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold))
+          GestureDetector(
+            onTap: () {
+              if (friend.userSecond.id == UserRepositoryImpl.currentUser.id) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfileMe()),
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ProfileFriend(friend.userSecond)),
+                );
+              }
+            },
+            child: Text(
+                friend.userSecond.firstName + " " + friend.userSecond.lastName,
+                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
+          )
         ],
       ),
     );

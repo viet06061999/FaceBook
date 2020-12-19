@@ -2,7 +2,9 @@ import 'dart:ui';
 import 'dart:math';
 
 import 'package:facebook_app/data/model/friend.dart';
+import 'package:facebook_app/data/repository/user_repository_impl.dart';
 import 'package:facebook_app/view/profile_friend.dart';
+import 'package:facebook_app/view/profile_me.dart';
 import 'package:facebook_app/viewmodel/friend_view_model.dart';
 import 'package:facebook_app/viewmodel/profile_view_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,6 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ListUserFriend extends StatefulWidget {
+  // final ProfileProvide provide;
   final int maxFriends = 9999;
   final List<Friend> friends;
   final Function(int) onImageClicked;
@@ -19,6 +22,7 @@ class ListUserFriend extends StatefulWidget {
   // ListUserFriend(this.provide, this.friends, this.onImageClicked, this.onExpandClicked);
   ListUserFriend(
       {
+        // @required this.provide,
         @required this.friends,
       @required this.onImageClicked,
       @required this.onExpandClicked,
@@ -111,12 +115,19 @@ class _ListUserFriendState extends State<ListUserFriend> {
         children: <Widget>[
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        ProfileFriend(friend.userSecond)),
-              );
+              if (friend.userSecond.id == UserRepositoryImpl.currentUser.id) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfileMe()),
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ProfileFriend(friend.userSecond)),
+                );
+              }
             },
             child: Container(
               height: 60,
@@ -137,7 +148,21 @@ class _ListUserFriendState extends State<ListUserFriend> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      if (friend.userSecond.id == UserRepositoryImpl.currentUser.id) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ProfileMe()),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ProfileFriend(friend.userSecond)),
+                        );
+                      }
+                    },
                     child: Text(
                       friend.userSecond.firstName +
                           " " +

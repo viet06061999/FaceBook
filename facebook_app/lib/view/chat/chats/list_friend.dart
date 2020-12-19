@@ -133,6 +133,9 @@ class _ListFriendState extends State<ListFriendTmp>
   }
 
   _buildRootListView(ChatProvide value) {
+    value.conservations.forEach((element) {
+      print('conservation front ${element.currentMessage.from.lastName} ${element.currentMessage.to.lastName} ${element.currentMessage}');
+    });
     return Expanded(
       child: ListView.builder(
         padding: EdgeInsets.only(top: 10.0),
@@ -144,7 +147,8 @@ class _ListFriendState extends State<ListFriendTmp>
           } else if (index == 1) {
             return _buildStoriesList(value);
           } else {
-            return ConversationItem(value.conservations[index-2]);
+            print('item conservation index ${index} ${value.conservations[index-2].currentMessage.to.lastName}');
+            return ConversationItem(value, value.conservations[index-2]);
           }
         },
         itemCount: value.conservations.length + 2,

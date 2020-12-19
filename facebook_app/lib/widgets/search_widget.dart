@@ -7,8 +7,7 @@ class SearchScreen extends StatefulWidget {
 
 }
 
-class _SearchScreenState extends State<SearchScreen>
-{
+class _SearchScreenState extends State<SearchScreen> {
   Widget appBarTitle = new Text("Tìm kiếm", style: new TextStyle(color: Colors.white),);
   Icon actionIcon = new Icon(Icons.search, color: Colors.white,);
   final key = new GlobalKey<ScaffoldState>();

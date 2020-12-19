@@ -78,6 +78,9 @@ class HomeProvide extends BaseProvide {
   List<Friend> _friendsPending = [];
 
   List<Friend> get friendsPending => _friendsPending;
+  List<UserEntity> _users = [];
+
+  List<UserEntity> get users => _users;
 
   bool _isTop = true;
 
@@ -121,6 +124,7 @@ class HomeProvide extends BaseProvide {
     notifyListeners();
   }
 
+
   UserEntity get userEntity => _userEntity;
 
   set userEntity(UserEntity userEntity) {
@@ -129,7 +133,13 @@ class HomeProvide extends BaseProvide {
   }
 
   HomeProvide(this.repository, this.photoRepository, this.userRepository,
-      this.friendRepository, this.notificationRepository);
+      this.friendRepository, this.notificationRepository){
+    userRepository.getCurrentUser().then((value) {
+      userEntity = value;
+      getFriends(value);
+      getUsers();
+    });
+  }
 
   init() {
     userRepository.getCurrentUser().then((value) {
@@ -194,7 +204,15 @@ class HomeProvide extends BaseProvide {
       }, onError: (e) => {print("xu ly upload post fail o day")});
     }
   }
-
+  getUsers() {
+    _users.clear();
+    userRepository.getAllUsers().listen((event) async {
+      event.docChanges.forEach((element) async {
+        UserEntity entity = UserEntity.fromJson(element.doc.data());
+        _users.add(entity);
+      });
+    }, onError: (e) => {print("xu ly fail o day")});
+  }
   _getListPost() => repository.getListPost().listen((event) async {
         event.docChanges.forEach((element) async {
           DocumentReference documentReference = element.doc.data()['owner'];

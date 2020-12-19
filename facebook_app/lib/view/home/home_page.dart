@@ -1,6 +1,6 @@
 import 'package:facebook_app/base/base.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
-import 'package:facebook_app/widgets/search_widget.dart';
+import 'package:facebook_app/widgets/search_widget2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePageTmp>
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => SearchScreen()),
+                                      builder: (context) => searchFriend(_provide)),
                                 );
                               },
                               icon: Icon(Icons.search, color: Colors.black)),

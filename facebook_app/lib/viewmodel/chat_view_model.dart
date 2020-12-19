@@ -88,9 +88,7 @@ class ChatProvide extends BaseProvide {
   getConservations(UserEntity entity) {
     _conservations.clear();
     chatRepository.getConservations(userEntity.id).listen((event) async {
-      print('vao day roi nek');
       event.docChanges.forEach((element) async {
-        print('chay lan n');
         DocumentReference documentReferenceFrom =
         element.doc.data()['current_message']['from'];
         DocumentReference documentReferenceTo =
@@ -103,21 +101,27 @@ class ChatProvide extends BaseProvide {
             Conservation.fromMap(element.doc.data(), from, to);
             print(conservation.currentMessage.message);
             if (element.type == DocumentChangeType.added) {
+              print('add');
+              print('from ${conservation.currentMessage.from.lastName} mess ${conservation.currentMessage}');
               _conservations.insert(0, conservation);
               notifyListeners();
             } else if (element.type == DocumentChangeType.modified) {
               print('modified');
-              print('conservation ${conservation.currentMessage.from.lastName} ${conservation.currentMessage.to.lastName}');
+              print('conservation ${conservation.currentMessage.from.lastName} ${conservation.currentMessage.to.lastName} ${conservation.currentMessage}');
               var index = -1;
               index = _conservations.indexWhere(
                     (element) =>
                 (element.id == conservation.id) || element.id == '-1',
               );
+              print('index $index');
               if(index == -1) _conservations.insert(0, conservation);
               else {
                 _conservations.removeAt(index);
                 _conservations.insert(0, conservation);
               }
+              conservations.forEach((element) {
+                // print('conservation ${element.currentMessage.from.lastName} ${element.currentMessage.to.lastName} ${element.currentMessage}');
+              });
               notifyListeners();
             } else if (element.type == DocumentChangeType.removed) {
               _conservations
@@ -157,9 +161,7 @@ class ChatProvide extends BaseProvide {
         .doc(conservationId);
     var ref = await document.get();
     if (ref.exists) {
-      print('ton tai');
       chatRepository.getChat(conservationId).listen((event) async {
-        print('thay doi roi');
         _messages = (event.data()['messages'] as List)
             .map((e) => convertToMessage(e, userEntity, user))
             .toList();
@@ -167,7 +169,6 @@ class ChatProvide extends BaseProvide {
         notifyListeners();
       }, onError: (e) => {print("xu ly fail o day")});
     } else {
-      print('khong ton tai');
       FirebaseFirestore.instance
           .collection('conservations')
           .doc(conservationId)
@@ -183,7 +184,6 @@ class ChatProvide extends BaseProvide {
         _messages = (event.data()['messages'] as List)
             .map((e) => convertToMessage(e, userEntity, friend))
             .toList();
-        print(_messages.length);
         notifyListeners();
       }, onError: (e) => {print("xu ly fail o day")});
     }

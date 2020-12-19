@@ -129,7 +129,7 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
                               onTap: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ChatDetailV3(conservation),
+                                  builder: (context) => ChatDetailV3(conservation,friend),
                                 ),
                               ),
                               child: Center(

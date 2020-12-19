@@ -16,29 +16,31 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:facebook_app/view/chat/profile/profile_firend.dart';
+import 'package:facebook_app/ultils/string_ext.dart';
 
 class ChatDetailV3 extends PageProvideNode<ChatProvide> {
   final Conservation conservation;
-
-  ChatDetailV3(this.conservation);
+  final UserEntity friend;
+  ChatDetailV3(this.conservation,this.friend);
 
   @override
   Widget buildContent(BuildContext context) {
-    return ChatDetailV3Tmp(mProvider, conservation);
+    return ChatDetailV3Tmp(mProvider, conservation,friend);
   }
 }
 
 class ChatDetailV3Tmp extends StatefulWidget {
   final Conservation conservation;
   final ChatProvide provide;
+  final UserEntity friend;
 
-  ChatDetailV3Tmp(this.provide, this.conservation){
+  ChatDetailV3Tmp(this.provide, this.conservation,this.friend){
     provide.getChatDetail(conservation: conservation);
   }
 
 
   @override
-  State<StatefulWidget> createState() => _ChatDetailState(conservation);
+  State<StatefulWidget> createState() => _ChatDetailState(conservation,friend);
 }
 
 class _ChatDetailState extends State<ChatDetailV3Tmp>
@@ -46,9 +48,11 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
   String content = "";
   var myController = TextEditingController();
   String cont="";
+
   ChatProvide _provide;
-  final Conservation conservation;
-  _ChatDetailState(this.conservation);
+  Conservation conservation;
+  UserEntity friend;
+  _ChatDetailState(this.conservation,this.friend);
 
   @override
   void initState() {
@@ -58,7 +62,6 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
 
   @override
   Widget build(BuildContext context) {
-    var friend = conservation.checkFriend(_provide.userEntity.id);
     return Scaffold(body: Consumer<ChatProvide>(
       builder: (context, value, child) {
         return Container(
@@ -71,14 +74,14 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
                   reverse: true,
                   // shrinkWrap: true,
                   // physics: NeverScrollableScrollPhysics(),
-                  itemCount: value.messages.length+1,
+                  itemCount: _getvalue(value),
 
-                  itemBuilder: (BuildContext context, int index) {
+              itemBuilder: (BuildContext context, int index) {
                     if(index==value.messages.length){
                       return _buildNewFriend(friend);
                     }
                     else if (value.messages[value.messages.length-index-1].from.id ==
-                        friend.id) {
+                        friend.id){
                       return Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16.0,
@@ -106,7 +109,7 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
                                     throw 'Could not launch $link';
                                   }
                                 },
-                                text: getMyText(getText(value.messages[value.messages.length-index-1].message)),
+                                text: getText(value.messages[value.messages.length-index-1].message).getMyText(),
                               //  textAlign: TextAlign.left,
                                 style: TextStyle(fontSize: 14.0),
                                 linkStyle: TextStyle(color: Colors.black),
@@ -141,7 +144,7 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
                                     throw 'Could not launch $link';
                                   }
                                 },
-                                text: getMyText(getText(value.messages[value.messages.length-index-1].message)),
+                                text: getText(value.messages[value.messages.length-index-1].message).getMyText(),
                                 style: TextStyle(fontSize: 14.0),
                                 linkStyle: TextStyle(color: Colors.black),
                               ),
@@ -258,9 +261,9 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
                 onChanged: (text) {
                   setState(() {
                     int n = myController.text.length;
-                    if(myController.text[n-1]==" "&&n>=2) {
+                    if(n>=2&&myController.text[n-1]==" ") {
                       cont = myController.text;
-                      cont = getMyTextSpace(cont);
+                      cont = cont.getMyTextSpace();
                       if(myController.text!=cont){
                         myController.text=cont;
                         myController.selection = TextSelection.fromPosition(
@@ -268,8 +271,7 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
                         );
                       }
                     }
-                    content = text;
-                    content = text;
+                    content = myController.text;
                   });
                 },
                 controller: myController,
@@ -349,7 +351,6 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
           FlutterAbsolutePath.getAbsolutePath(value[i].identifier)
               .then((value) =>
               setState(() {
-                print(value);
                 // pathImages.add(value);
               }));
         }
@@ -359,6 +360,10 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
     }
     if (!mounted) return;
   }
+  _getvalue(ChatProvide value) {
+    _provide=value;
+    return value.messages.length;
+  }
 // Future<File> pickImage(ImageSource source) async{
 //   File testImage = await ImagePicker.pickImage(source: source);
 //   setState(() {
@@ -367,6 +372,7 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
 // }
 
 }
+
 
 String getText(String message) {
   int n = message.length;
@@ -417,131 +423,4 @@ String getText(String message) {
     }
   }
   return message;
-}
-String getMyText(String myController) {
-  String s = myController;
-  int n = s.length;
-  for(int i=0;i<n;i++){
-    // icon buồn
-    if(i<n-1&&s[i]==":"&&s[i+1]=="(") {
-      s = s.substring(0,i) + "😞"+ s.substring(i+2,n);
-      i++;
-    } // icon fine
-    else if(i<n-1&&s[i]==":"&&s[i+1]==")") {
-      s = s.substring(0,i) + "🙂"+ s.substring(i+2,n);
-      i++;
-    }
-    else if(i<n-1&&s[i]==":"&&s[i+1]=="D") {
-      s = s.substring(0,i) + "😃"+ s.substring(i+2,n);
-      i++;
-    }
-    else if(i<n-1&&s[i]==":"&&s[i+1]=="P") {
-      s = s.substring(0,i) + "😛"+ s.substring(i+2,n);
-      i++;
-    }
-    else if(i<n-1&&s[i]==":"&&s[i+1]=="O") {
-      s = s.substring(0,i) + "😮"+ s.substring(i+2,n);
-      i++;
-    }
-    else if(i<n-1&&s[i]==":"&&s[i+1]=="/") {
-      s = s.substring(0,i) + "😕"+ s.substring(i+2,n);
-      i++;
-    }
-    else if(i<n-1&&s[i]==":"&&s[i+1]=="*") {
-      s = s.substring(0,i) + "😘"+ s.substring(i+2,n);
-      i++;
-    }
-    else if(i<n-1&&s[i]=="<"&&s[i+1]=="3") {
-      s = s.substring(0,i) + "❤"+ s.substring(i+2,n);
-      i++;
-    }
-    else if(i<n-1&&s[i]=="="&&s[i+1]=="b"){
-      s = s.substring(0,i) + "👍"+ s.substring(i+2,n);
-      i++;
-    }
-    else if(i<n-1&&s[i]==";"&&s[i+1]==")"){
-      s = s.substring(0,i) + "😉"+ s.substring(i+2,n);
-      i++;
-    }
-    else if(i<n-5&&s[i]==":"&&s[i+1]=="p"&&s[i+2]=="o"&&s[i+3]=="o"&&s[i+4]=="p"&&s[i+5]==":"){
-      s = s.substring(0,i) + "💩"+ s.substring(i+6,n);
-      i++;
-    }
-    // code thêm thì làm theo form trên
-  }
-  return s;
-}
-
-String getMyTextSpace(String text) {
-  String s = text;
-  int n = s.length;
-  if(n>=3&&s[n-3]==":"&&s[n-2]=="(") {
-    if(n>=4) s = s.substring(0,n-3) + "😞 ";
-    else{
-      s = s.substring(0,n-3) + "😞 ";
-    }
-  } // icon fine
-  else if(n>=3&&s[n-3]==":"&&s[n-2]==")") {
-    if(n>=4) s = s.substring(0,n-3) + "🙂 ";
-    else{
-      s = s.substring(0,n-3) + "🙂 ";
-    }
-  }
-  else if(n>=3&&s[n-3]==":"&&s[n-2]=="D") {
-    if(n>=4)s = s.substring(0,n-3) + "😃 ";
-    else{
-      s = s.substring(0,n-3) + "😃 ";
-    }
-  }
-  else if(n>=3&&s[n-3]==":"&&s[n-2]=="P") {
-    if(n>=4)s = s.substring(0,n-3) + "😛 ";
-    else{
-      s = s.substring(0,n-3) + "😛 ";
-    }
-  }
-  else if(n>=3&&s[n-3]==":"&&s[n-2]=="O") {
-    if(n>=4)s = s.substring(0,n-3) + "😮 ";
-    else{
-      s = s.substring(0,n-3) + "😮 ";
-    }
-  }
-  else if(n>=3&&s[n-3]==":"&&s[n-2]=="/") {
-    if(n>=4)s = s.substring(0,n-3) + "😕 ";
-    else{
-      s = s.substring(0,n-3) + "😕 ";
-    }
-  }
-  else if(n>=3&&s[n-3]==":"&&s[n-2]=="*") {
-    if(n>=4)s = s.substring(0,n-3) + "😘 ";
-    else{
-      s = s.substring(0,n-3) + "😘 ";
-    }
-  }
-  else if(n>=3&&s[n-3]=="<"&&s[n-2]=="3") {
-    if(n>=4)s = s.substring(0,n-3) + "❤ ";
-    else{
-      s = s.substring(0,n-3) + "❤ ";
-    }
-  }
-  else if(n>=3&&s[n-3]=="="&&s[n-2]=="b"){
-    if(n>=4)s = s.substring(0,n-3) + "👍 ";
-    else{
-      s = s.substring(0,n-3) + "👍 ";
-    }
-  }
-  else if(n>=3&&s[n-3]==";"&&s[n-2]==")"){
-    if(n>=4)s = s.substring(0,n-3) + "😉 ";
-    else{
-      s = s.substring(0,n-3) + "😉 ";
-    }
-  }
-  else if(n>=7&&s[n-7]==":"&&s[n-6]=="p"&&s[n-5]=="o"&&s[n-4]=="o"&&s[n-3]=="p"&&s[n-2]==":"){
-    if(n>=8) s = s.substring(0,n-7) + "💩 ";
-    else{
-      s = s.substring(0,n-7) + "💩 ";
-    }
-  }
-  // code thêm thì làm theo form trên
-
-  return s;
 }

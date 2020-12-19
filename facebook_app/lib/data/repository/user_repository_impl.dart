@@ -45,7 +45,6 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<void> setCurrentUser(UserEntity userEntity) {
-    currentUser = userEntity;
     return _localDatasource.setCurrentUser(userEntity);
   }
 

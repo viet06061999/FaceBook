@@ -30,6 +30,9 @@ class ProfileProvide extends HomeProvide {
     userRepository.getCurrentUser().then((value) {
       userEntity = value;
       getFriends(userEntity);
+      // getNotFriends(userEntity);
+      getFriendsRequest(userEntity);
+      getFriendsWaitConfirm(userEntity);
       getUserListPost(userEntity.id);
       getUserPhotos(userEntity.id);
       getUserVideos(userEntity.id);

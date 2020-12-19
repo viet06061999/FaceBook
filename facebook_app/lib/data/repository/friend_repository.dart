@@ -8,7 +8,11 @@ abstract class FriendRepository {
 
   acceptRequest(Friend friend, Function onError);
 
+  deleteRequest(Friend friend, Function onError);
+
   Stream<QuerySnapshot> getFriends(String id);
+
+  Stream<QuerySnapshot> getNotFriends(String id);
 
   Stream<QuerySnapshot> getRequestFriends(String id);
 

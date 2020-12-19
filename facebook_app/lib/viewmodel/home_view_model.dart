@@ -61,6 +61,20 @@ class HomeProvide extends BaseProvide {
 
   List<Friend> get friends => _friends;
 
+  // List<Friend> _notFriends = [];
+  //
+  // List<Friend> get notFriends => _notFriends;
+
+  //Danh sách lời mời kết bạn chờ xác nhận (firstUser là người gửi lời mời kết bạn, currentUser gui)
+  List<Friend> _friendWaitConfirm = [];
+
+  List<Friend> get friendWaitConfirm => _friendWaitConfirm;
+
+  //Danh sách lời mời kết bạn tới currentUser (firstUser là người gửi lời mời kết bạn)
+  List<Friend> _friendRequest = [];
+
+  List<Friend> get friendRequest => _friendRequest;
+
   List<Friend> _friendsPending = [];
 
   List<Friend> get friendsPending => _friendsPending;
@@ -72,7 +86,7 @@ class HomeProvide extends BaseProvide {
   set isTop(bool isTop) {
     _isTop = isTop;
     if (_isTop) {
-      if(tmpPosts.length > 0){
+      if (tmpPosts.length > 0) {
         listPost.insertAll(0, tmpPosts);
         tmpPosts.clear();
         notifyListeners();
@@ -120,9 +134,12 @@ class HomeProvide extends BaseProvide {
   init() {
     userRepository.getCurrentUser().then((value) {
       userEntity = value;
-      print('user Entity ${value.firstName}');
+      // print('user Entity ${value.firstName}');
       _getListPost();
       getFriends(userEntity);
+      // getNotFriends(userEntity);
+      getFriendsRequest(userEntity);
+      getFriendsWaitConfirm(userEntity);
       getNotifications();
     });
   }
@@ -134,7 +151,7 @@ class HomeProvide extends BaseProvide {
 
   Future<void> uploadPost(String content,
       {List<String> pathImages, String pathVideos}) async {
-    print(pathImages);
+    // print(pathImages);
     Post post = Post("-1", content, DateTime.now().toString(),
         DateTime.now().toString(), [], [], [], Video.origin(), userEntity);
     if (pathImages != null && pathImages.isNotEmpty) {
@@ -143,7 +160,7 @@ class HomeProvide extends BaseProvide {
       pathImages.asMap().forEach((index, element) async {
         await photoRepository.uploadPhoto(userEntity.id, element, (urlPath) {
           loadingImage = false;
-          print(urlPath);
+          // print(urlPath);
           post.images.add(urlPath);
           if (index == pathImages.length - 1) {
             _createPost(post).listen((event) {
@@ -228,11 +245,11 @@ class HomeProvide extends BaseProvide {
           UserEntity second = UserEntity.fromJson(value.data());
           Friend friend = Friend.fromJson(element.doc.data(), entity, second);
           if (element.type == DocumentChangeType.added) {
-            print('add');
+            // print('add');
             _friends.insert(0, friend);
             print(_friends.length);
           } else if (element.type == DocumentChangeType.modified) {
-            print('modified');
+            // print('modified');
             int position = -1;
             position = _friends.indexWhere(
                 (element) => (element.userSecond == friend.userSecond));
@@ -252,6 +269,105 @@ class HomeProvide extends BaseProvide {
     }, onError: (e) => {print("xu ly fail o day")});
   }
 
+  // getNotFriends(UserEntity entity) {
+  //   print('not friend');
+  //   _notFriends.clear();
+  //   friendRepository.getNotFriends(entity.id).listen((event) async {
+  //     event.docChanges.forEach((element) async {
+  //       DocumentReference documentReference = element.doc.data()['second_user'];
+  //       await documentReference.get().then((value) {
+  //         UserEntity second = UserEntity.fromJson(value.data());
+  //         Friend friend = Friend.fromJson(element.doc.data(), entity, second);
+  //         if (element.type == DocumentChangeType.added) {
+  //           print('add');
+  //           _notFriends.insert(0, friend);
+  //           print(_notFriends.length);
+  //         } else if (element.type == DocumentChangeType.modified) {
+  //           // print('modified');
+  //           int position = -1;
+  //           position = _notFriends.indexWhere(
+  //                   (element) => (element.userSecond == friend.userSecond));
+  //           if (position != -1)
+  //             _notFriends[position] = friend;
+  //           else
+  //             _notFriends.insert(0, friend);
+  //         } else if (element.type == DocumentChangeType.removed) {
+  //           _notFriends.removeWhere(
+  //                   (element) => element.userSecond == friend.userSecond);
+  //         }
+  //       });
+  //       if (event.docChanges.length != 0) {
+  //         notifyListeners();
+  //       }
+  //     });
+  //   }, onError: (e) => {print("xu ly fail o day")});
+  // }
+
+  //lời mời kết bạn đã nhan
+  getFriendsRequest(UserEntity entity) =>
+      friendRepository.getRequestFriends(entity.id).listen((event) async {
+        event.docChanges.forEach((element) async {
+          DocumentReference documentReference =
+              element.doc.data()['second_user'];
+          await documentReference.get().then((value) {
+            UserEntity second = UserEntity.fromJson(value.data());
+            Friend friend = Friend.fromJson(element.doc.data(), entity, second);
+            if (element.type == DocumentChangeType.added) {
+              _friendRequest.insert(0, friend);
+            } else if (element.type == DocumentChangeType.modified) {
+              print('removed');
+              int position = -1;
+              position = _friendRequest.indexWhere(
+                  (element) => (element.userSecond == friend.userSecond));
+              if (position != -1)
+                _friendRequest[position] = friend;
+              else
+                _friendRequest.insert(0, friend);
+            } else if (element.type == DocumentChangeType.removed) {
+              print('removed');
+              _friendRequest.removeWhere(
+                  (element) => element.userFirst.id == friend.userFirst.id);
+            }
+          });
+          if (event.docChanges.length != 0) {
+            notifyListeners();
+          }
+        });
+      }, onError: (e) => {print("xu ly fail o day")});
+
+  //lời mời kết bạn đã gui
+  getFriendsWaitConfirm(UserEntity entity) =>
+      friendRepository.getRequestedFriends(entity.id).listen((event) async {
+        event.docChanges.forEach((element) async {
+          DocumentReference documentReference =
+              element.doc.data()['second_user'];
+          await documentReference.get().then((value) {
+            UserEntity firstUser = UserEntity.fromJson(value.data());
+            Friend friend =
+                Friend.fromJson(element.doc.data(), firstUser, entity);
+            if (element.type == DocumentChangeType.added) {
+              print('get fpending');
+              _friendWaitConfirm.insert(0, friend);
+            } else if (element.type == DocumentChangeType.modified) {
+              int position = -1;
+              position = _friendWaitConfirm.indexWhere(
+                  (element) => (element.userSecond == friend.userSecond));
+
+              if (position != -1)
+                _friendWaitConfirm[position] = friend;
+              else
+                _friendWaitConfirm.insert(0, friend);
+            } else if (element.type == DocumentChangeType.removed) {
+              _friendWaitConfirm.removeWhere(
+                  (element) => element.userSecond == friend.userSecond);
+            }
+          });
+          if (event.docChanges.length != 0) {
+            notifyListeners();
+          }
+        });
+      }, onError: (e) => {print("xu ly fail o day")});
+
   getNotifications() {
     print('get thong bao nay');
     notificationRepository.getNotifications(userEntity.id).listen(
@@ -261,7 +377,7 @@ class HomeProvide extends BaseProvide {
         DocumentReference documentReference = element.doc.data()['first_user'];
         await documentReference.get().then((value) async {
           UserEntity user = UserEntity.fromJson(value.data());
-          print(user.firstName);
+          // print(user.firstName);
           NotificationApp notification;
           var map = element.doc.data();
           NotificationType type =
@@ -351,19 +467,8 @@ class HomeProvide extends BaseProvide {
     }, onError: (e) => {print("xu ly fail o day")});
   }
 
-  bool checkFriend(String idThey) {
-    return _friends.firstWhere((element) {
-              return (element.userFirst.id == idThey ||
-                      element.userSecond.id == idThey) &&
-                  element.status == FriendStatus.accepted;
-            }, orElse: null) ==
-            null
-        ? false
-        : true;
-  }
-
   void updateLike(Post post) {
-    print(post.isLiked);
+    // print(post.isLiked);
     if (post.isLiked) {
       post.likes.removeWhere((element) => element.id == userEntity.id);
       repository.updateDisLikePost(post, userEntity);
@@ -409,9 +514,45 @@ class HomeProvide extends BaseProvide {
             orElse: () => null) !=
         null;
   }
-  //dong y ket ban
-  // acceptRequest(Friend friend) {
-  //   friendRepository.acceptRequest(friend, () {});
-  //   notifyListeners();
-  // }
+
+  bool checkFriend(String idSecond) {
+    Friend fr = friends.firstWhere((element) {
+      return (element.userSecond.id == idSecond);
+    }, orElse: () => null);
+    if (fr != null)
+      return true;
+    else
+      return false;
+  }
+
+  bool checkRequestFriend(String idSecond) {
+    Friend fr = friendRequest.firstWhere((element) {
+      return (element.userSecond.id == idSecond);
+    }, orElse: () => null);
+    if (fr != null)
+      return true;
+    else
+      return false;
+  }
+
+  bool checkWaitingFriend(String idSecond) {
+    Friend fr = friendWaitConfirm.firstWhere((element) {
+      return (element.userSecond.id == idSecond);
+    }, orElse: () => null);
+    if (fr != null)
+      return true;
+    else
+      return false;
+  }
+
+  int checkStatusFriend(String idSecond) {
+    if (checkFriend(idSecond))
+      return 1; //da la ban
+    else if (checkRequestFriend(idSecond))
+      return 2; //dang gui loi toi currentUser
+    else if (checkWaitingFriend(idSecond))
+      return 3; //currentUser gui loi moi
+    else
+      return 4; //ko la ban
+  }
 }

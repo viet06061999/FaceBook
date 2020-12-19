@@ -1,8 +1,11 @@
 import 'package:facebook_app/base/base.dart';
 import 'package:facebook_app/data/base_type/friend_status.dart';
+import 'package:facebook_app/data/model/friend.dart';
 import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/data/repository/user_repository_impl.dart';
+import 'package:facebook_app/data/source/local/user_local_data.dart';
 import 'package:facebook_app/viewmodel/friend_profile_view_model.dart';
+import 'package:facebook_app/viewmodel/friend_view_model.dart';
 import 'package:facebook_app/viewmodel/profile_view_model.dart';
 import 'package:facebook_app/widgets/black_background_show_image.dart';
 import 'package:facebook_app/widgets/friend_grid.dart';
@@ -11,6 +14,7 @@ import 'package:facebook_app/widgets/post_widget.dart';
 import 'package:facebook_app/widgets/post_widget_friend.dart';
 import 'package:facebook_app/widgets/separator_widget.dart';
 import 'package:facebook_app/widgets/setting_profile.dart';
+import 'package:facebook_app/widgets/setting_profile_friend.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -39,6 +43,9 @@ class ProfilePageTmp extends StatefulWidget {
 class _ProfileFriend extends State<ProfilePageTmp>
     with SingleTickerProviderStateMixin {
   ProfileProvide provide;
+  UserEntity currentUser = UserRepositoryImpl.currentUser;
+
+  _ProfileFriend();
 
   @override
   void initState() {
@@ -182,168 +189,14 @@ class _ProfileFriend extends State<ProfilePageTmp>
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
-                                //tra loi loi moi ket ban
-                                // GestureDetector(
-                                //   onTap: () {
-                                //     showModalBottomSheet(
-                                //         context: context,
-                                //         builder: (builder) {
-                                //           return new Container(
-                                //             // height: 350.0,
-                                //             color: Color(0xFF737373),
-                                //             child: new Container(
-                                //                 decoration: new BoxDecoration(
-                                //                     color: Colors.white,
-                                //                     borderRadius:
-                                //                         new BorderRadius.only(
-                                //                             topLeft:
-                                //                                 const Radius.circular(
-                                //                                     10.0),
-                                //                             topRight:
-                                //                                 const Radius.circular(
-                                //                                     10.0))),
-                                //                 child: Column(
-                                //                   mainAxisSize: MainAxisSize.min,
-                                //                   children: <Widget>[
-                                //                     _createTile(
-                                //                         context,
-                                //                         'Đồng ý',
-                                //                         Icon(
-                                //                           Icons.check,
-                                //                           color: Colors.black,
-                                //                         ),
-                                //                         _action1),
-                                //                     _createTile(
-                                //                         context,
-                                //                         'Từ chối',
-                                //                         Icon(
-                                //                           Icons.close,
-                                //                           color: Colors.black,
-                                //                         ),
-                                //                         _action1),
-                                //                   ],
-                                //                 )),
-                                //           );
-                                //         });
-                                //   },
-                                //   child: Container(
-                                //     margin: const EdgeInsets.only(right: 6.0),
-                                //     height: 40.0,
-                                //     width: MediaQuery.of(context).size.width - 150,
-                                //     decoration: BoxDecoration(
-                                //         color: Colors.blue,
-                                //         borderRadius: BorderRadius.circular(5.0)),
-                                //     child: Center(
-                                //       child: Row(
-                                //         mainAxisSize: MainAxisSize.min,
-                                //         children: <Widget>[
-                                //           Icon(
-                                //             FontAwesomeIcons.userCheck,
-                                //             color: Colors.white,
-                                //             size: 22.0,
-                                //           ),
-                                //           Text('  Trả lời',
-                                //               style: TextStyle(
-                                //                   color: Colors.white,
-                                //                   fontWeight: FontWeight.bold,
-                                //                   fontSize: 16.0)),
-                                //         ],
-                                //       ),
-                                //     ),
-                                //   ),
-                                // ),
-
-                                //gui loi moi
-                                // GestureDetector(
-                                //   onTap: () {},
-                                //   child: Container(
-                                //     margin: const EdgeInsets.only(right: 6.0),
-                                //     height: 40.0,
-                                //     width: MediaQuery.of(context).size.width - 150,
-                                //     decoration: BoxDecoration(
-                                //         color: Colors.blue,
-                                //         borderRadius: BorderRadius.circular(5.0)),
-                                //     child: Center(
-                                //       child: Row(
-                                //         mainAxisSize: MainAxisSize.min,
-                                //         children: <Widget>[
-                                //           Icon(
-                                //             FontAwesomeIcons.userPlus,
-                                //             color: Colors.white,
-                                //             size: 22.0,
-                                //           ),
-                                //           Text('  Gửi lời mời',
-                                //               style: TextStyle(
-                                //                   color: Colors.white,
-                                //                   fontWeight: FontWeight.bold,
-                                //                   fontSize: 16.0)),
-                                //         ],
-                                //       ),
-                                //     ),
-                                //   ),
-                                // ),
-
-                                //huy loi moi ket ban
-                                // GestureDetector(
-                                //   onTap: () {},
-                                //   child: Container(
-                                //     margin: const EdgeInsets.only(right: 6.0),
-                                //     height: 40.0,
-                                //     width: MediaQuery.of(context).size.width - 150,
-                                //     decoration: BoxDecoration(
-                                //         color: Colors.blue,
-                                //         borderRadius: BorderRadius.circular(5.0)),
-                                //     child: Center(
-                                //       child: Row(
-                                //         mainAxisSize: MainAxisSize.min,
-                                //         children: <Widget>[
-                                //           Icon(
-                                //             FontAwesomeIcons.userMinus,
-                                //             color: Colors.white,
-                                //             size: 22.0,
-                                //           ),
-                                //           Text('  Hủy lời mời',
-                                //               style: TextStyle(
-                                //                   color: Colors.white,
-                                //                   fontWeight: FontWeight.bold,
-                                //                   fontSize: 16.0)),
-                                //         ],
-                                //       ),
-                                //     ),
-                                //   ),
-                                // ),
-
-                                //huy ket ban
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: Container(
-                                    margin: const EdgeInsets.only(right: 6.0),
-                                    height: 40.0,
-                                    width:
-                                        MediaQuery.of(context).size.width - 150,
-                                    decoration: BoxDecoration(
-                                        color: Colors.blue,
-                                        borderRadius:
-                                            BorderRadius.circular(5.0)),
-                                    child: Center(
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          Icon(
-                                            FontAwesomeIcons.userTimes,
-                                            color: Colors.white,
-                                            size: 22.0,
-                                          ),
-                                          Text('  Hủy kết bạn',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16.0)),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                if (checkFriend())
+                                  buildDestroyFriend(value)
+                                else if (checkWaitingFriend()) //frWaitingConfirm
+                                  buildReply(value)
+                                else if (checkRequestFriend())
+                                  buildCancelRequest(value)
+                                else
+                                  buildSendResquest(value),
                                 GestureDetector(
                                     onTap: () {},
                                     child: Container(
@@ -363,7 +216,7 @@ class _ProfileFriend extends State<ProfilePageTmp>
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                SettingProfile(value)),
+                                                SettingProfileFriend(value)),
                                       );
                                     },
                                     child: Container(
@@ -428,29 +281,6 @@ class _ProfileFriend extends State<ProfilePageTmp>
                             Text('Xem thêm thông tin',
                                 style: TextStyle(fontSize: 16.0))
                           ],
-                        ),
-                        SizedBox(height: 15.0),
-                        Container(
-                          height: 40.0,
-                          decoration: BoxDecoration(
-                            color: Colors.lightBlueAccent.withOpacity(0.25),
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                          child: Center(
-                              child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              SettingProfile(value)),
-                                    );
-                                  },
-                                  child: Text('Chỉnh sửa trang cá nhân',
-                                      style: TextStyle(
-                                          color: Colors.blue,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16.0)))),
                         ),
                       ],
                     ),
@@ -553,14 +383,240 @@ class _ProfileFriend extends State<ProfilePageTmp>
     print('action 1');
   }
 
-  bool checkFriend(String idThey) {
-    return provide.friends.firstWhere((element) {
-              return (element.userFirst.id == idThey ||
-                      element.userSecond.id == idThey) &&
-                  element.status == FriendStatus.accepted;
-            }, orElse: null) ==
-            null
-        ? false
-        : true;
+  bool checkFriend() {
+    Friend fr = provide.friends.firstWhere((element) {
+      return (element.userSecond.id == currentUser.id);
+    }, orElse: () => null);
+    if (fr != null)
+      return true;
+    else
+      return false;
+  }
+
+  bool checkRequestFriend() {
+    Friend fr = provide.friendRequest.firstWhere((element) {
+      return (element.userSecond.id == currentUser.id);
+    }, orElse: () => null);
+    if (fr != null)
+      return true;
+    else
+      return false;
+  }
+
+  bool checkWaitingFriend() {
+    Friend fr = provide.friendWaitConfirm.firstWhere((element) {
+      return (element.userSecond.id == currentUser.id);
+    }, orElse: () => null);
+    if (fr != null)
+      return true;
+    else
+      return false;
+  }
+
+  //lay friend voi currentUser (da la ban be)
+  Friend getFriendWithCurrentUser() {
+    return provide.friends
+        .firstWhere((element) => element.userSecond.id == currentUser.id);
+  }
+
+  //lay friend voi currentUser (gui cho current)
+  Friend getFriendWithCurrentUser2() {
+    return provide.friendWaitConfirm
+        .firstWhere((element) => element.userSecond.id == currentUser.id);
+  }
+
+  //lay friend voi currentUser (current gui)
+  Friend getFriendWithCurrentUser3() {
+    return provide.friendRequest
+        .firstWhere((element) => element.userSecond.id == currentUser.id);
+  }
+
+  Widget buildFriendButton(ProfileFriendProvide value) {
+    if (checkFriend()) {
+      return buildDestroyFriend(value);
+    } else if (checkWaitingFriend()) {
+      //frWaitingConfirm
+      return buildReply(value);
+    } else if (checkRequestFriend()) {
+      return buildCancelRequest(value);
+    } else {
+      return buildSendResquest(value);
+    }
+  }
+
+  //huy ket ban
+  GestureDetector buildDestroyFriend(ProfileFriendProvide value) {
+    return GestureDetector(
+      onTap: () {
+        value.friendRepository.deleteRequest(getFriendWithCurrentUser(), () {});
+      },
+      child: Container(
+        margin: const EdgeInsets.only(right: 6.0),
+        height: 40.0,
+        width: MediaQuery.of(context).size.width - 150,
+        decoration: BoxDecoration(
+            color: Colors.blue, borderRadius: BorderRadius.circular(5.0)),
+        child: Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(
+                FontAwesomeIcons.userTimes,
+                color: Colors.white,
+                size: 22.0,
+              ),
+              Text('  Hủy kết bạn',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.0)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  //tra loi loi moi
+  GestureDetector buildReply(ProfileFriendProvide value) {
+    return GestureDetector(
+      onTap: () {
+        showModalBottomSheet(
+            context: context,
+            builder: (builder) {
+              return new Container(
+                // height: 350.0,
+                color: Color(0xFF737373),
+                child: new Container(
+                    decoration: new BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: new BorderRadius.only(
+                            topLeft: const Radius.circular(10.0),
+                            topRight: const Radius.circular(10.0))),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ListTile(
+                          leading: Icon(
+                            Icons.check,
+                            color: Colors.black,
+                          ),
+                          title: Text('Đồng ý'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            value.friendRepository.acceptRequest(
+                                getFriendWithCurrentUser2(), () {});
+                          },
+                        ),
+                        ListTile(
+                          leading: Icon(
+                            Icons.close,
+                            color: Colors.black,
+                          ),
+                          title: Text('Từ chối'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            value.friendRepository.deleteRequest(
+                                getFriendWithCurrentUser2(), () {});
+                          },
+                        ),
+                      ],
+                    )),
+              );
+            });
+      },
+      child: Container(
+        margin: const EdgeInsets.only(right: 6.0),
+        height: 40.0,
+        width: MediaQuery.of(context).size.width - 150,
+        decoration: BoxDecoration(
+            color: Colors.blue, borderRadius: BorderRadius.circular(5.0)),
+        child: Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(
+                FontAwesomeIcons.userCheck,
+                color: Colors.white,
+                size: 22.0,
+              ),
+              Text('  Trả lời',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.0)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  //huy loi moi
+  GestureDetector buildCancelRequest(ProfileFriendProvide value) {
+    return GestureDetector(
+      onTap: () {
+        value.friendRepository
+            .deleteRequest(getFriendWithCurrentUser3(), () {});
+      },
+      child: Container(
+        margin: const EdgeInsets.only(right: 6.0),
+        height: 40.0,
+        width: MediaQuery.of(context).size.width - 150,
+        decoration: BoxDecoration(
+            color: Colors.blue, borderRadius: BorderRadius.circular(5.0)),
+        child: Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(
+                FontAwesomeIcons.userMinus,
+                color: Colors.white,
+                size: 22.0,
+              ),
+              Text('  Hủy lời mời',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.0)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  //gui loi moi
+  GestureDetector buildSendResquest(ProfileFriendProvide value) {
+    return GestureDetector(
+      onTap: () {
+        value.friendRepository
+            .createRequestFriend(currentUser, value.userEntity.id, () {});
+      },
+      child: Container(
+        margin: const EdgeInsets.only(right: 6.0),
+        height: 40.0,
+        width: MediaQuery.of(context).size.width - 150,
+        decoration: BoxDecoration(
+            color: Colors.blue, borderRadius: BorderRadius.circular(5.0)),
+        child: Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(
+                FontAwesomeIcons.userPlus,
+                color: Colors.white,
+                size: 22.0,
+              ),
+              Text('  Gửi lời mời',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.0)),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

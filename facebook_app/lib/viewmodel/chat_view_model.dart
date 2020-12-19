@@ -12,6 +12,8 @@ import 'package:facebook_app/data/repository/user_repository.dart';
 import 'package:facebook_app/ultils/string_ext.dart';
 import 'package:facebook_app/ultils/string_ext.dart';
 
+import '../data/model/user.dart';
+
 class ChatProvide extends BaseProvide {
   final UserRepository userRepository;
   final FriendRepository friendRepository;
@@ -142,10 +144,13 @@ class ChatProvide extends BaseProvide {
       {Conservation conservation, UserEntity friend}) async {
     _messages.clear();
     String conservationId = '';
+    UserEntity user = UserEntity.origin();
     if (friend != null) {
       conservationId = userEntity.id.encryptDecrypt(friend.id);
+      user = friend;
     } else {
       conservationId = conservation.id;
+      user = conservation.checkFriend(userEntity.id);
     }
     var document = FirebaseFirestore.instance
         .collection('conservations')
@@ -156,7 +161,7 @@ class ChatProvide extends BaseProvide {
       chatRepository.getChat(conservationId).listen((event) async {
         print('thay doi roi');
         _messages = (event.data()['messages'] as List)
-            .map((e) => convertToMessage(e, userEntity, friend))
+            .map((e) => convertToMessage(e, userEntity, user))
             .toList();
         print(_messages.length);
         notifyListeners();
@@ -209,5 +214,4 @@ class ChatProvide extends BaseProvide {
       notifyListeners();
     }
   }
-
 }

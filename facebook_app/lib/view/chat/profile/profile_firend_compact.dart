@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:facebook_app/routes/routes.dart';
 import 'package:facebook_app/data/model/conservation.dart';
 import 'package:facebook_app/view/chat/chat_detail/chat_detailv3.dart';
+import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 
 class ProfilePageFriendCompact extends PageProvideNode<ChatProvide> {
   final Conservation conservation;
@@ -53,6 +54,7 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
 
   @override
   Widget build(BuildContext context) {
+    // height: MediaQuery.of(context).size.height * 0.9;
     var friend = conservation.checkFriend(_provide.userEntity.id);
     return Scaffold(
       body: NotificationListener<OverscrollIndicatorNotification>(
@@ -129,7 +131,7 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
                               onTap: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ChatDetailV3(conservation),
+                                  builder: (context) => ChatDetailV3(conservation,friend),
                                 ),
                               ),
                               child: Center(
@@ -231,8 +233,7 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
                 Container(
                   padding: EdgeInsets.only(left: 20.0),
                   child: Icon(
-                    Icons.more_vert,
-
+                    Icons.close,
                     color: Colors.black,
                     size: 20.0,
                   ),

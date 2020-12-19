@@ -120,7 +120,7 @@ class _ProfilePageFriendV1State extends State<ProfilePageFriendV1Tmp>
                                   // borderRadius: BorderRadius.circular(30.0)),
                                   shape: BoxShape.circle,
                                 ),
-                                child: Icon(Icons.toggle_off),
+                                child: Icon(Icons.person),
                               ),
 
                             )
@@ -129,26 +129,9 @@ class _ProfilePageFriendV1State extends State<ProfilePageFriendV1Tmp>
                       ),
                       _buildSettingItem3('Chủ đề', '', false,FontAwesomeIcons.solidMoon,Icons.toggle_off,Colors.black),
                       _buildSettingItem('Biểu tượng cảm xúc', '', false,FontAwesomeIcons.users,Colors.purpleAccent,Colors.white),
-                      _buildSettingItem('Tin nhắn chờ', '', false,FontAwesomeIcons.facebookMessenger,Colors.lightBlueAccent,Colors.white),
+                      _buildSettingItem('Biệt danh', '', false, FontAwesomeIcons.facebookMessenger,Colors.lightBlueAccent,Colors.white),
                       _buildTitleSetting('Trang cá nhân'),
                       _buildSettingItem2('Trang thái hoạt động', 'Bật', false,FontAwesomeIcons.userMinus,Colors.lightGreenAccent.shade400),
-                      // _buildSettingItem2('Tên người dùng', provide.userEntity.email, false,FontAwesomeIcons.userSecret,Colors.deepOrange),
-                      _buildTitleSetting('Tuỳ chọn'),
-                      _buildSettingItem('Quyền riêng tư', '', false,FontAwesomeIcons.shieldAlt,Colors.lightBlueAccent,Colors.white),
-                      _buildSettingItem('Âm thanh & thông báo', '', false,FontAwesomeIcons.bell,Colors.purpleAccent,Colors.white),
-                      _buildSettingItem('Trình tiết kiệm dữ liệu', '', false,FontAwesomeIcons.shieldVirus,Colors.deepPurple,Colors.white),
-                      _buildSettingItem('Tin', '', false,FontAwesomeIcons.video,Colors.indigoAccent,Colors.white),
-                      _buildSettingItem('SMS', '', false,FontAwesomeIcons.comment,Colors.purpleAccent,Colors.white),
-                      _buildSettingItem('Danh bạ thư điện thoại', '', false,FontAwesomeIcons.userFriends,Colors.lightBlueAccent,Colors.white),
-                      _buildSettingItem('Ảnh & phương tiện', '', false,FontAwesomeIcons.image,Colors.purpleAccent,Colors.white),
-                      _buildSettingItem3('Bong bóng chat', '', false,FontAwesomeIcons.comments,Icons.toggle_off,
-                          Colors.lightGreenAccent),
-                      _buildSettingItem('Cập nhật ứng dụng', '', false,FontAwesomeIcons.mobile,Colors.deepPurple,Colors.white),
-                      _buildTitleSetting('Tài khoản'),
-                      _buildSettingItem('Cài đặt tài khoản', '', false,FontAwesomeIcons.cog,Colors.indigoAccent,Colors.white),
-                      _buildSettingItem('Báo cáo vấn đề kỹ thuật', '', false,FontAwesomeIcons.exclamation,Colors.deepOrangeAccent,Colors.white),
-                      _buildSettingItem('Trợ giúp', '', false,FontAwesomeIcons.questionCircle,Colors.lightBlueAccent,Colors.white),
-                      _buildSettingItem('Pháp lý và chính sách', '', false,FontAwesomeIcons.scroll,Colors.grey,Colors.white),
                       SizedBox(height: 16.0)
                     ],
                   ),
@@ -419,10 +402,6 @@ _buildSettingItem3(title, subtitle, isBorderBottom, icon1, icon2,color1) {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(80.0),
                 color: color1,
-                // image: DecorationImage(
-                //   image: NetworkImage(provide.userEntity.avatar),
-                //   fit: BoxFit.cover,
-                // ),
               ),
               child: Icon(
                 icon1,

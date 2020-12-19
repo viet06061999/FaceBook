@@ -139,7 +139,7 @@ class _ProfilePageFriendCompactV1State extends State<ProfilePageFriendCompactV1T
                                     // borderRadius: BorderRadius.circular(30.0)),
                                     shape: BoxShape.circle,
                                   ),
-                                  child: Icon(Icons.toggle_off),
+                                  child: Icon(Icons.person),
                                 ),
 
                               )

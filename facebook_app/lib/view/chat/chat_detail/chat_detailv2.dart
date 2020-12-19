@@ -18,6 +18,8 @@ import 'dart:io';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
+import 'package:facebook_app/ultils/string_ext.dart';
+
 class ChatDetail extends PageProvideNode<ChatProvide> {
   final UserEntity friend;
 
@@ -58,6 +60,8 @@ class _ChatDetailState extends State<ChatDetailTmp>
 
   @override
   Widget build(BuildContext context) {
+    File imageFile;
+
     return Scaffold(body: Consumer<ChatProvide>(
       builder: (context, value, child) {
         return Container(
@@ -65,11 +69,11 @@ class _ChatDetailState extends State<ChatDetailTmp>
           child: Column(
             children: <Widget>[
               buildAppBar(friend),
-              //_buildNewFriend(friend),
+             //_buildNewFriend(friend),
               Expanded(
-                child: ListView.builder(
-                        reverse: true,
-                          // shrinkWrap: true,
+                 child: ListView.builder(
+                  reverse: true,
+                   // shrinkWrap: true,
                           // physics: NeverScrollableScrollPhysics(),
                         itemCount: value.messages.length+1,
                         itemBuilder: (BuildContext context, int index) {
@@ -106,7 +110,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
                                         throw 'Could not launch $link';
                                       }
                                     },
-                                    text: getMyText(getText(value.messages[value.messages.length-index-1].message)),
+                                    text:getText(value.messages[value.messages.length-index-1].message).getMyText(),
                                     //textAlign: TextAlign.left,
                                     style: TextStyle(fontSize: 14.0),
                                     linkStyle: TextStyle(color: Colors.black),
@@ -142,7 +146,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
                                         throw 'Could not launch $link';
                                       }
                                     },
-                                    text: getMyText(getText(value.messages[value.messages.length-index-1].message)),
+                                    text: getText(value.messages[value.messages.length-index-1].message).getMyText(),
                                     //textAlign: TextAlign.left,
                                     style: TextStyle(fontSize: 14.0),
                                     linkStyle: TextStyle(color: Colors.black),
@@ -165,7 +169,6 @@ class _ChatDetailState extends State<ChatDetailTmp>
   buildAppBar(UserEntity friend) {
     return MessengerAppBarAction(
       isScroll: true,
-      // isScroll: _isScroll,
       isBack: true,
       title: friend.firstName + " " + friend.lastName,
       imageUrl: friend.avatar,
@@ -205,29 +208,32 @@ class _ChatDetailState extends State<ChatDetailTmp>
         children: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8.0),
-            // child: Row(
-            //   children: <Widget>[
-            //     IconButton(
-            //       icon: Icon(
-            //         FontAwesomeIcons.camera,
-            //         size: 25.0,
-            //         color: Colors.lightBlue,
-            //       ),
-            //       onPressed: () {},
-            //
-            //     ),
-            //     IconButton(
-            //       icon: Icon(
-            //         FontAwesomeIcons.image,
-            //         size: 25.0,
-            //         color: Colors.lightBlue,
-            //       ),
-            //       onPressed: () {
-            //         loadAssets();
-            //       },
-            //     )
-            //   ],
-            // ),
+            child: Row(
+              children: <Widget>[
+                // IconButton(
+                //   icon: Icon(
+                //     FontAwesomeIcons.camera,
+                //     size: 25.0,
+                //     color: Colors.lightBlue,
+                //   ),
+                //   onPressed: () {
+                //     // _showDialog(context);
+                //     _openCamera(context);
+                //   },
+                //
+                // ),
+                // IconButton(
+                //   icon: Icon(
+                //     FontAwesomeIcons.image,
+                //     size: 25.0,
+                //     color: Colors.lightBlue,
+                //   ),
+                //   onPressed: () {
+                //     loadAssets();
+                //   },
+                // )
+              ],
+            ),
           ),
           Expanded(
             child: Container(
@@ -235,9 +241,9 @@ class _ChatDetailState extends State<ChatDetailTmp>
                 onChanged: (text) {
                   setState(() {
                     int n = myController.text.length;
-                    if(myController.text[n-1]==" "&&n>=2) {
+                    if(n>=2&&myController.text[n-1]==" ") {
                       cont = myController.text;
-                      cont = getMyTextSpace(cont);
+                      cont = cont.getMyTextSpace();
                       if(myController.text!=cont){
                         myController.text=cont;
                         myController.selection = TextSelection.fromPosition(
@@ -245,7 +251,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
                         );
                       }
                     }
-                    content = text;
+                    content = myController.text;
                   });
                 },
 
@@ -295,7 +301,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
               },
               icon: Icon(
                 // FontAwesomeIcons.solidThumbsUp,
-                content.isEmpty ? FontAwesomeIcons.solidThumbsUp : FontAwesomeIcons.paperPlane,
+                (content.isEmpty||content==null||content=="") ? FontAwesomeIcons.solidThumbsUp : FontAwesomeIcons.paperPlane,
                 size: 25.0,
                 color: Colors.lightBlue,
               ),
@@ -345,136 +351,6 @@ class _ChatDetailState extends State<ChatDetailTmp>
 // }
 
 }
-
-String getMyTextSpace(String text) {
-  String s = text;
-  int n = s.length;
-  if(n>=3&&s[n-3]==":"&&s[n-2]=="(") {
-    if(n>=4) s = s.substring(0,n-3) + "😞 ";
-    else{
-      s = s.substring(0,n-3) + "😞 ";
-    }
-  } // icon fine
-  else if(n>=3&&s[n-3]==":"&&s[n-2]==")") {
-    if(n>=4) s = s.substring(0,n-3) + "🙂 ";
-    else{
-      s = s.substring(0,n-3) + "🙂 ";
-    }
-  }
-  else if(n>=3&&s[n-3]==":"&&s[n-2]=="D") {
-    if(n>=4)s = s.substring(0,n-3) + "😃 ";
-    else{
-      s = s.substring(0,n-3) + "😃 ";
-    }
-  }
-  else if(n>=3&&s[n-3]==":"&&s[n-2]=="P") {
-    if(n>=4)s = s.substring(0,n-3) + "😛 ";
-    else{
-      s = s.substring(0,n-3) + "😛 ";
-    }
-  }
-  else if(n>=3&&s[n-3]==":"&&s[n-2]=="O") {
-    if(n>=4)s = s.substring(0,n-3) + "😮 ";
-    else{
-      s = s.substring(0,n-3) + "😮 ";
-    }
-  }
-  else if(n>=3&&s[n-3]==":"&&s[n-2]=="/") {
-    if(n>=4)s = s.substring(0,n-3) + "😕 ";
-    else{
-      s = s.substring(0,n-3) + "😕 ";
-    }
-  }
-  else if(n>=3&&s[n-3]==":"&&s[n-2]=="*") {
-    if(n>=4)s = s.substring(0,n-3) + "😘 ";
-    else{
-      s = s.substring(0,n-3) + "😘 ";
-    }
-  }
-  else if(n>=3&&s[n-3]=="<"&&s[n-2]=="3") {
-    if(n>=4)s = s.substring(0,n-3) + "❤ ";
-    else{
-      s = s.substring(0,n-3) + "❤ ";
-    }
-  }
-  else if(n>=3&&s[n-3]=="="&&s[n-2]=="b"){
-    if(n>=4)s = s.substring(0,n-3) + "👍 ";
-    else{
-      s = s.substring(0,n-3) + "👍 ";
-    }
-  }
-  else if(n>=3&&s[n-3]==";"&&s[n-2]==")"){
-    if(n>=4)s = s.substring(0,n-3) + "😉 ";
-    else{
-      s = s.substring(0,n-3) + "😉 ";
-    }
-  }
-  else if(n>=7&&s[n-7]==":"&&s[n-6]=="p"&&s[n-5]=="o"&&s[n-4]=="o"&&s[n-3]=="p"&&s[n-2]==":"){
-    if(n>=8) s = s.substring(0,n-7) + "💩 ";
-    else{
-      s = s.substring(0,n-7) + "💩 ";
-    }
-  }
-  // code thêm thì làm theo form trên
-
-  return s;
-}
-
-String getMyText(String myController) {
-  String s = myController;
-  int n = s.length;
-  for(int i=0;i<n;i++){
-    // icon buồn
-    if(i<n-1&&s[i]==":"&&s[i+1]=="(") {
-      s = s.substring(0,i) + "😞"+ s.substring(i+2,n);
-      i++;
-    } // icon fine
-    else if(i<n-1&&s[i]==":"&&s[i+1]==")") {
-      s = s.substring(0,i) + "🙂"+ s.substring(i+2,n);
-      i++;
-    }
-    else if(i<n-1&&s[i]==":"&&s[i+1]=="D") {
-      s = s.substring(0,i) + "😃"+ s.substring(i+2,n);
-      i++;
-    }
-    else if(i<n-1&&s[i]==":"&&s[i+1]=="P") {
-      s = s.substring(0,i) + "😛"+ s.substring(i+2,n);
-      i++;
-    }
-    else if(i<n-1&&s[i]==":"&&s[i+1]=="O") {
-      s = s.substring(0,i) + "😮"+ s.substring(i+2,n);
-      i++;
-    }
-    else if(i<n-1&&s[i]==":"&&s[i+1]=="/") {
-      s = s.substring(0,i) + "😕"+ s.substring(i+2,n);
-      i++;
-    }
-    else if(i<n-1&&s[i]==":"&&s[i+1]=="*") {
-      s = s.substring(0,i) + "😘"+ s.substring(i+2,n);
-      i++;
-    }
-    else if(i<n-1&&s[i]=="<"&&s[i+1]=="3") {
-      s = s.substring(0,i) + "❤"+ s.substring(i+2,n);
-      i++;
-    }
-    else if(i<n-1&&s[i]=="="&&s[i+1]=="b"){
-      s = s.substring(0,i) + "👍"+ s.substring(i+2,n);
-      i++;
-    }
-    else if(i<n-1&&s[i]==";"&&s[i+1]==")"){
-      s = s.substring(0,i) + "😉"+ s.substring(i+2,n);
-      i++;
-    }
-    else if(i<n-5&&s[i]==":"&&s[i+1]=="p"&&s[i+2]=="o"&&s[i+3]=="o"&&s[i+4]=="p"&&s[i+5]==":"){
-      s = s.substring(0,i) + "💩"+ s.substring(i+6,n);
-      i++;
-    }
-    // code thêm thì làm theo form trên
-  }
-  return s;
-}
-
-
 
 _buildNewFriend(UserEntity friend) {
   return Container(

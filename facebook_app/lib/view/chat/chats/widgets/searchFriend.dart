@@ -144,7 +144,7 @@ class _searchFriendState extends State<searchFriend> {
 }
 
 UserEntity getProvide(ChatProvide provide, int index) {
-  if(index==0&&a==1){
+  if(index==0 && a==1){
     a=0;
   }
   if(provide.users[index+a].id==provide.userEntity.id){

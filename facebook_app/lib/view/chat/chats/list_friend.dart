@@ -10,6 +10,9 @@ import 'package:facebook_app/widgets/messenger_app_bar/messenger_app_bar.dart';
 import 'package:facebook_app/base/base.dart';
 import 'package:provider/provider.dart';
 import 'package:facebook_app/view/chat/chats/camera.dart';
+import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 class ListFriend extends PageProvideNode<ChatProvide> {
   @override
@@ -75,6 +78,23 @@ class _ListFriendState extends State<ListFriendTmp>
   }
 
   _buildMessengerAppBar(_isScroll) {
+    File imageFile;
+    void _openCamera(BuildContext context) async {
+      var camPicture = await ImagePicker.pickImage(source: ImageSource.camera);
+      this.setState(() {
+        imageFile = camPicture;
+      });
+
+      Navigator.of(context).pop();
+    }
+
+    Widget _imageView() {
+      if (imageFile == null) {
+        return Text("No Image Selected");
+      } else {
+        return Image.file(imageFile, width: 400, height: 400);
+      }
+    }
     return  (MessengerAppBar(
         _provide,
         isScroll: _isScroll,
@@ -82,26 +102,44 @@ class _ListFriendState extends State<ListFriendTmp>
         actions: <Widget>[
           Row (
             children: <Widget>[
-              InkWell(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AccessCamera(),
-                  ),
+              // InkWell(
+              //   onTap: () => Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //       // builder: (context) => AccessCamera(),
+              //       builder: (context) => Camera(),
+              //
+              //     ),
+              //   ),
+              //
+              //   child: Container(
+              //     margin: const EdgeInsets.only( right: 15.0),
+              //     width: 33.0,
+              //     height: 33.0,
+              //     decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(20),
+              //       color: Colors.grey.shade200,
+              //     ),
+              //     child: Icon(
+              //       FontAwesomeIcons.camera,
+              //       size: 15.0,
+              //     ),
+              //   ),
+              // ),
+
+              IconButton(
+                icon: Icon(
+
+                  FontAwesomeIcons.camera,
+                  size: 25.0,
+                  color: Colors.lightBlue,
                 ),
-                child: Container(
-                  margin: const EdgeInsets.only( right: 15.0),
-                  width: 33.0,
-                  height: 33.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.grey.shade200,
-                  ),
-                  child: Icon(
-                    FontAwesomeIcons.camera,
-                    size: 15.0,
-                  ),
-                ),
+                onPressed: () {
+                  // _showDialog(context);
+                  _openCamera(context);
+                },
+
+
               ),
               InkWell(
                 onTap: () => Navigator.push(

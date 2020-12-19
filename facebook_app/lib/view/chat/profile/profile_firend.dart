@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:facebook_app/routes/routes.dart';
 import 'package:facebook_app/data/model/conservation.dart';
 import 'package:facebook_app/view/chat/profile/profile_firend_compact.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ProfilePageFriend extends PageProvideNode<ChatProvide> {
   final Conservation conservation;
@@ -105,50 +106,41 @@ class _ProfilePageFriendState extends State<ProfilePageFriendTmp>
 
                           SizedBox(width: 10.0),
                           GestureDetector(
-                              onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
+                              onTap: (){
+                                showMaterialModalBottomSheet(
+                                  context: context,
+                                  backgroundColor: Colors.transparent,
                                   builder: (context) => ProfilePageFriendCompact(conservation),
-                                ),
-                              ),
+                                );
+                              },
                             child: Center(
+
                               child: Container(
+
                                 padding: EdgeInsets.symmetric(
+
                                     horizontal: 15.0, vertical: 10.0),
                                 decoration: BoxDecoration(
+
                                   color: Colors.grey[300],
                                   // borderRadius: BorderRadius.circular(30.0)),
                                   shape: BoxShape.circle,
                                 ),
-                                child: Icon(Icons.toggle_off),
+
+                                child: Icon(Icons.person),
+
                               ),
 
                             )
                           ),
                         ],
                       ),
-                      _buildSettingItem3('Chủ đề', '', false,FontAwesomeIcons.solidMoon,Icons.toggle_off,Colors.black),
-                      _buildSettingItem('Biểu tượng cảm xúc', '', false,FontAwesomeIcons.users,Colors.purpleAccent,Colors.white),
+                      _buildSettingItem3('Chủ đề', '', false, FontAwesomeIcons.arrowAltCircleUp),
+                      _buildSettingItem3('Biểu tượng cảm xúc', '', false, FontAwesomeIcons.arrowAltCircleUp),
+                      _buildSettingItem('yyyyyyyyy', '', false,FontAwesomeIcons.users,Colors.purpleAccent,Colors.white),
                       _buildSettingItem('Tin nhắn chờ', '', false,FontAwesomeIcons.facebookMessenger,Colors.lightBlueAccent,Colors.white),
-                      _buildTitleSetting('Trang cá nhân'),
-                      _buildSettingItem2('Trang thái hoạt động', 'Bật', false,FontAwesomeIcons.userMinus,Colors.lightGreenAccent.shade400),
-                      // _buildSettingItem2('Tên người dùng', provide.userEntity.email, false,FontAwesomeIcons.userSecret,Colors.deepOrange),
-                      _buildTitleSetting('Tuỳ chọn'),
-                      _buildSettingItem('Quyền riêng tư', '', false,FontAwesomeIcons.shieldAlt,Colors.lightBlueAccent,Colors.white),
-                      _buildSettingItem('Âm thanh & thông báo', '', false,FontAwesomeIcons.bell,Colors.purpleAccent,Colors.white),
-                      _buildSettingItem('Trình tiết kiệm dữ liệu', '', false,FontAwesomeIcons.shieldVirus,Colors.deepPurple,Colors.white),
-                      _buildSettingItem('Tin', '', false,FontAwesomeIcons.video,Colors.indigoAccent,Colors.white),
-                      _buildSettingItem('SMS', '', false,FontAwesomeIcons.comment,Colors.purpleAccent,Colors.white),
-                      _buildSettingItem('Danh bạ thư điện thoại', '', false,FontAwesomeIcons.userFriends,Colors.lightBlueAccent,Colors.white),
-                      _buildSettingItem('Ảnh & phương tiện', '', false,FontAwesomeIcons.image,Colors.purpleAccent,Colors.white),
-                      _buildSettingItem3('Bong bóng chat', '', false,FontAwesomeIcons.comments,Icons.toggle_off,
-                          Colors.lightGreenAccent),
-                      _buildSettingItem('Cập nhật ứng dụng', '', false,FontAwesomeIcons.mobile,Colors.deepPurple,Colors.white),
-                      _buildTitleSetting('Tài khoản'),
-                      _buildSettingItem('Cài đặt tài khoản', '', false,FontAwesomeIcons.cog,Colors.indigoAccent,Colors.white),
-                      _buildSettingItem('Báo cáo vấn đề kỹ thuật', '', false,FontAwesomeIcons.exclamation,Colors.deepOrangeAccent,Colors.white),
-                      _buildSettingItem('Trợ giúp', '', false,FontAwesomeIcons.questionCircle,Colors.lightBlueAccent,Colors.white),
-                      _buildSettingItem('Pháp lý và chính sách', '', false,FontAwesomeIcons.scroll,Colors.grey,Colors.white),
+                      _buildTitleSetting('hành động khác'),
+                      // _buildSettingItem2('Trang thái hoạt động', 'Bật', false,FontAwesomeIcons.userMinus,Colors.lightGreenAccent.shade400),
                       SizedBox(height: 16.0)
                     ],
                   ),
@@ -217,6 +209,7 @@ class _ProfilePageFriendState extends State<ProfilePageFriendTmp>
                   ),
 
                 ),
+
               ],
             ),
           )
@@ -392,7 +385,7 @@ _buildSettingItem2(title, subtitle, isBorderBottom, icon,color1) {
   );
 }
 
-_buildSettingItem3(title, subtitle, isBorderBottom, icon1, icon2,color1) {
+_buildSettingItem3(title, subtitle, isBorderBottom, icon2) {
   return Container(
     margin: EdgeInsets.only(left: 16.0),
     padding: EdgeInsets.only(
@@ -413,24 +406,24 @@ _buildSettingItem3(title, subtitle, isBorderBottom, icon1, icon2,color1) {
       children: <Widget>[
         Row(
           children: <Widget>[
-            Container(
-              width: 35,
-              height: 35,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(80.0),
-                color: color1,
+            // Container(
+            //   width: 35,
+            //   height: 35,
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(80.0),
+                // color: color1,
                 // image: DecorationImage(
                 //   image: NetworkImage(provide.userEntity.avatar),
                 //   fit: BoxFit.cover,
-                // ),
-              ),
-              child: Icon(
-                icon1,
-                //FontAwesomeIcons.chevronRight,
-                color: Colors.white,
-                size: 18.0,
-              ),
-            ),
+            //     // ),
+            //   ),
+              // child: Icon(
+              //   icon1,
+              //   //FontAwesomeIcons.chevronRight,
+              //   color: Colors.white,
+              //   size: 18.0,
+            //   // ),
+            // ),
             SizedBox(width: 10.0),
             Text(
                 title,
@@ -455,7 +448,7 @@ _buildSettingItem3(title, subtitle, isBorderBottom, icon1, icon2,color1) {
             Icon(
               icon2,
               color: Colors.grey.shade300,
-              size: 50.0,
+              size: 18.0,
             )
           ],
         )

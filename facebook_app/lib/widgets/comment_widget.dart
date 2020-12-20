@@ -110,6 +110,15 @@ class _CreateCommentState extends State<CreateCommentWidget> {
                               content = myController.text;
                             });
                           },
+                          textInputAction: TextInputAction.send,
+                          onEditingComplete: () {
+                            String mess = content;
+                            if(mess != null && mess != "" ) {
+                              provide.addComment(post, content);
+                              myController.text="";
+                              content ="";
+                            }
+                          },
                           decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(10.0),
                               border: OutlineInputBorder(
@@ -139,10 +148,12 @@ class _CreateCommentState extends State<CreateCommentWidget> {
                       padding: EdgeInsets.symmetric(horizontal: 8.0),
                       child: IconButton(
                         onPressed: () {
-                          provide.addComment(post, content);
-                          setState(() {
-                            myController.text = "";
-                          });
+                          String mess = content;
+                          if(mess != null && mess != "" ) {
+                            provide.addComment(post, content);
+                            myController.text="";
+                            content ="";
+                          }
                           // Navigator.pop(context);
                         },
                         icon: Icon(

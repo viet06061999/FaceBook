@@ -70,87 +70,90 @@ class _CreateCommentState extends State<CreateCommentWidget> {
                   }),
             ),
             // Spacer(),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
-              padding: EdgeInsets.only( bottom: 15.0),
-              child: Row(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    child: IconButton(
-                      icon: Icon(
-                        FontAwesomeIcons.image,
-                        size: 25.0,
-                        color: Colors.lightBlue,
+            Visibility(
+              visible: provide.checkFriend(post.owner.id),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                ),
+                padding: EdgeInsets.only( bottom: 15.0),
+                child: Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: IconButton(
+                        icon: Icon(
+                          FontAwesomeIcons.image,
+                          size: 25.0,
+                          color: Colors.lightBlue,
+                        ),
+                        onPressed: () {},
                       ),
-                      onPressed: () {},
                     ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      child: TextField(
-                        controller: myController,
-                        onChanged: (text) {
-                          setState(() {
-                            int n = myController.text.length;
-                            if(n>=2&&myController.text[n-1]==" ") {
-                              cont = myController.text;
-                              cont = cont.getMyTextSpace();
-                              if(myController.text!=cont){
-                                myController.text=cont;
-                                myController.selection = TextSelection.fromPosition(
-                                  TextPosition(offset: myController.text.length),
-                                );
+                    Expanded(
+                      child: Container(
+                        child: TextField(
+                          controller: myController,
+                          onChanged: (text) {
+                            setState(() {
+                              int n = myController.text.length;
+                              if(n>=2&&myController.text[n-1]==" ") {
+                                cont = myController.text;
+                                cont = cont.getMyTextSpace();
+                                if(myController.text!=cont){
+                                  myController.text=cont;
+                                  myController.selection = TextSelection.fromPosition(
+                                    TextPosition(offset: myController.text.length),
+                                  );
+                                }
                               }
-                            }
-                            content = myController.text;
-                          });
-                        },
-                        decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(10.0),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(25),
-                              borderSide: BorderSide(
-                                width: 0,
-                                style: BorderStyle.none,
+                              content = myController.text;
+                            });
+                          },
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.all(10.0),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25),
+                                borderSide: BorderSide(
+                                  width: 0,
+                                  style: BorderStyle.none,
+                                ),
                               ),
-                            ),
-                            hintText: 'Viết bình luận',
-                            filled: true,
-                            fillColor: Colors.grey.shade200,
-                            hintStyle: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.grey[600],
-                            ),
-                            suffixIcon: Icon(
-                              FontAwesomeIcons.solidSmileBeam,
-                              size: 25.0,
-                              color: Colors.lightBlue,
-                            )),
+                              hintText: 'Viết bình luận',
+                              filled: true,
+                              fillColor: Colors.grey.shade200,
+                              hintStyle: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.grey[600],
+                              ),
+                              suffixIcon: Icon(
+                                FontAwesomeIcons.solidSmileBeam,
+                                size: 25.0,
+                                color: Colors.lightBlue,
+                              )),
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    child: IconButton(
-                      onPressed: () {
-                        provide.addComment(post, content);
-                        setState(() {
-                          myController.text = "";
-                        });
-                        // Navigator.pop(context);
-                      },
-                      icon: Icon(
-                        FontAwesomeIcons.paperPlane,
-                        size: 25.0,
-                        color: Colors.lightBlue,
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: IconButton(
+                        onPressed: () {
+                          provide.addComment(post, content);
+                          setState(() {
+                            myController.text = "";
+                          });
+                          // Navigator.pop(context);
+                        },
+                        icon: Icon(
+                          FontAwesomeIcons.paperPlane,
+                          size: 25.0,
+                          color: Colors.lightBlue,
+                        ),
                       ),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
           ],

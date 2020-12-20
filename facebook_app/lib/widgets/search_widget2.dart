@@ -200,11 +200,6 @@ class _searchFriendState extends State<searchFriend> {
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
     super.initState();
-    // for(int i =0; i<provide.users.length;i++){
-    //   if(provide.users[i]!=provide.userEntity){
-    //     _list.add(provide.users[i]);
-    //   }
-    // }
     _list = provide.users;
     list2 = provide.users;
     _IsSearching = false;
@@ -258,13 +253,7 @@ class _searchFriendState extends State<searchFriend> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         backgroundColor: Colors.white,
-        title: Container(
-          height: 40.0,
-          decoration: BoxDecoration(
-            color: Colors.grey.shade200,
-              borderRadius: BorderRadius.circular(21),
-          ),
-          child: TextField(
+        title: TextField(
               controller: _searchQuery,
               onChanged: (text) {
                 setState(() {
@@ -289,11 +278,9 @@ class _searchFriendState extends State<searchFriend> {
                 });
               },
               decoration: InputDecoration(
-                contentPadding: new EdgeInsets.fromLTRB(10, 0, 0, 5),
                   hintText: "Tìm kiếm",
                   border: InputBorder.none,
                   hintStyle: TextStyle(color: Colors.grey))),
-        ),
         actions: <Widget>[
           new IconButton(
             icon: actionIcon,

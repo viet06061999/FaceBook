@@ -43,7 +43,6 @@ class _HomePageState extends State<HomePageTmp>
   initState() {
     super.initState();
     _provide = widget.provide;
-    _provide.init();
     _tabController = TabController(vsync: this, length: 6);
     // set up listener here
     _controller.addListener(() {

@@ -33,19 +33,25 @@ class PostRepositoryImpl implements PostRepository {
 
   @override
   Observable<void> updateComment(Post post, Comment comment) {
-    _firNotification.updateNotificationCommentPost(post, comment);
+    if (post.owner.id != comment.user.id) {
+      _firNotification.updateNotificationCommentPost(post, comment);
+    }
     return _firPost.updatePost(post, post.owner.id);
   }
 
   @override
   Observable<void> updateDisLikePost(Post post, UserEntity userEntity) {
-    _firNotification.updateNotificationDisLikePost(post, userEntity);
+    if (post.owner.id != userEntity.id) {
+      _firNotification.updateNotificationDisLikePost(post, userEntity);
+    }
     return _firPost.updatePost(post, post.owner.id);
   }
 
   @override
   Observable<void> updateLikePost(Post post, UserEntity userEntity) {
-    _firNotification.updateNotificationLikePost(post, userEntity);
+    if (post.owner.id != userEntity.id) {
+      _firNotification.updateNotificationLikePost(post, userEntity);
+    }
     return _firPost.updatePost(post, post.owner.id);
   }
 }

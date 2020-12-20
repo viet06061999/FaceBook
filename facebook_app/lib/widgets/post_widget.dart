@@ -81,10 +81,22 @@ class PostWidget extends StatelessWidget {
                           );
                         }
                       },
-                      child: Text(
-                          post.owner.firstName + ' ' + post.owner.lastName,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 17.0)),
+                      child: Row(
+                        children: [
+                          Text(
+                              post.owner.firstName + ' ' + post.owner.lastName,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 17.0)),
+                          SizedBox(
+                            width: 5.0,
+                          ),
+                          Icon(
+                            Icons.check_circle,
+                            size: 18,
+                            color: Colors.blueAccent,
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(height: 5.0),
                     Text(fix(post.modified))

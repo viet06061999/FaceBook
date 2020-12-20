@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ListUserFriend extends StatefulWidget {
+class ListUserFriend2 extends StatefulWidget {
   // final ProfileProvide provide;
   final int maxFriends = 9999;
   final List<UserEntity> friends;
@@ -21,7 +21,7 @@ class ListUserFriend extends StatefulWidget {
   final Function onExpandClicked;
 
   // ListUserFriend(this.provide, this.friends, this.onImageClicked, this.onExpandClicked);
-  ListUserFriend(
+  ListUserFriend2(
       {
         // @required this.provide,
         @required this.friends,
@@ -36,7 +36,7 @@ class ListUserFriend extends StatefulWidget {
 }
 
 @override
-class _ListUserFriendState extends State<ListUserFriend> {
+class _ListUserFriendState extends State<ListUserFriend2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +45,7 @@ class _ListUserFriendState extends State<ListUserFriend> {
             color: Colors.black, //change your color here
           ),
           title: Text(
-            "Tất cả bạn bè",
+            "Gợi ý",
             style: TextStyle(color: Colors.black.withOpacity(1.0)),
           ),
           backgroundColor: Colors.white,
@@ -182,7 +182,7 @@ class _ListUserFriendState extends State<ListUserFriend> {
                         Container(
                           width: 150.0,
                           child: Text(
-                            "5 bạn chung",
+                            getFriendChung(),
                             style: TextStyle(
                                 color: Colors.grey.shade700, fontSize: 16),
                             overflow: TextOverflow.ellipsis,
@@ -296,4 +296,9 @@ class _ListUserFriendState extends State<ListUserFriend> {
   _action1(String userId) {
     print(userId);
   }
+}
+String getFriendChung() {
+  var rng = new Random();
+  int a =1+ rng.nextInt(10);
+  return "${a} bạn chung";
 }

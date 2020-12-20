@@ -334,7 +334,7 @@ class _ProfileFriend extends State<ProfilePageTmp>
                               context,
                               MaterialPageRoute(
                                   builder: (context) => ListUserFriend(
-                                      // value: value,
+                                      provide: value,
                                       friends: value.friends,
                                       onImageClicked: null,
                                       onExpandClicked: null)),

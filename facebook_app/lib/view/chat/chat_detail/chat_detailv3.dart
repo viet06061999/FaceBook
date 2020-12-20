@@ -5,6 +5,7 @@ import 'package:facebook_app/view/chat/chats/widgets/conversation_item.dart';
 import 'package:facebook_app/viewmodel/chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:facebook_app/widgets/messenger_app_bar/AppBarNetworkRoundedImage2.dart';
+import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:facebook_app/widgets/messenger_app_bar/app_bar_network_rounded_image.dart';
 import 'package:facebook_app/widgets/messenger_app_bar_action/messenger_app_bar.dart';
@@ -273,6 +274,22 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
                     }
                     content = myController.text;
                   });
+                },
+                textInputAction: TextInputAction.send,
+                onEditingComplete: () {
+                  String mess = content;
+                  if(mess != null && mess != "" ) {
+                    _provide.sendMessage(friend,
+                        content: content);
+                    myController.text="";
+                    content ="";
+                  }
+                  else {
+                    var parser = EmojiParser();
+                    mess = parser.emojify('I :heart: :coffee: :like:');
+                    _provide.sendMessage(friend,
+                        content: "👍");
+                  }
                 },
                 controller: myController,
                 decoration: InputDecoration(

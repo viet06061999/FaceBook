@@ -352,7 +352,7 @@ class HomeProvide extends BaseProvide {
       friendRepository.getRequestedFriends(entity.id).listen((event) async {
         event.docChanges.forEach((element) async {
           DocumentReference documentReference =
-              element.doc.data()['first_user'];
+              element.doc.data()['second_user'];
           await documentReference.get().then((value) {
             UserEntity firstUser = UserEntity.fromJson(value.data());
             Friend friend =
@@ -372,6 +372,7 @@ class HomeProvide extends BaseProvide {
               _friendWaitConfirm.removeWhere(
                   (element) => element.userSecond == friend.userSecond);
             }
+            print('leng wait ${_friendWaitConfirm.length}');
           });
           if (event.docChanges.length != 0) {
             notifyListeners();

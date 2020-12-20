@@ -1,30 +1,39 @@
+import 'package:facebook_app/data/model/notification/accept_friend_notification.dart';
+import 'package:facebook_app/data/model/notification/notification_post.dart';
+import 'package:facebook_app/data/model/notification/request_friend_notification.dart';
 import 'package:facebook_app/data/model/user.dart';
+import 'package:facebook_app/viewmodel/home_view_model.dart';
+import 'package:facebook_app/widgets/post_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:facebook_app/data/model/notification/notification_friend.dart';
 import 'package:intl/intl.dart';
 import 'package:facebook_app/view/profile_friend.dart';
 
 class NotificationWidget extends StatelessWidget {
-  final NotificationApp notification;
+  NotificationApp notification;
   final UserEntity userEntity;
-
-  NotificationWidget({this.notification, this.userEntity});
+  final HomeProvide provide;
+  NotificationWidget(this.notification, this.userEntity, this.provide);
 
   @override
   Widget build(BuildContext context) {
-    print("notification ${notification.getContent(userId: userEntity.id)}");
     return InkWell(
-      onTap: () =>
+      onTap: () {
+        if (notification is NotificationAcceptFriend ||
+            notification is NotificationRequestFriend) {
           Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ProfileFriend(notification.userFirst)),
-          ),
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProfileFriend(notification.userFirst)));
+        } else {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PostDetail(post: (notification as NotificationPost).post, provide: provide,)));
+        }
+      },
       child: Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        width: MediaQuery.of(context).size.width,
         height: 100.0,
         padding: EdgeInsets.symmetric(horizontal: 15.0),
         child: Row(
@@ -62,11 +71,10 @@ class NotificationWidget extends StatelessWidget {
     );
   }
 
-  onClick(BuildContext context, UserEntity entity) {
+  onTapNotification(BuildContext context, UserEntity entity) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-          builder: (context) => ProfileFriend(entity)),
+      MaterialPageRoute(builder: (context) => ProfileFriend(entity)),
     );
   }
 
@@ -78,19 +86,18 @@ class NotificationWidget extends StatelessWidget {
                 fontWeight: FontWeight.normal,
                 color: Colors.black),
             children: [
-              TextSpan(
-                  text:
-                  '${notification.userFirst.firstName} ${notification.userFirst
-                      .lastName} ',
-                  style:
+          TextSpan(
+              text:
+                  '${notification.userFirst.firstName} ${notification.userFirst.lastName} ',
+              style:
                   TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
-              TextSpan(
-                  text: getText(
-                      notification.getContent(userId: userEntity.id),
-                      notification.userFirst.firstName.length +
-                          notification.userFirst.lastName.length +
-                          1))
-            ]));
+          TextSpan(
+              text: getText(
+                  notification.getContent(userId: userEntity.id),
+                  notification.userFirst.firstName.length +
+                      notification.userFirst.lastName.length +
+                      1))
+        ]));
   }
 
   String fix(String text1) {

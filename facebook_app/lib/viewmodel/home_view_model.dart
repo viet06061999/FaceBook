@@ -132,13 +132,7 @@ class HomeProvide extends BaseProvide {
   }
 
   HomeProvide(this.repository, this.photoRepository, this.userRepository,
-      this.friendRepository, this.notificationRepository) {
-    userRepository.getCurrentUser().then((value) {
-      userEntity = value;
-      getFriends(value);
-      getUsers();
-    });
-  }
+      this.friendRepository, this.notificationRepository);
 
   init() {
     userRepository.getCurrentUser().then((value) {
@@ -150,6 +144,7 @@ class HomeProvide extends BaseProvide {
       getFriendsRequest(userEntity);
       getFriendsWaitConfirm(userEntity);
       getNotifications();
+      getUsers();
     });
   }
 

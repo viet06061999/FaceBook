@@ -239,38 +239,37 @@ class PostWidget extends StatelessWidget {
     }
   }
 
-  buildBottom(BuildContext context, Post post){
-    if(provide.checkFriend(post.owner.id)) return buildBottomLikeFriend(context);
+  buildBottom(BuildContext context, Post post) {
+    if (provide.checkFriend(post.owner.id))
+      return buildBottomLikeFriend(context);
     return buildBottomLikeNoFriend(context);
   }
 
   buildBottomLikeFriend(BuildContext context) {
-    return   Container(
+    return Container(
       padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Consumer<HomeProvide>(builder: (key, value, child) {
-            return FlatButton(
-              onPressed: () => {value.updateLike(post)},
-              child: Row(
-                // Replace with a Row for horizontal icon + text
-                children: <Widget>[
-                  Icon(FontAwesomeIcons.thumbsUp,
-                      size: 20.0,
+          FlatButton(
+            onPressed: () => {provide.updateLike(post)},
+            child: Row(
+              // Replace with a Row for horizontal icon + text
+              children: <Widget>[
+                Icon(FontAwesomeIcons.thumbsUp,
+                    size: 20.0,
+                    color: !post.isLiked ? Colors.grey : Colors.blue),
+                SizedBox(width: 5.0),
+                Text(
+                  'Like',
+                  style: TextStyle(
+                      fontSize: 14,
                       color: !post.isLiked ? Colors.grey : Colors.blue),
-                  SizedBox(width: 5.0),
-                  Text(
-                    'Like',
-                    style: TextStyle(
-                        fontSize: 14,
-                        color: !post.isLiked ? Colors.grey : Colors.blue),
-                  )
-                ],
-              ),
-            );
-          }),
+                )
+              ],
+            ),
+          ),
           FlatButton(
             onPressed: () => {
               showMaterialModalBottomSheet(
@@ -285,17 +284,20 @@ class PostWidget extends StatelessWidget {
             child: Row(
               // Replace with a Row for horizontal icon + text
               children: <Widget>[
-                Icon(FontAwesomeIcons.commentAlt, size: 20.0, color:Colors.grey),
+                Icon(FontAwesomeIcons.commentAlt,
+                    size: 20.0, color: Colors.grey),
                 SizedBox(width: 5.0),
-                Text('Comment', style: TextStyle(fontSize: 14.0, color:Colors.grey)),
+                Text('Comment',
+                    style: TextStyle(fontSize: 14.0, color: Colors.grey)),
               ],
             ),
           ),
           Row(
             children: <Widget>[
-              Icon(FontAwesomeIcons.share, size: 20.0,  color:Colors.grey),
+              Icon(FontAwesomeIcons.share, size: 20.0, color: Colors.grey),
               SizedBox(width: 5.0),
-              Text('Share', style: TextStyle(fontSize: 14.0, color:Colors.grey)),
+              Text('Share',
+                  style: TextStyle(fontSize: 14.0, color: Colors.grey)),
             ],
           ),
         ],
@@ -304,38 +306,36 @@ class PostWidget extends StatelessWidget {
   }
 
   buildBottomLikeNoFriend(BuildContext context) {
-    return   Container(
+    return Container(
       padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Consumer<HomeProvide>(builder: (key, value, child) {
-            return FlatButton(
-              onPressed: () => {value.updateLike(post)},
-              padding: EdgeInsets.all(10.0),
-              child: Row(
-                // Replace with a Row for horizontal icon + text
-                children: <Widget>[
-                  Icon(FontAwesomeIcons.thumbsUp,
-                      size: 20.0,
+          FlatButton(
+            onPressed: () => {provide.updateLike(post)},
+            child: Row(
+              // Replace with a Row for horizontal icon + text
+              children: <Widget>[
+                Icon(FontAwesomeIcons.thumbsUp,
+                    size: 20.0,
+                    color: !post.isLiked ? Colors.grey : Colors.blue),
+                SizedBox(width: 5.0),
+                Text(
+                  'Like',
+                  style: TextStyle(
+                      fontSize: 14,
                       color: !post.isLiked ? Colors.grey : Colors.blue),
-                  SizedBox(width: 5.0),
-                  Text(
-                    'Like',
-                    style: TextStyle(
-                        fontSize: 14,
-                        color: !post.isLiked ? Colors.grey : Colors.blue),
-                  )
-                ],
-              ),
-            );
-          }),
+                )
+              ],
+            ),
+          ),
           Row(
             children: <Widget>[
-              Icon(FontAwesomeIcons.share, size: 20.0,  color:Colors.grey),
+              Icon(FontAwesomeIcons.share, size: 20.0, color: Colors.grey),
               SizedBox(width: 5.0),
-              Text('Share', style: TextStyle(fontSize: 14.0, color:Colors.grey)),
+              Text('Share',
+                  style: TextStyle(fontSize: 14.0, color: Colors.grey)),
             ],
           ),
         ],

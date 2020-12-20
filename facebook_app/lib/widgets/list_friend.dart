@@ -6,6 +6,7 @@ import 'package:facebook_app/data/repository/user_repository_impl.dart';
 import 'package:facebook_app/view/profile_friend.dart';
 import 'package:facebook_app/view/profile_me.dart';
 import 'package:facebook_app/viewmodel/friend_view_model.dart';
+import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:facebook_app/viewmodel/profile_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,22 +14,20 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ListUserFriend extends StatefulWidget {
-  // final ProfileProvide provide;
+  final HomeProvide provide;
   final int maxFriends = 9999;
   final List<Friend> friends;
   final Function(int) onImageClicked;
   final Function onExpandClicked;
 
   // ListUserFriend(this.provide, this.friends, this.onImageClicked, this.onExpandClicked);
-  ListUserFriend(
-      {
-        // @required this.provide,
-        @required this.friends,
-      @required this.onImageClicked,
-      @required this.onExpandClicked,
-      Key key,
-      })
-      : super(key: key);
+  ListUserFriend({
+    @required this.provide,
+    @required this.friends,
+    @required this.onImageClicked,
+    @required this.onExpandClicked,
+    Key key,
+  }) : super(key: key);
 
   @override
   createState() => _ListUserFriendState();
@@ -124,8 +123,7 @@ class _ListUserFriendState extends State<ListUserFriend> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          ProfileFriend(friend.userSecond)),
+                      builder: (context) => ProfileFriend(friend.userSecond)),
                 );
               }
             },
@@ -149,7 +147,8 @@ class _ListUserFriendState extends State<ListUserFriend> {
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
-                      if (friend.userSecond.id == UserRepositoryImpl.currentUser.id) {
+                      if (friend.userSecond.id ==
+                          UserRepositoryImpl.currentUser.id) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => ProfileMe()),
@@ -181,7 +180,7 @@ class _ListUserFriendState extends State<ListUserFriend> {
                         Container(
                           width: 150.0,
                           child: Text(
-                            "5 bạn chung",
+                            getFriendChung(),
                             style: TextStyle(
                                 color: Colors.grey.shade700, fontSize: 16),
                             overflow: TextOverflow.ellipsis,
@@ -202,63 +201,97 @@ class _ListUserFriendState extends State<ListUserFriend> {
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[
-                                              _createTile(
-                                                  context,
-                                                  'Xem bạn bè của ' +
-                                                      friend.userSecond
-                                                          .firstName +
-                                                      " " +
-                                                      friend
-                                                          .userSecond.lastName,
-                                                  Icon(
-                                                    Icons.people_outline,
-                                                    color: Colors.black,
-                                                  ),
-                                                  _action1,
-                                                  friend.userSecond.id),
-                                              _createTile(
-                                                  context,
-                                                  'Xem trang cá nhân của ' +
-                                                      friend.userSecond
-                                                          .firstName +
-                                                      " " +
-                                                      friend
-                                                          .userSecond.lastName,
-                                                  Icon(
-                                                    Icons
-                                                        .account_circle_outlined,
-                                                    color: Colors.black,
-                                                  ),
-                                                  _action1,
-                                                  friend.userSecond.id),
-                                              _createTile(
-                                                  context,
-                                                  'Chặn ' +
-                                                      friend.userSecond
-                                                          .firstName +
-                                                      " " +
-                                                      friend
-                                                          .userSecond.lastName,
-                                                  Icon(
-                                                    Icons.block,
-                                                    color: Colors.black,
-                                                  ),
-                                                  _action1,
-                                                  friend.userSecond.id),
-                                              _createTile(
-                                                  context,
-                                                  'Hủy kết bạn ' +
-                                                      friend.userSecond
-                                                          .firstName +
-                                                      " " +
-                                                      friend
-                                                          .userSecond.lastName,
-                                                  Icon(
-                                                    Icons.cancel_outlined,
-                                                    color: Colors.black,
-                                                  ),
-                                                  _action1,
-                                                  friend.userSecond.id),
+                                              ListTile(
+                                                leading: Icon(
+                                                  Icons.people_outline,
+                                                  color: Colors.black,
+                                                ),
+                                                title: Text('Xem bạn bè của ' +
+                                                    friend
+                                                        .userSecond.firstName +
+                                                    " " +
+                                                    friend.userSecond.lastName),
+                                                onTap: () {
+                                                  if (friend.userSecond.id ==
+                                                      UserRepositoryImpl
+                                                          .currentUser.id) {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ProfileMe()),
+                                                    );
+                                                  } else {
+                                                    // Navigator.push(
+                                                    //   context,
+                                                    //   MaterialPageRoute(
+                                                    //       builder: (context) =>
+                                                    //           ListUserFriend(friends: ,
+                                                    //               onImageClicked: null,
+                                                    //               onExpandClicked: null)),
+                                                    // );
+                                                  }
+                                                },
+                                              ),
+                                              ListTile(
+                                                leading: Icon(
+                                                  Icons.account_circle_outlined,
+                                                  color: Colors.black,
+                                                ),
+                                                title: Text(
+                                                    'Xem trang cá nhân của ' +
+                                                        friend.userSecond
+                                                            .firstName +
+                                                        " " +
+                                                        friend.userSecond
+                                                            .lastName),
+                                                onTap: () {
+                                                  if (friend.userSecond.id ==
+                                                      UserRepositoryImpl.currentUser.id) {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(builder: (context) => ProfileMe()),
+                                                    );
+                                                  } else {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ProfileFriend(friend.userSecond)),
+                                                    );
+                                                  }
+                                                },
+                                              ),
+                                              // _createTile(
+                                              //     context,
+                                              //     'Chặn ' +
+                                              //         friend.userSecond
+                                              //             .firstName +
+                                              //         " " +
+                                              //         friend
+                                              //             .userSecond.lastName,
+                                              //     Icon(
+                                              //       Icons.block,
+                                              //       color: Colors.black,
+                                              //     ),
+                                              //     _action1,
+                                              //     friend.userSecond.id),
+                                              // ListTile(
+                                              //   leading: Icon(
+                                              //     Icons.cancel_outlined,
+                                              //     color: Colors.black,
+                                              //   ),
+                                              //   title: Text(
+                                              //       'Hủy kết bạn ' +
+                                              //           friend.userSecond
+                                              //               .firstName +
+                                              //           " " +
+                                              //           friend
+                                              //               .userSecond.lastName),
+                                              //   onTap: () {
+                                              //     widget.provide.friendRepository.deleteRequest(friend, () {});
+                                              //   },
+                                              // ),
                                             ],
                                           )),
                                     );
@@ -296,4 +329,10 @@ class _ListUserFriendState extends State<ListUserFriend> {
   _action1(String userId) {
     print(userId);
   }
+}
+
+String getFriendChung() {
+  var rng = new Random();
+  int a = 1 + rng.nextInt(10);
+  return "${a} bạn chung";
 }

@@ -9,10 +9,10 @@ class WatchTab extends StatefulWidget {
 }
 
 class _WatchTabState extends State<WatchTab> {
-  String videoUrl1 = 'https://www.youtube.com/watch?v=Llw9Q6akRo4';
+  String videoUrl1 = 'https://www.youtube.com/watch?v=vTJdVE_gjI0&ab_channel=%C4%90enV%C3%A2uOfficial';
   YoutubePlayerController _controller1;
 
-  String videoUrl2 = 'https://www.youtube.com/watch?v=E1ZVSFfCk9g';
+  String videoUrl2 = 'https://www.youtube.com/watch?v=Llw9Q6akRo4&ab_channel=S%C6%A1nT%C3%B9ngM-TPOfficial';
   YoutubePlayerController _controller2;
 
   @override
@@ -162,7 +162,7 @@ class _WatchTabState extends State<WatchTab> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text('Greg',
+                          Text('Nguyễn Văn Vở',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 17.0)),
                           SizedBox(height: 5.0),
@@ -249,7 +249,7 @@ class _WatchTabState extends State<WatchTab> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text('Olivia',
+                          Text('Sờ Cai',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 17.0)),
                           SizedBox(height: 5.0),

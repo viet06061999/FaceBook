@@ -1,5 +1,6 @@
 import 'package:facebook_app/base/base.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
+import 'package:facebook_app/widgets/search_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -23,7 +24,9 @@ class HomePage extends PageProvideNode<HomeProvide> {
 class HomePageTmp extends StatefulWidget {
   final HomeProvide provide;
 
-  const HomePageTmp(this.provide);
+   HomePageTmp(this.provide){
+   provide.init();
+  }
 
   @override
   State<StatefulWidget> createState() => _HomePageState();
@@ -89,7 +92,15 @@ class _HomePageState extends State<HomePageTmp>
                     Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          Icon(Icons.search, color: Colors.black),
+                          IconButton(
+                              onPressed: (){
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SearchScreen()),
+                                );
+                              },
+                              icon: Icon(Icons.search, color: Colors.black)),
                           SizedBox(width: 15.0),
                           IconButton(
                             icon: Icon(FontAwesomeIcons.facebookMessenger),

@@ -60,111 +60,117 @@ class _ChatDetailState extends State<ChatDetailTmp>
 
   @override
   Widget build(BuildContext context) {
-    File imageFile;
-
-    return Scaffold(body: Consumer<ChatProvide>(
-      builder: (context, value, child) {
-        return Container(
-          decoration: BoxDecoration(color: Colors.white),
-          child: Column(
-            children: <Widget>[
-              buildAppBar(friend),
-             //_buildNewFriend(friend),
-              Expanded(
-                 child: ListView.builder(
-                  reverse: true,
-                   // shrinkWrap: true,
-                          // physics: NeverScrollableScrollPhysics(),
-                        itemCount: value.messages.length+1,
-                        itemBuilder: (BuildContext context, int index) {
-                          if(index==value.messages.length){
-                            return _buildNewFriend(friend);
+    return WillPopScope(
+      child: Scaffold(body: Consumer<ChatProvide>(
+        builder: (context, value, child) {
+          return Container(
+            decoration: BoxDecoration(color: Colors.white),
+            child: Column(
+              children: <Widget>[
+                buildAppBar(friend),
+               //_buildNewFriend(friend),
+                Expanded(
+                   child: ListView.builder(
+                    reverse: true,
+                     // shrinkWrap: true,
+                            // physics: NeverScrollableScrollPhysics(),
+                          itemCount: value.messages.length+1,
+                          itemBuilder: (BuildContext context, int index) {
+                            if(index==value.messages.length){
+                              return _buildNewFriend(friend);
+                            }
+                          else if (value.messages[value.messages.length-index-1].from.id ==
+                              friend.id) {
+                            return Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                                vertical: 2.0,
+                              ),
+                              child: Row(
+                                //crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  AppBarNetworkRoundedImage(
+                                    //value.getConservations(friend.userSecond);
+                                      imageUrl: friend.avatar),
+                                  SizedBox(width: 15.0),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    padding: EdgeInsets.all(8.0),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.shade200,
+                                      borderRadius: BorderRadius.circular(15.0),
+                                    ),
+                                    child:  Linkify(
+                                      onOpen: (link) async {
+                                        if (await canLaunch(link.url)) {
+                                          await launch(link.url);
+                                        } else {
+                                          throw 'Could not launch $link';
+                                        }
+                                      },
+                                      text:getText(value.messages[value.messages.length-index-1].message).getMyText(),
+                                      //textAlign: TextAlign.left,
+                                      style: TextStyle(fontSize: 14.0),
+                                      linkStyle: TextStyle(color: Colors.black),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            );
+                          } else {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                                vertical: 2.0,
+                              ),
+                              child: Row(
+                                //crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  SizedBox(width: 55.0),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    padding: EdgeInsets.all(8.0),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.shade200,
+                                      borderRadius: BorderRadius.circular(15.0),
+                                    ),
+                                    child:
+                                    Linkify(
+                                      onOpen: (link) async {
+                                        if (await canLaunch(link.url)) {
+                                          await launch(link.url);
+                                        } else {
+                                          throw 'Could not launch $link';
+                                        }
+                                      },
+                                      text: getText(value.messages[value.messages.length-index-1].message).getMyText(),
+                                      //textAlign: TextAlign.left,
+                                      style: TextStyle(fontSize: 14.0),
+                                      linkStyle: TextStyle(color: Colors.black),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            );
                           }
-                        else if (value.messages[value.messages.length-index-1].from.id ==
-                            friend.id) {
-                          return Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0,
-                              vertical: 2.0,
-                            ),
-                            child: Row(
-                              //crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                AppBarNetworkRoundedImage(
-                                  //value.getConservations(friend.userSecond);
-                                    imageUrl: friend.avatar),
-                                SizedBox(width: 15.0),
-                                Container(
-                                  alignment: Alignment.center,
-                                  padding: EdgeInsets.all(8.0),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade200,
-                                    borderRadius: BorderRadius.circular(15.0),
-                                  ),
-                                  child:  Linkify(
-                                    onOpen: (link) async {
-                                      if (await canLaunch(link.url)) {
-                                        await launch(link.url);
-                                      } else {
-                                        throw 'Could not launch $link';
-                                      }
-                                    },
-                                    text:getText(value.messages[value.messages.length-index-1].message).getMyText(),
-                                    //textAlign: TextAlign.left,
-                                    style: TextStyle(fontSize: 14.0),
-                                    linkStyle: TextStyle(color: Colors.black),
-                                  ),
-                                )
-                              ],
-                            ),
-                          );
-                        } else {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0,
-                              vertical: 2.0,
-                            ),
-                            child: Row(
-                              //crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                SizedBox(width: 55.0),
-                                Container(
-                                  alignment: Alignment.center,
-                                  padding: EdgeInsets.all(8.0),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade200,
-                                    borderRadius: BorderRadius.circular(15.0),
-                                  ),
-                                  child:
-                                  Linkify(
-                                    onOpen: (link) async {
-                                      if (await canLaunch(link.url)) {
-                                        await launch(link.url);
-                                      } else {
-                                        throw 'Could not launch $link';
-                                      }
-                                    },
-                                    text: getText(value.messages[value.messages.length-index-1].message).getMyText(),
-                                    //textAlign: TextAlign.left,
-                                    style: TextStyle(fontSize: 14.0),
-                                    linkStyle: TextStyle(color: Colors.black),
-                                  ),
-                                )
-                              ],
-                            ),
-                          );
-                        }
-                        },
+                          },
+                  ),
                 ),
-              ),
-              _buildBottomChat(friend),
-              ],
-              ),
-              );
-      },
-    ));
+                _buildBottomChat(friend),
+                ],
+                ),
+                );
+        },
+      )
+      ),
+        onWillPop: _onWillPop,
+    );
+  }
+  Future<bool> _onWillPop(){
+    Navigator.pop(context);
+    return Future.value(false);
   }
   buildAppBar(UserEntity friend) {
     return MessengerAppBarAction(

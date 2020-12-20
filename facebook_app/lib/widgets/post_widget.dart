@@ -1,5 +1,7 @@
 import 'package:facebook_app/data/model/post.dart';
+import 'package:facebook_app/data/repository/user_repository_impl.dart';
 import 'package:facebook_app/view/profile_friend.dart';
+import 'package:facebook_app/view/profile_me.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,6 +9,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:facebook_app/widgets/photo_grid.dart';
 import 'package:intl/intl.dart';
+import 'package:video_player/video_player.dart';
 import 'comment_widget.dart';
 import 'black_background_image.dart';
 import 'post_detail.dart';
@@ -14,6 +17,10 @@ import 'post_detail.dart';
 class PostWidget extends StatelessWidget {
   final Post post;
   final HomeProvide provide;
+  VideoPlayerController controller;
+  Future<void> initializeVideoPlayerFuture;
+
+  PostWidget createState() => PostWidget();
 
   PostWidget({this.post, this.provide});
 
@@ -33,11 +40,18 @@ class PostWidget extends StatelessWidget {
               children: <Widget>[
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProfileFriend(post.owner)),
-                    );
+                    if (post.owner.id == UserRepositoryImpl.currentUser.id) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ProfileMe()),
+                      );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProfileFriend(post.owner)),
+                      );
+                    }
                   },
                   child: CircleAvatar(
                     backgroundImage: NetworkImage(post.owner.avatar),
@@ -51,11 +65,21 @@ class PostWidget extends StatelessWidget {
                   children: <Widget>[
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProfileFriend(post.owner)),
-                        );
+                        if (post.owner.id ==
+                            UserRepositoryImpl.currentUser.id) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProfileMe()),
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ProfileFriend(post.owner)),
+                          );
+                        }
                       },
                       child: Text(
                           post.owner.firstName + ' ' + post.owner.lastName,
@@ -88,6 +112,7 @@ class PostWidget extends StatelessWidget {
               )),
           SizedBox(height: 10.0),
           buildImages(context),
+          buildVideos(context),
           SizedBox(height: 10.0),
           Container(
             padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -104,7 +129,7 @@ class PostWidget extends StatelessWidget {
                 Row(
                   children: <Widget>[
                     GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         showMaterialModalBottomSheet(
                           context: context,
                           backgroundColor: Colors.transparent,
@@ -212,7 +237,7 @@ class PostWidget extends StatelessWidget {
           maxImages: 4,
         ),
       );
-    } else {
+    } else if (post.images.length == 3) {
       return Visibility(
           visible: true,
           child: Row(
@@ -290,5 +315,42 @@ class PostWidget extends StatelessWidget {
     } else {
       return "1 tháng trước";
     }
+  }
+
+  buildVideos(BuildContext context) {
+      controller = VideoPlayerController.network(post.video.url);
+      initializeVideoPlayerFuture = controller.initialize();
+      controller.setLooping(true);
+      FloatingActionButton(
+        onPressed: () {
+            if (controller.value.isPlaying) {
+              controller.pause();
+            } else {
+              controller.play();
+            }
+        },
+        child: Icon(
+          controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+        ),
+      );
+      return FutureBuilder(
+        future: initializeVideoPlayerFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            // If the VideoPlayerController has finished initialization, use
+            // the data it provides to limit the aspect ratio of the video.
+            return AspectRatio(
+              aspectRatio: controller.value.aspectRatio,
+              // Use the VideoPlayer widget to display the video.
+              child: VideoPlayer(controller),
+            );
+          } else {
+            // If the VideoPlayerController is still initializing, show a
+            // loading spinner.
+            return Center(child: CircularProgressIndicator());
+          }
+        },
+      );
+
   }
 }

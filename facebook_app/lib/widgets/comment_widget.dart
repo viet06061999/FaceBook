@@ -3,7 +3,7 @@ import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:facebook_app/widgets/comment_list.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
+import 'package:facebook_app/ultils/string_ext.dart';
 
 class CreateCommentWidget extends StatefulWidget {
   final HomeProvide provide;
@@ -19,9 +19,10 @@ class CreateCommentWidget extends StatefulWidget {
 
 class _CreateCommentState extends State<CreateCommentWidget> {
   String content = "";
+  var myController = TextEditingController();
+  String cont=" ";
   final HomeProvide provide;
   final Post post;
-  TextEditingController controller = TextEditingController();
   _CreateCommentState(this.post, this.provide);
 
   @override
@@ -90,14 +91,23 @@ class _CreateCommentState extends State<CreateCommentWidget> {
                   Expanded(
                     child: Container(
                       child: TextField(
-                        controller: controller,
+                        controller: myController,
                         onChanged: (text) {
                           setState(() {
-                            content = text;
+                            int n = myController.text.length;
+                            if(n>=2&&myController.text[n-1]==" ") {
+                              cont = myController.text;
+                              cont = cont.getMyTextSpace();
+                              if(myController.text!=cont){
+                                myController.text=cont;
+                                myController.selection = TextSelection.fromPosition(
+                                  TextPosition(offset: myController.text.length),
+                                );
+                              }
+                            }
+                            content = myController.text;
                           });
                         },
-                        // decoration: InputDecoration(
-                        //     border: InputBorder.none, hintText: 'Viết bình luận'),
                         decoration: InputDecoration(
                             contentPadding: EdgeInsets.all(10.0),
                             border: OutlineInputBorder(
@@ -129,7 +139,7 @@ class _CreateCommentState extends State<CreateCommentWidget> {
                       onPressed: () {
                         provide.addComment(post, content);
                         setState(() {
-                          controller.text = "";
+                          myController.text = "";
                         });
                         // Navigator.pop(context);
                       },

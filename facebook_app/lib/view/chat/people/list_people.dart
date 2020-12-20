@@ -1,9 +1,9 @@
 import 'package:facebook_app/viewmodel/chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:facebook_app/models/list_friend_model.dart';
 import 'package:facebook_app/view/chat/people/widgets/conversation_item.dart';
 import 'package:facebook_app/widgets/messenger_app_bar/messenger_app_bar.dart';
+
 
 class ListPeople extends StatefulWidget {
   final ChatProvide _provide;

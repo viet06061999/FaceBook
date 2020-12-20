@@ -102,52 +102,49 @@ class _ListFriendState extends State<ListFriendTmp>
         actions: <Widget>[
           Row (
             children: <Widget>[
-              // InkWell(
-              //   onTap: () => Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       // builder: (context) => AccessCamera(),
-              //       builder: (context) => Camera(),
-              //
-              //     ),
-              //   ),
-              //
-              //   child: Container(
-              //     margin: const EdgeInsets.only( right: 15.0),
-              //     width: 33.0,
-              //     height: 33.0,
-              //     decoration: BoxDecoration(
-              //       borderRadius: BorderRadius.circular(20),
-              //       color: Colors.grey.shade200,
-              //     ),
-              //     child: Icon(
-              //       FontAwesomeIcons.camera,
-              //       size: 15.0,
-              //     ),
-              //   ),
-              // ),
+              GestureDetector(
+                onTap: () {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //       // builder: (context) => AccessCamera()),
+                  //     builder: (context) => DropDown()),
+                  // );
+                  // );
+                  // DropDown();
 
-              IconButton(
-                icon: Icon(
-
-                  FontAwesomeIcons.camera,
-                  size: 25.0,
-                  color: Colors.lightBlue,
-                ),
-                onPressed: () {
-                  // _showDialog(context);
-                  _openCamera(context);
                 },
+                child: Container(
+                  margin: const EdgeInsets.only( right: 15.0),
+                  width: 33.0,
+                  height: 33.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.grey.shade200,
+                  ),
+
+                  child: Icon(
+                    FontAwesomeIcons.camera,
+                    size: 15.0,
+                  ),
+                ),
+                // onPressed: () {
+                //   // _showDialog(context);
+                //   // _openCamera(context);
+                //   DropDownState();
+                // },
 
 
               ),
-              InkWell(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => searchFriend(_provide),
-                  ),
-                ),
+
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => searchFriend(_provide)),
+                  );
+                },
                 child: Container(
                   width: 33.0,
                   height: 33.0,

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:date_format/date_format.dart';
 import 'package:facebook_app/data/model/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rxdart/rxdart.dart';
@@ -82,6 +83,12 @@ class FirAuth {
   Stream<QuerySnapshot> getAllUsers() =>
       FirebaseFirestore.instance
           .collection('users')
+          .snapshots(includeMetadataChanges: true);
+
+  Stream<DocumentSnapshot> getUserRealTime(String userId) =>
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
           .snapshots(includeMetadataChanges: true);
 
   _createUser(UserEntity user, String document, Function onSuccess) {

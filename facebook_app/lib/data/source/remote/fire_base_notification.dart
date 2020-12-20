@@ -33,6 +33,7 @@ class FirNotification {
     Future<void> future = null;
     var now = DateTime.now().toString();
     var receiver = post.comments.map((e) => e.user.id).toList();
+    receiver.add(post.owner.id);
     var notification = NotificationLikePost(_getRandString(6),post, userFirst, now, 0, receiver);
     if (ref.exists) {
       future = _firestore.collection('notification').doc(post.postId).update({
@@ -58,7 +59,6 @@ class FirNotification {
       future = _firestore.collection('notification').doc(post.postId).update({
         "others": FieldValue.increment(-1),
         "update_time": now,
-        "receivers": FieldValue.arrayRemove([userFirst.id]),
       });
     }
     return future;

@@ -78,13 +78,11 @@ class FriendProvide extends HomeProvide {
             Friend friend =
                 Friend.fromJson(element.doc.data(), firstUser, entity);
             if (element.type == DocumentChangeType.added) {
-              print('get fpending');
               _friendWaitConfirm.insert(0, friend);
             } else if (element.type == DocumentChangeType.modified) {
               int position = -1;
               position = _friendWaitConfirm.indexWhere(
                   (element) => (element.userSecond == friend.userSecond));
-
               if (position != -1)
                 _friendWaitConfirm[position] = friend;
               else

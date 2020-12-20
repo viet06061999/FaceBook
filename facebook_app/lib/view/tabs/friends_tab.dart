@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:facebook_app/base/base.dart';
 import 'package:facebook_app/data/model/friend.dart';
 import 'package:facebook_app/view/tabs/profile_tab.dart';
@@ -13,32 +13,41 @@ import 'package:provider/provider.dart';
 import '../profile_friend.dart';
 
 class FriendsTab extends PageProvideNode<FriendProvide> {
+  final HomeProvide homeProvide;
+  FriendsTab(this.homeProvide);
+
   @override
   Widget buildContent(BuildContext context) {
-    return FriendsPageTmp(mProvider);
+    return FriendsPageTmp(mProvider,this.homeProvide);
   }
 }
 
 class FriendsPageTmp extends StatefulWidget {
   final FriendProvide provide;
-  int maxFriends = 9999;
+  final HomeProvide homeProvide;
+  final int maxFriends = 9999;
   Function(int) onImageClicked;
   Function onExpandClicked;
 
-  FriendsPageTmp(this.provide);
+  FriendsPageTmp(this.provide,this.homeProvide);
 
   @override
-  State<StatefulWidget> createState() => _FriendsPageState();
+  State<StatefulWidget> createState() => _FriendsPageState(this.homeProvide);
 }
 
 class _FriendsPageState extends State<FriendsPageTmp>
     with SingleTickerProviderStateMixin {
-  FriendProvide provide;
-
+  FriendProvide _provide;
+  final HomeProvide homeProvide;
+  _FriendsPageState(this.homeProvide);
   @override
   void initState() {
     super.initState();
-    provide = widget.provide;
+    _provide = widget.provide;
+    print("abc${homeProvide.users.length}");
+    for(int i=0;i<homeProvide.users.length;i++){
+      print("abc${homeProvide.users[i].lastName}");
+    }
   }
 
   @override
@@ -78,7 +87,7 @@ class _FriendsPageState extends State<FriendsPageTmp>
                         MaterialPageRoute(
                             builder: (context) => ListUserFriend(
                                 // provide: value,
-                                friends: value.friends,
+                                friends: homeProvide.friends,
                                 onImageClicked: null,
                                 onExpandClicked: null)),
                       );
@@ -172,10 +181,10 @@ class _FriendsPageState extends State<FriendsPageTmp>
   }
 
   List<Widget> buildFriends() {
-    int numImages = provide.friendRequest.length;
+    int numImages = _provide.friendRequest.length;
     print('number friend request $numImages');
     return List<Widget>.generate(min(numImages, widget.maxFriends), (index) {
-      Friend friend = provide.friendRequest[index];
+      Friend friend = _provide.friendRequest[index];
 
       // If its the last image
       if (index == widget.maxFriends - 1) {
@@ -264,7 +273,7 @@ class _FriendsPageState extends State<FriendsPageTmp>
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
-                      provide.acceptRequest(friend);
+                      _provide.acceptRequest(friend);
                       print('oke fr');
                     },
                     child: Container(
@@ -281,7 +290,7 @@ class _FriendsPageState extends State<FriendsPageTmp>
                   SizedBox(width: 10.0),
                   GestureDetector(
                     onTap: () {
-                      provide.deleteRequest(friend);
+                      _provide.deleteRequest(friend);
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(

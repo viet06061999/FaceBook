@@ -78,6 +78,9 @@ class HomeProvide extends BaseProvide {
   List<Friend> _friendsPending = [];
 
   List<Friend> get friendsPending => _friendsPending;
+  List<UserEntity> _users = [];
+
+  List<UserEntity> get users => _users;
 
   bool _isTop = true;
 
@@ -141,6 +144,7 @@ class HomeProvide extends BaseProvide {
       getFriendsRequest(userEntity);
       getFriendsWaitConfirm(userEntity);
       getNotifications();
+      getUsers();
     });
   }
 
@@ -195,6 +199,16 @@ class HomeProvide extends BaseProvide {
     }
   }
 
+  getUsers() {
+    _users.clear();
+    userRepository.getAllUsers().listen((event) async {
+      event.docChanges.forEach((element) async {
+        UserEntity entity = UserEntity.fromJson(element.doc.data());
+        _users.add(entity);
+      });
+    }, onError: (e) => {print("xu ly fail o day")});
+  }
+
   _getListPost() => repository.getListPost().listen((event) async {
         event.docChanges.forEach((element) async {
           DocumentReference documentReference = element.doc.data()['owner'];
@@ -205,7 +219,6 @@ class HomeProvide extends BaseProvide {
             if (element.type == DocumentChangeType.added) {
               _insertPost(postRoot);
             } else if (element.type == DocumentChangeType.modified) {
-              print('thay doi');
               Post post = postRoot;
               int position = -1;
               position = _listPost.indexWhere(
@@ -217,7 +230,6 @@ class HomeProvide extends BaseProvide {
                 (element) =>
                     (element.postId == post.postId) || element.postId == '-1',
               );
-              print('position $position tmp $positionTmp');
               if (position != -1)
                 _listPost[position] = post;
               else if (positionTmp != -1)
@@ -340,13 +352,12 @@ class HomeProvide extends BaseProvide {
       friendRepository.getRequestedFriends(entity.id).listen((event) async {
         event.docChanges.forEach((element) async {
           DocumentReference documentReference =
-              element.doc.data()['first_user'];
+              element.doc.data()['second_user'];
           await documentReference.get().then((value) {
             UserEntity firstUser = UserEntity.fromJson(value.data());
             Friend friend =
                 Friend.fromJson(element.doc.data(), firstUser, entity);
             if (element.type == DocumentChangeType.added) {
-              print('get fpending');
               _friendWaitConfirm.insert(0, friend);
             } else if (element.type == DocumentChangeType.modified) {
               int position = -1;
@@ -361,6 +372,7 @@ class HomeProvide extends BaseProvide {
               _friendWaitConfirm.removeWhere(
                   (element) => element.userSecond == friend.userSecond);
             }
+            print('leng wait ${_friendWaitConfirm.length}');
           });
           if (event.docChanges.length != 0) {
             notifyListeners();
@@ -369,11 +381,9 @@ class HomeProvide extends BaseProvide {
       }, onError: (e) => {print("xu ly fail o day")});
 
   getNotifications() {
-    print('get thong bao nay');
     notificationRepository.getNotifications(userEntity.id).listen(
         (event) async {
       event.docChanges.forEach((element) async {
-        print('vao element');
         DocumentReference documentReference = element.doc.data()['first_user'];
         await documentReference.get().then((value) async {
           UserEntity user = UserEntity.fromJson(value.data());
@@ -516,13 +526,12 @@ class HomeProvide extends BaseProvide {
   }
 
   bool checkFriend(String idSecond) {
+    if (idSecond == userEntity.id) return true;
     Friend fr = friends.firstWhere((element) {
       return (element.userSecond.id == idSecond);
     }, orElse: () => null);
-    if (fr != null)
-      return true;
-    else
-      return false;
+    if (fr != null) return true;
+    return false;
   }
 
   bool checkRequestFriend(String idSecond) {

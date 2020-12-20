@@ -14,7 +14,7 @@ class UserRepositoryImpl implements UserRepository {
   final FirUploadPhoto firPhoto;
   final FirUserUpload firUserUpload;
   final UserLocalDatasource _localDatasource;
-  static UserEntity currentUser ;
+  static UserEntity currentUser;
 
   UserRepositoryImpl(
       this._firAuth, this._localDatasource, this.firPhoto, this.firUserUpload);
@@ -87,4 +87,8 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Stream<QuerySnapshot> getAllUsers() => _firAuth.getAllUsers();
+
+  @override
+  Stream<DocumentSnapshot> getCurrentUserRealTime(String userId) =>
+      _firAuth.getUserRealTime(userId);
 }

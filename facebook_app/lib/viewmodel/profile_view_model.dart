@@ -8,6 +8,7 @@ import 'package:facebook_app/data/repository/notification_repository.dart';
 import 'package:facebook_app/data/repository/photo_repository.dart';
 import 'package:facebook_app/data/repository/post_repository.dart';
 import 'package:facebook_app/data/repository/user_repository.dart';
+import 'package:facebook_app/data/repository/user_repository_impl.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,24 +27,29 @@ class ProfileProvide extends HomeProvide {
   List<Video> get videos => _videos;
 
   void init() {
-    print('init pảent');
-    userRepository.getCurrentUser().then((value) {
-      userEntity = value;
-      getFriends(userEntity);
-      // getNotFriends(userEntity);
-      getFriendsRequest(userEntity);
-      getFriendsWaitConfirm(userEntity);
-      getUserListPost(userEntity.id);
-      getUserPhotos(userEntity.id);
-      getUserVideos(userEntity.id);
+    userRepository
+        .getCurrentUserRealTime(UserRepositoryImpl.currentUser.id)
+        .listen((event) {
+      userEntity = UserEntity.fromJson(event.data());
+      notifyListeners();
     });
+    getFriends(UserRepositoryImpl.currentUser);
+    // getNotFriends(userEntity);
+    getFriendsRequest(UserRepositoryImpl.currentUser);
+    getFriendsWaitConfirm(UserRepositoryImpl.currentUser);
+    getUserListPost(userEntity.id);
+    getUserPhotos(userEntity.id);
+    getUserVideos(userEntity.id);
   }
 
-  ProfileProvide(PostRepository repository, PhotoRepository photoRepository,
-      UserRepository userRepository, FriendRepository friendRepository,
+  ProfileProvide(
+      PostRepository repository,
+      PhotoRepository photoRepository,
+      UserRepository userRepository,
+      FriendRepository friendRepository,
       NotificationRepository notificationRepository)
       : super(repository, photoRepository, userRepository, friendRepository,
-      notificationRepository);
+            notificationRepository);
 
   getUserListPost(String userId) {
     _userListPost.clear();
@@ -60,8 +66,8 @@ class ProfileProvide extends HomeProvide {
             Post post = postRoot;
             int position = -1;
             position = _userListPost.indexWhere(
-                  (element) =>
-              (element.postId == post.postId) || element.postId == '-1',
+              (element) =>
+                  (element.postId == post.postId) || element.postId == '-1',
             );
             if (position != -1)
               _userListPost[position] = post;
@@ -98,9 +104,9 @@ class ProfileProvide extends HomeProvide {
 
   updateDescriptionUser(UserEntity userEntity, String description) {
     userRepository.updateDescriptionUser(userEntity, description).listen(
-            (event) {
-          print("loading");
-        }, onError: (error) {
+        (event) {
+      print("loading");
+    }, onError: (error) {
       print(error);
     }).onDone(() {
       print("done");

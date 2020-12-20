@@ -149,64 +149,7 @@ class PostWidget extends StatelessWidget {
             ),
           ),
           Divider(height: 30.0),
-          Container(
-            padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Consumer<HomeProvide>(builder: (key, value, child) {
-                  return FlatButton(
-                    onPressed: () => {value.updateLike(post)},
-                    padding: EdgeInsets.all(10.0),
-                    child: Row(
-                      // Replace with a Row for horizontal icon + text
-                      children: <Widget>[
-                        Icon(FontAwesomeIcons.thumbsUp,
-                            size: 20.0,
-                            color: !post.isLiked ? Colors.grey : Colors.blue),
-                        SizedBox(width: 5.0),
-                        Text(
-                          'Like',
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: !post.isLiked ? Colors.grey : Colors.blue),
-                        )
-                      ],
-                    ),
-                  );
-                }),
-                FlatButton(
-                  onPressed: () => {
-                    showMaterialModalBottomSheet(
-                      context: context,
-                      backgroundColor: Colors.transparent,
-                      builder: (context) => CreateCommentWidget(
-                        provide: provide,
-                        post: post,
-                      ),
-                    )
-                  },
-                  padding: EdgeInsets.all(10.0),
-                  child: Row(
-                    // Replace with a Row for horizontal icon + text
-                    children: <Widget>[
-                      Icon(FontAwesomeIcons.commentAlt, size: 20.0),
-                      SizedBox(width: 5.0),
-                      Text('Comment', style: TextStyle(fontSize: 14.0)),
-                    ],
-                  ),
-                ),
-                Row(
-                  children: <Widget>[
-                    Icon(FontAwesomeIcons.share, size: 20.0),
-                    SizedBox(width: 5.0),
-                    Text('Share', style: TextStyle(fontSize: 14.0)),
-                  ],
-                ),
-              ],
-            ),
-          )
+          buildBottom(context, post),
         ],
       ),
     );
@@ -290,10 +233,114 @@ class PostWidget extends StatelessWidget {
                     ),
                   ),
                 ],
-              )
+              ),
             ],
           ));
     }
+  }
+
+  buildBottom(BuildContext context, Post post) {
+    if (provide.checkFriend(post.owner.id))
+      return buildBottomLikeFriend(context);
+    return buildBottomLikeNoFriend(context);
+  }
+
+  buildBottomLikeFriend(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          FlatButton(
+            onPressed: () => {provide.updateLike(post)},
+            child: Row(
+              // Replace with a Row for horizontal icon + text
+              children: <Widget>[
+                Icon(FontAwesomeIcons.thumbsUp,
+                    size: 20.0,
+                    color: !post.isLiked ? Colors.grey : Colors.blue),
+                SizedBox(width: 5.0),
+                Text(
+                  'Like',
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: !post.isLiked ? Colors.grey : Colors.blue),
+                )
+              ],
+            ),
+          ),
+          FlatButton(
+            onPressed: () => {
+              showMaterialModalBottomSheet(
+                context: context,
+                backgroundColor: Colors.transparent,
+                builder: (context) => CreateCommentWidget(
+                  provide: provide,
+                  post: post,
+                ),
+              )
+            },
+            child: Row(
+              // Replace with a Row for horizontal icon + text
+              children: <Widget>[
+                Icon(FontAwesomeIcons.commentAlt,
+                    size: 20.0, color: Colors.grey),
+                SizedBox(width: 5.0),
+                Text('Comment',
+                    style: TextStyle(fontSize: 14.0, color: Colors.grey)),
+              ],
+            ),
+          ),
+          Row(
+            children: <Widget>[
+              Icon(FontAwesomeIcons.share, size: 20.0, color: Colors.grey),
+              SizedBox(width: 5.0),
+              Text('Share',
+                  style: TextStyle(fontSize: 14.0, color: Colors.grey)),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  buildBottomLikeNoFriend(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          FlatButton(
+            onPressed: () => {provide.updateLike(post)},
+            child: Row(
+              // Replace with a Row for horizontal icon + text
+              children: <Widget>[
+                Icon(FontAwesomeIcons.thumbsUp,
+                    size: 20.0,
+                    color: !post.isLiked ? Colors.grey : Colors.blue),
+                SizedBox(width: 5.0),
+                Text(
+                  'Like',
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: !post.isLiked ? Colors.grey : Colors.blue),
+                )
+              ],
+            ),
+          ),
+          Row(
+            children: <Widget>[
+              Icon(FontAwesomeIcons.share, size: 20.0, color: Colors.grey),
+              SizedBox(width: 5.0),
+              Text('Share',
+                  style: TextStyle(fontSize: 14.0, color: Colors.grey)),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   String fix(String text1) {
@@ -317,23 +364,28 @@ class PostWidget extends StatelessWidget {
     }
   }
 
-  buildVideos(BuildContext context) {
+  Visibility buildVideos(BuildContext context) {
+    bool isVisible = post.video.url.isNotEmpty;
+    if (isVisible) {
       controller = VideoPlayerController.network(post.video.url);
       initializeVideoPlayerFuture = controller.initialize();
       controller.setLooping(true);
       FloatingActionButton(
         onPressed: () {
-            if (controller.value.isPlaying) {
-              controller.pause();
-            } else {
-              controller.play();
-            }
+          if (controller.value.isPlaying) {
+            controller.pause();
+          } else {
+            controller.play();
+          }
         },
         child: Icon(
           controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
         ),
       );
-      return FutureBuilder(
+    }
+    return Visibility(
+      visible: isVisible,
+      child: FutureBuilder(
         future: initializeVideoPlayerFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
@@ -350,7 +402,7 @@ class PostWidget extends StatelessWidget {
             return Center(child: CircularProgressIndicator());
           }
         },
-      );
-
+      ),
+    );
   }
 }

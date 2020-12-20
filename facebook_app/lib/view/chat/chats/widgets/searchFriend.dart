@@ -20,7 +20,8 @@ class _searchFriendState extends State<searchFriend> {
   bool _isScroll = false;
   final ChatProvide provide;
 
-  _searchFriendState(this.provide);
+  _searchFriendState(this.provide){
+    }
 
   _scrollListener() {
     if (_controller.offset > 0) {
@@ -49,28 +50,30 @@ class _searchFriendState extends State<searchFriend> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _buildMessengerAppBar(_isScroll),
-            Padding(
-              padding: EdgeInsets.only(left: 16.0),
-              child : Text(
-                "Gợi ý",
-                style: TextStyle(
-                  color: Colors.grey.shade600,
-                  fontSize: 14.0,
-                ),
-                textAlign: TextAlign.left,
-              ),
-            ),
             Expanded(
               child: ListView.builder(
                 padding: EdgeInsets.only(top: 10.0),
                 controller: _controller,
                 itemBuilder: (context, index) {
-                  return ConversationItem(
+                    if(index==0){
+                      return Container(
+                        padding: EdgeInsets.only(left: 16.0),
+                        child : Text(
+                          "Gợi ý",
+                          style: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: 14.0,
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                      );
+                    }
+                    else return ConversationItem(
                     provide,
-                    getProvide(provide,index),
+                    getProvide(provide,index-1),
                   );
                 },
-                itemCount: provide.users.length-1,
+                itemCount: provide.users.length,
               ),
             )
           ],
@@ -80,6 +83,68 @@ class _searchFriendState extends State<searchFriend> {
   }
 
   _buildMessengerAppBar(_isScroll) {
+    return Container(
+      height: 90.0,
+      padding: EdgeInsets.only(right: 12.0, top: 16.0),
+      decoration: BoxDecoration(color: Colors.white, boxShadow: [
+        BoxShadow(
+          color: _isScroll ? Colors.black12 : Colors.white,
+          offset: Offset(0.0, 1.0),
+          blurRadius: 10.0,
+        ),
+      ]),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(left: 16.0),
+                child: InkWell(
+                  onTap: () {
+                    Routes.goBack(context);
+                  },
+                  child: Icon(
+                    FontAwesomeIcons.arrowLeft,
+                    size: 15.0,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 10.0,
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 16.0),
+                child: Text(
+                  'Tin nhắn mới',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold),
+                ),
+              )
+            ],
+          ),
+          Container(
+            child: Row(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(left: 20.0),
+                  child: Icon(
+                    Icons.toggle_off,
+                    color: Colors.grey.shade300,
+                    size: 45.0,
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+  _buildsearch(_isScroll) {
     return Container(
       height: 90.0,
       padding: EdgeInsets.only(right: 12.0, top: 16.0),

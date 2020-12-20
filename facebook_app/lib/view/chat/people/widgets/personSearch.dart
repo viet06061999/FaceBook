@@ -4,20 +4,21 @@ import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:facebook_app/view/chat/chat_detail/chat_detailv2.dart';
-
+import '../../../profile_me.dart';
 import '../../../profile_friend.dart';
 
 
 class personSearch extends StatelessWidget {
   final UserEntity friend;
-  const personSearch(this.friend);
+  final HomeProvide provide;
+  const personSearch(this.provide,this.friend);
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ProfileFriend(friend),
+          builder: (context) => (friend.id==provide.userEntity.id) ? ProfileMe():ProfileFriend(friend),
         ),
       ),
       child: Padding(

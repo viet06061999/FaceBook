@@ -107,6 +107,7 @@ class _searchFriendState extends State<searchFriend> {
                 itemCount:  list2.length,
                 itemBuilder: (context, index) {
                   return personSearch(
+                    provide,
                     list2[index],
                   );
                 },

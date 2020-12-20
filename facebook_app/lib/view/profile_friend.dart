@@ -20,6 +20,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import 'chat/chat_detail/chat_detailv2.dart';
+
 class ProfileFriend extends PageProvideNode<ProfileFriendProvide> {
   ProfileFriend(UserEntity entity) : super(params: [entity]);
 
@@ -198,7 +200,12 @@ class _ProfileFriend extends State<ProfilePageTmp>
                                 else
                                   buildSendResquest(value),
                                 GestureDetector(
-                                    onTap: () {},
+                                    onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ChatDetail(provide.userEntity),
+                                      ),
+                                    ),
                                     child: Container(
                                       margin: const EdgeInsets.only(right: 6.0),
                                       height: 40.0,

@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePageTmp>
           body: Consumer<HomeProvide>(builder: (context, value, child) {
             return TabBarView(controller: _tabController, children: [
               HomeTab(value),
-              FriendsTab(),
+              FriendsTab(value),
               WatchTab(),
               ProfileTab(),
               NotificationsTab(value),

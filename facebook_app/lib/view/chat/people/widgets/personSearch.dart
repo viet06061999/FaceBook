@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:facebook_app/view/chat/chat_detail/chat_detailv2.dart';
 
+import '../../../profile_friend.dart';
+
 
 class personSearch extends StatelessWidget {
   final UserEntity friend;
@@ -15,7 +17,7 @@ class personSearch extends StatelessWidget {
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ChatDetail(friend),
+          builder: (context) => ProfileFriend(friend),
         ),
       ),
       child: Padding(

@@ -162,9 +162,9 @@ class _searchFriendState extends State<searchFriend> {
                           }
                         }
                       }
-                          for(int i=0;i<list2.length;i++){
-                            print("abc+${list2[i].lastName}");
-                          }
+                      for(int i=0;i<list2.length;i++){
+                        print("abc+${list2[i].lastName}");
+                      }
                     });
                   },
                   style: new TextStyle(
@@ -224,6 +224,3 @@ String RemoveUnicode(String text)
   print("$text abc");
   return text;
 }
-
-
-

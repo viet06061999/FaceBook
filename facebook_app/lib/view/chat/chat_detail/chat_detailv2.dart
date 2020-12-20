@@ -260,7 +260,22 @@ class _ChatDetailState extends State<ChatDetailTmp>
                     content = myController.text;
                   });
                 },
-
+                onEditingComplete: () {
+                  String mess = content;
+                  if(mess != null && mess != "" ) {
+                    _provide.sendMessage(friend,
+                        content: content);
+                    myController.text="";
+                    content ="";
+                  }
+                  else {
+                    var parser = EmojiParser();
+                    mess = parser.emojify('I :heart: :coffee: :like:');
+                    _provide.sendMessage(friend,
+                        content: "👍");
+                  }
+                },
+                textInputAction: TextInputAction.send,
                 controller: myController,
                 decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10.0),

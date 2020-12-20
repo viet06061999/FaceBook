@@ -3,6 +3,7 @@ import 'package:facebook_app/data/repository/user_repository_impl.dart';
 import 'package:facebook_app/data/source/local/user_local_data.dart';
 import 'package:facebook_app/data/source/remote/fire_base_storage.dart';
 import 'package:facebook_app/data/source/remote/fire_base_user_storage.dart';
+import 'package:facebook_app/view/login/login_page.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:facebook_app/viewmodel/profile_view_model.dart';
 import 'package:flutter/material.dart';
@@ -273,7 +274,7 @@ class MenuTab extends StatelessWidget {
                 children: <Widget>[
                   Icon(Icons.help, size: 40.0, color: Colors.grey[700]),
                   SizedBox(width: 10.0),
-                  Text('Help & Support', style: TextStyle(fontSize: 17.0)),
+                  Text('Trợ giúp & hỗ trợ', style: TextStyle(fontSize: 17.0)),
                 ],
               ),
               Icon(Icons.arrow_drop_down, size: 30.0),
@@ -293,7 +294,7 @@ class MenuTab extends StatelessWidget {
                 children: <Widget>[
                   Icon(Icons.settings, size: 40.0, color: Colors.grey[700]),
                   SizedBox(width: 10.0),
-                  Text('Settings & Privacy', style: TextStyle(fontSize: 17.0)),
+                  Text('Cài đặt và quyền riêng tư', style: TextStyle(fontSize: 17.0)),
                 ],
               ),
               Icon(Icons.arrow_drop_down, size: 30.0),
@@ -304,53 +305,57 @@ class MenuTab extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           height: 65.0,
           padding: EdgeInsets.symmetric(horizontal: 15.0),
-          child: RaisedButton(
-              onPressed: () {
-                UserRepositoryImpl(
-                        inject<FirAuth>(),
-                        inject<UserLocalDatasource>(),
-                        inject<FirUploadPhoto>(),
-                        inject<FirUserUpload>())
-                    .logOut();
-                SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-              },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Icon(Icons.exit_to_app, size: 40.0, color: Colors.blue),
-                      SizedBox(width: 10.0),
-                      Text('Đăng xuất', style: TextStyle(fontSize: 17.0)),
-                    ],
+                  GestureDetector(
+                    onTap: () {
+                      UserRepositoryImpl(
+                          inject<FirAuth>(),
+                          inject<UserLocalDatasource>(),
+                          inject<FirUploadPhoto>(),
+                          inject<FirUserUpload>())
+                          .logOut();
+                        Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => LoginPage()),
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Icon(Icons.exit_to_app, size: 40.0, color: Colors.grey[700]),
+                        SizedBox(width: 10.0),
+                        Text('Đăng xuất', style: TextStyle(fontSize: 17.0)),
+                      ],
+                    ),
                   ),
                 ],
               )),
-        ),
         Container(
           width: MediaQuery.of(context).size.width,
           height: 65.0,
           padding: EdgeInsets.symmetric(horizontal: 15.0),
-          child: RaisedButton(
-            onPressed: () {
-              SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-            },
-            child: Row(
+          child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Icon(Icons.close, size: 40.0, color: Colors.blue),
-                    SizedBox(width: 10.0),
-                    Text('Thoát ứng dụng', style: TextStyle(fontSize: 17.0)),
-                  ],
+                GestureDetector(
+                  onTap: () {
+                    SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      Icon(Icons.close, size: 40.0, color: Colors.grey[700]),
+                      SizedBox(width: 10.0),
+                      Text('Thoát ứng dụng', style: TextStyle(fontSize: 17.0)),
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
-        ),
       ],
     )));
   }

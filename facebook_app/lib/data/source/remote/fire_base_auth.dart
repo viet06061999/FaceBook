@@ -92,6 +92,8 @@ class FirAuth {
           .snapshots(includeMetadataChanges: true);
 
   _createUser(UserEntity user, String document, Function onSuccess) {
+    user.avatar = "https://1.bp.blogspot.com/-A7UYXuVWb_Q/XncdHaYbcOI/AAAAAAAAZhM/hYOevjRkrJEZhcXPnfP42nL3ZMu4PvIhgCLcBGAsYHQ/s1600/Trend-Avatar-Facebook%2B%25281%2529.jpg";
+    user.coverImage ="https://www.gocbao.com/wp-content/uploads/2020/04/anh-bia-phong-canh-dep-25.jpg";
     var db = FirebaseFirestore.instance;
     db
         .collection("users")

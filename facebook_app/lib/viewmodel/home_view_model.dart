@@ -152,6 +152,56 @@ class HomeProvide extends BaseProvide {
       .doOnListen(() => loading = true)
       .doOnDone(() => loading = false);
 
+  Observable<void> _updatePost(Post post) => repository
+      .updatePost(post, userEntity.id)
+      .doOnListen(() => loading = true)
+      .doOnDone(() => loading = false);
+
+  Future<void> upDatePost(Post post,
+      {List<String> pathImages, String pathVideos}) async {
+    // print(pathImages);
+    post.modified = DateTime.now().toString();
+    if (pathImages != null && pathImages.isNotEmpty) {
+      loadingImage = true;
+      _progressPhoto = new List(pathImages.length);
+      pathImages.asMap().forEach((index, element) async {
+        await photoRepository.uploadPhoto(userEntity.id, element, (urlPath) {
+          loadingImage = false;
+          // print(urlPath);
+          post.images.add(urlPath);
+          if (index == pathImages.length - 1) {
+            _updatePost(post).listen((event) {
+              print("xu ly upload post success o day");
+            }, onError: (e) => {print("xu ly upload post fail o day")});
+          }
+        }, () {
+          loadingImage = false;
+          print('loi roi xu ly loi upload photo fail ơ đây nhá');
+        }, (progress) {
+          _progressPhoto[index] = progress;
+          print(progress);
+          progressPhoto = _progressPhoto;
+        });
+      });
+    } else if (pathVideos != null && pathVideos.isNotEmpty) {
+      loadingVideo = true;
+      photoRepository.uploadVideo(userEntity.id, pathVideos, (urlPath) {
+        loadingVideo = false;
+        post.video.url = urlPath;
+        _updatePost(post).listen((event) {
+          print("xu ly upload post success o day");
+        }, onError: (e) => {print("xu ly upload video fail o day")});
+      }, () {
+        loadingVideo = false;
+        print('loi roi xu ly loi upload video fail ơ đây nhá');
+      }, (progress) {});
+    } else {
+      _updatePost(post).listen((event) {
+        print("xu ly upload post success o day");
+      }, onError: (e) => {print("xu ly upload post fail o day")});
+    }
+  }
+
   Future<void> uploadPost(String content,
       {List<String> pathImages, String pathVideos}) async {
     // print(pathImages);
@@ -258,24 +308,26 @@ class HomeProvide extends BaseProvide {
           if (element.type == DocumentChangeType.added) {
             // print('add');
             _friends.insert(0, friend);
-            print(_friends.length);
+            notifyListeners();
           } else if (element.type == DocumentChangeType.modified) {
             // print('modified');
             int position = -1;
             position = _friends.indexWhere(
                 (element) => (element.userSecond == friend.userSecond));
+            if(friend.status == FriendStatus.none){
+              _friends.remove(position);
+            }
             if (position != -1)
               _friends[position] = friend;
             else
               _friends.insert(0, friend);
+            notifyListeners();
           } else if (element.type == DocumentChangeType.removed) {
             _friends.removeWhere(
                 (element) => element.userSecond == friend.userSecond);
+            notifyListeners();
           }
         });
-        if (event.docChanges.length != 0) {
-          notifyListeners();
-        }
       });
     }, onError: (e) => {print("xu ly fail o day")});
   }
@@ -291,24 +343,28 @@ class HomeProvide extends BaseProvide {
             Friend friend = Friend.fromJson(element.doc.data(), entity, second);
             if (element.type == DocumentChangeType.added) {
               _friendRequest.insert(0, friend);
+              notifyListeners();
             } else if (element.type == DocumentChangeType.modified) {
               print('removed');
               int position = -1;
               position = _friendRequest.indexWhere(
                   (element) => (element.userSecond == friend.userSecond));
+              if(friend.status == FriendStatus.none){
+                _friendRequest.remove(position);
+              }
               if (position != -1)
                 _friendRequest[position] = friend;
               else
                 _friendRequest.insert(0, friend);
+              notifyListeners();
             } else if (element.type == DocumentChangeType.removed) {
               print('removed');
               _friendRequest.removeWhere(
                   (element) => element.userFirst.id == friend.userFirst.id);
+              notifyListeners();
+
             }
           });
-          if (event.docChanges.length != 0) {
-            notifyListeners();
-          }
         });
       }, onError: (e) => {print("xu ly fail o day")});
 
@@ -325,24 +381,26 @@ class HomeProvide extends BaseProvide {
                 Friend.fromJson(element.doc.data(), entity, secondUser);
             if (element.type == DocumentChangeType.added) {
               _friendWaitConfirm.insert(0, friend);
+              notifyListeners();
             } else if (element.type == DocumentChangeType.modified) {
               int position = -1;
               position = _friendWaitConfirm.indexWhere(
                   (element) => (element.userSecond == friend.userSecond));
-
+              if(friend.status == FriendStatus.none){
+                _friendWaitConfirm.remove(position);
+              }
               if (position != -1)
                 _friendWaitConfirm[position] = friend;
               else
                 _friendWaitConfirm.insert(0, friend);
+              notifyListeners();
             } else if (element.type == DocumentChangeType.removed) {
               _friendWaitConfirm.removeWhere(
                   (element) => element.userSecond == friend.userSecond);
+              notifyListeners();
             }
             print('leng wait ${_friendWaitConfirm.length}');
           });
-          if (event.docChanges.length != 0) {
-            notifyListeners();
-          }
         });
       }, onError: (e) => {print("xu ly fail o day")});
 

@@ -141,7 +141,7 @@ class _HomePageState extends State<HomePageTmp>
             return TabBarView(controller: _tabController, children: [
               HomeTab(value),
               FriendsTab(value),
-              WatchTab(),
+              WatchTab(value),
               ProfileTab(),
               NotificationsTab(value),
               MenuTab(value)

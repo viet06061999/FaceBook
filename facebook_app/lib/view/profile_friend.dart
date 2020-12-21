@@ -46,6 +46,7 @@ class _ProfileFriend extends State<ProfilePageTmp>
     with SingleTickerProviderStateMixin {
   ProfileFriendProvide provide;
   UserEntity currentUser = UserRepositoryImpl.currentUser;
+  int status = 0;
 
   _ProfileFriend();
 
@@ -193,7 +194,7 @@ class _ProfileFriend extends State<ProfilePageTmp>
                               children: <Widget>[
                                 if (checkFriend())
                                   buildDestroyFriend(value)
-                                else if (checkWaitingFriend())  //tra loi ket ban
+                                else if (checkWaitingFriend()) //tra loi ket ban
                                   buildReply(value)
                                 else if (checkRequestFriend()) //huy loi moi
                                   buildCancelRequest(value)
@@ -201,11 +202,12 @@ class _ProfileFriend extends State<ProfilePageTmp>
                                   buildSendResquest(value),
                                 GestureDetector(
                                     onTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ChatDetail(provide.userEntity),
-                                      ),
-                                    ),
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                ChatDetail(provide.userEntity),
+                                          ),
+                                        ),
                                     child: Container(
                                       margin: const EdgeInsets.only(right: 6.0),
                                       height: 40.0,
@@ -440,14 +442,14 @@ class _ProfileFriend extends State<ProfilePageTmp>
   }
 
   Widget buildFriendButton(ProfileFriendProvide value) {
+    print('build lai ${status}');
     if (checkFriend()) {
       return buildDestroyFriend(value);
     } else if (checkWaitingFriend()) {
-      //frWaitingConfirm
       return buildReply(value);
     } else if (checkRequestFriend()) {
       return buildCancelRequest(value);
-    } else {
+    } else if (status == 4) {
       return buildSendResquest(value);
     }
   }
@@ -457,6 +459,10 @@ class _ProfileFriend extends State<ProfilePageTmp>
     return GestureDetector(
       onTap: () {
         value.friendRepository.deleteRequest(getFriendWithCurrentUser(), () {});
+        setState(() {
+          status = 4;
+          provide.notifyListeners();
+        });
       },
       child: Container(
         margin: const EdgeInsets.only(right: 6.0),
@@ -526,6 +532,10 @@ class _ProfileFriend extends State<ProfilePageTmp>
                             Navigator.pop(context);
                             value.friendRepository.deleteRequest(
                                 getFriendWithCurrentUser2(), () {});
+                            setState(() {
+                              status = 4;
+                              provide.notifyListeners();
+                            });
                           },
                         ),
                       ],
@@ -566,6 +576,10 @@ class _ProfileFriend extends State<ProfilePageTmp>
       onTap: () {
         value.friendRepository
             .deleteRequest(getFriendWithCurrentUser3(), () {});
+        setState(() {
+          status = 4;
+          provide.notifyListeners();
+        });
       },
       child: Container(
         margin: const EdgeInsets.only(right: 6.0),

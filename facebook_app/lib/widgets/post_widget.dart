@@ -3,6 +3,7 @@ import 'package:facebook_app/data/repository/user_repository_impl.dart';
 import 'package:facebook_app/view/profile_friend.dart';
 import 'package:facebook_app/view/profile_me.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
+import 'package:facebook_app/widgets/edit_post.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -37,73 +38,79 @@ class PostWidget extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(15),
             child: Row(
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    if (post.owner.id == UserRepositoryImpl.currentUser.id) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ProfileMe()),
-                      );
-                    } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ProfileFriend(post.owner)),
-                      );
-                    }
-                  },
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(post.owner.avatar),
-                    radius: 20.0,
-                  ),
-                ),
-                SizedBox(width: 7.0),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
                   children: <Widget>[
                     GestureDetector(
                       onTap: () {
-                        if (post.owner.id ==
-                            UserRepositoryImpl.currentUser.id) {
+                        if (post.owner.id == UserRepositoryImpl.currentUser.id) {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => ProfileMe()),
+                            MaterialPageRoute(builder: (context) => ProfileMe()),
                           );
                         } else {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    ProfileFriend(post.owner)),
+                                builder: (context) => ProfileFriend(post.owner)),
                           );
                         }
                       },
-                      child: Row(
-                        children: [
-                          Text(
-                              post.owner.firstName + ' ' + post.owner.lastName,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 17.0)),
-                          SizedBox(
-                            width: 5.0,
-                          ),
-                          Icon(
-                            Icons.check_circle,
-                            size: 15,
-                            color: Colors.blueAccent,
-                          )
-                        ],
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(post.owner.avatar),
+                        radius: 20.0,
                       ),
                     ),
-                    SizedBox(height: 5.0),
-                    Text(fix(post.modified))
+                    SizedBox(width: 7.0),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () {
+                            if (post.owner.id ==
+                                UserRepositoryImpl.currentUser.id) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ProfileMe()),
+                              );
+                            } else {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ProfileFriend(post.owner)),
+                              );
+                            }
+                          },
+                          child: Row(
+                            children: [
+                              Text(
+                                  post.owner.firstName + ' ' + post.owner.lastName,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold, fontSize: 17.0)),
+                              SizedBox(
+                                width: 5.0,
+                              ),
+                              Icon(
+                                Icons.check_circle,
+                                size: 15,
+                                color: Colors.blueAccent,
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 5.0),
+                        Text(fix(post.modified))
+                      ],
+                    ),
                   ],
                 ),
+                buildMenu(context),
               ],
-            ),
+            )
           ),
           SizedBox(height: 5.0),
           GestureDetector(
@@ -414,6 +421,29 @@ class PostWidget extends StatelessWidget {
             return Center(child: CircularProgressIndicator());
           }
         },
+      ),
+    );
+  }
+  Visibility buildMenu(BuildContext context){
+  return  Visibility(
+    visible: post.owner.id == UserRepositoryImpl.currentUser.id,
+      child: PopupMenuButton<String>(
+        onSelected: (String value) {
+          showMaterialModalBottomSheet(
+            context: context,
+            backgroundColor: Colors.transparent,
+            builder: (context) => EditPostWidget(
+              provide: provide,
+              post: post
+            ),
+          );
+        },
+        itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+          const PopupMenuItem<String>(
+            value: 'Value1',
+            child: Text('Chỉnh sửa'),
+          ),
+        ],
       ),
     );
   }

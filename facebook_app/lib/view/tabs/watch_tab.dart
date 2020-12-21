@@ -1,38 +1,21 @@
+import 'package:facebook_app/viewmodel/home_view_model.dart';
+import 'package:facebook_app/widgets/post_widget.dart';
 import 'package:facebook_app/widgets/separator_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-class WatchTab extends StatefulWidget {
-  @override
-  _WatchTabState createState() => _WatchTabState();
-}
+class WatchTab extends StatelessWidget {
+  final HomeProvide provide;
 
-class _WatchTabState extends State<WatchTab> {
-  String videoUrl1 = 'https://www.youtube.com/watch?v=vTJdVE_gjI0&ab_channel=%C4%90enV%C3%A2uOfficial';
-  YoutubePlayerController _controller1;
-
-  String videoUrl2 = 'https://www.youtube.com/watch?v=Llw9Q6akRo4&ab_channel=S%C6%A1nT%C3%B9ngM-TPOfficial';
-  YoutubePlayerController _controller2;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller1 = YoutubePlayerController(
-        initialVideoId: YoutubePlayer.convertUrlToId(videoUrl1));
-    _controller2 = YoutubePlayerController(
-        initialVideoId: YoutubePlayer.convertUrlToId(videoUrl2));
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _controller1.dispose();
-    _controller2.dispose();
-  }
+  WatchTab(this.provide);
 
   @override
   Widget build(BuildContext context) {
+    List posts = provide.listPost
+        .where(
+            (element) => element.video != null && element.video.url.isNotEmpty)
+        .toList();
     return SingleChildScrollView(
       child: SingleChildScrollView(
         child: Container(
@@ -146,181 +129,16 @@ class _WatchTabState extends State<WatchTab> {
                 ],
               ),
             ),
-            SeparatorWidget(),
-            Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15.0, 15.0, 0.0, 0.0),
-                  child: Row(
-                    children: <Widget>[
-                      CircleAvatar(
-                        backgroundImage: AssetImage('assets/greg.jpg'),
-                        radius: 20.0,
-                      ),
-                      SizedBox(width: 7.0),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text('Nguyễn Văn Vở',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 17.0)),
-                          SizedBox(height: 5.0),
-                          Text('7h')
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 20.0),
-                YoutubePlayer(controller: _controller1),
-                SizedBox(height: 10.0),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Icon(FontAwesomeIcons.thumbsUp,
-                              size: 15.0, color: Colors.blue),
-                          Text(' 23'),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Text('2 comments  •  '),
-                          Text('1 share'),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Divider(height: 30.0),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Icon(FontAwesomeIcons.thumbsUp, size: 20.0),
-                          SizedBox(width: 5.0),
-                          Text('Like', style: TextStyle(fontSize: 14.0)),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Icon(FontAwesomeIcons.commentAlt, size: 20.0),
-                          SizedBox(width: 5.0),
-                          Text('Comment', style: TextStyle(fontSize: 14.0)),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Icon(FontAwesomeIcons.share, size: 20.0),
-                          SizedBox(width: 5.0),
-                          Text('Share', style: TextStyle(fontSize: 14.0)),
-                        ],
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 20.0),
-            SeparatorWidget(),
-            Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15.0, 15.0, 0.0, 0.0),
-                  child: Row(
-                    children: <Widget>[
-                      CircleAvatar(
-                        backgroundImage: AssetImage('assets/olivia.jpg'),
-                        radius: 20.0,
-                      ),
-                      SizedBox(width: 7.0),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text('Sờ Cai',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 17.0)),
-                          SizedBox(height: 5.0),
-                          Text('10h')
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 20.0),
-                YoutubePlayer(controller: _controller2),
-                SizedBox(height: 10.0),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Icon(FontAwesomeIcons.thumbsUp,
-                              size: 15.0, color: Colors.blue),
-                          Text(' 98'),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Text('12 comments  •  '),
-                          Text('6 shares'),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Divider(height: 30.0),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Icon(FontAwesomeIcons.thumbsUp, size: 20.0),
-                          SizedBox(width: 5.0),
-                          Text('Like', style: TextStyle(fontSize: 14.0)),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Icon(FontAwesomeIcons.commentAlt, size: 20.0),
-                          SizedBox(width: 5.0),
-                          Text('Comment', style: TextStyle(fontSize: 14.0)),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Icon(FontAwesomeIcons.share, size: 20.0),
-                          SizedBox(width: 5.0),
-                          Text('Share', style: TextStyle(fontSize: 14.0)),
-                        ],
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 20.0),
-            SeparatorWidget(),
+            ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: posts.length,
+                itemBuilder: (context, index) {
+                  return PostWidget(
+                    post: posts[index],
+                    provide: provide,
+                  );
+                }),
           ],
         )),
       ),

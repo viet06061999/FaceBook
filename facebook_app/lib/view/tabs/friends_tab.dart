@@ -94,10 +94,7 @@ class _FriendsPageState extends State<FriendsPageTmp>
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ListUserFriend(
-                                    provide: widget.homeProvide,
-                                    friends: homeProvide.friends,
-                                    onImageClicked: null,
-                                    onExpandClicked: null)),
+                                    widget.homeProvide.userEntity)),
                           );
                         },
                         child: Container(

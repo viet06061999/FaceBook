@@ -287,7 +287,7 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
                     content ="";
                   }
                   else {
-                    var parser = EmojiParser();
+                      var parser = EmojiParser();
                     mess = parser.emojify('I :heart: :coffee: :like:');
                     _provide.sendMessage(friend,
                         content: "👍");

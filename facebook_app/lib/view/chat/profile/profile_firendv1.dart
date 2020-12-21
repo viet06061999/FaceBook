@@ -107,6 +107,78 @@ class _ProfilePageFriendV1State extends State<ProfilePageFriendV1Tmp>
                           SizedBox(width: 10.0),
                           GestureDetector(
                               onTap: (){
+                              },
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    Center(
+                                      child: Container(
+                                        margin: const EdgeInsets.only(top: 20.0, left: 20.0, right: 10.0),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15.0, vertical: 10.0),
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Icon(FontAwesomeIcons.phoneAlt),
+                                      ),
+                                    ),
+
+                                    Center(
+                                      child: Text(
+                                        "Âm thanh",
+                                        style: TextStyle(
+                                          color: Colors.grey.shade600,
+                                          fontSize: 12.0,
+                                        ),
+                                      ),
+
+                                    ),
+                                  ],
+
+                                ),
+
+
+                              )
+                          ),
+                          GestureDetector(
+                              onTap: (){
+                              },
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    Center(
+                                      child: Container(
+                                        margin: const EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15.0, vertical: 10.0),
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Icon(FontAwesomeIcons.video),
+                                      ),
+                                    ),
+
+                                    Center(
+                                      child: Text(
+                                        "Video",
+                                        style: TextStyle(
+                                          color: Colors.grey.shade600,
+                                          fontSize: 12.0,
+                                        ),
+                                      ),
+
+                                    ),
+                                  ],
+
+                                ),
+
+
+                              )
+                          ),
+                          GestureDetector(
+                              onTap: (){
                                 showMaterialModalBottomSheet(
                                   context: context,
                                   backgroundColor: Colors.transparent,
@@ -118,6 +190,7 @@ class _ProfilePageFriendV1State extends State<ProfilePageFriendV1Tmp>
                                   children: [
                                     Center(
                                       child: Container(
+                                        margin: const EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
                                         padding: EdgeInsets.symmetric(
                                             horizontal: 15.0, vertical: 10.0),
                                         decoration: BoxDecoration(
@@ -133,7 +206,43 @@ class _ProfilePageFriendV1State extends State<ProfilePageFriendV1Tmp>
                                         "Trang cá nhân",
                                         style: TextStyle(
                                           color: Colors.grey.shade600,
-                                          fontSize: 14.0,
+                                          fontSize: 12.0,
+                                        ),
+                                      ),
+
+                                    ),
+                                  ],
+
+                                ),
+
+
+                              )
+                          ),
+                          GestureDetector(
+                              onTap: (){
+                              },
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    Center(
+                                      child: Container(
+                                        margin: const EdgeInsets.only(top: 20.0, left: 0.0, right: 20.0),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15.0, vertical: 10.0),
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Icon(FontAwesomeIcons.bell),
+                                      ),
+                                    ),
+
+                                    Center(
+                                      child: Text(
+                                        "Tắt",
+                                        style: TextStyle(
+                                          color: Colors.grey.shade600,
+                                          fontSize: 12.0,
                                         ),
                                       ),
 
@@ -147,10 +256,19 @@ class _ProfilePageFriendV1State extends State<ProfilePageFriendV1Tmp>
                           ),
                         ],
                       ),
-                    _buildSettingItem3('Chủ đề', '', false, FontAwesomeIcons.circle),
-                    _buildSettingItem3('Biểu tượng cảm xúc', '', false, FontAwesomeIcons.solidThumbsUp),
-                    _buildTitleSetting('hành động khác'),
-                    _buildSettingItem('Chặn', '', false,Colors.purpleAccent,Colors.white),
+                      _buildSettingItem3('Chủ đề', '', false, FontAwesomeIcons.circle, Colors.blue),
+                      _buildSettingItem3('Biểu tượng cảm xúc', '', false, FontAwesomeIcons.solidThumbsUp, Colors.blue),
+                      _buildSettingItem('Biệt danh', '', false,Colors.purpleAccent,Colors.white),
+                      _buildTitleSetting('hành động khác'),
+                      _buildSettingItem3('Xem ảnh & video', '', false, FontAwesomeIcons.image, Colors.black),
+                      _buildSettingItem3('Tìm kiếm trong cuộc trò chuyện', '', false, FontAwesomeIcons.search,Colors.black),
+                      _buildSettingItem3('Đi đến cuộc trò chuyện bí mật', '', false, FontAwesomeIcons.lock,Colors.black),
+                      _buildSettingItem3('Tạo nhóm với ' + friend.firstName, '', false, FontAwesomeIcons.users, Colors.black),
+                      _buildTitleSetting('Quyền riên tư'),
+                      _buildSettingItem2('Thông báo', 'Bật', false,Colors.lightGreenAccent.shade400),
+                      _buildSettingItem3('Bỏ qua tin nhắn', '', false, Icons.account_circle_outlined, Colors.black),
+                      _buildSettingItem(' Chặn', '', false,Colors.purpleAccent,Colors.white),
+                      _buildSettingItem2('Có gì đó không ổn', 'Góp ý và báo cáo cuộc trò chuyện', false,Colors.lightGreenAccent.shade400),
 
                       SizedBox(height: 16.0)
                     ],
@@ -342,7 +460,7 @@ class _ProfilePageFriendV1State extends State<ProfilePageFriendV1Tmp>
   }
 }
 
-_buildSettingItem2(title, subtitle, isBorderBottom, icon,color1) {
+_buildSettingItem2(title, subtitle, isBorderBottom,color1) {
   return Container(
     margin: EdgeInsets.only(left: 16.0),
     padding: EdgeInsets.only(
@@ -363,24 +481,24 @@ _buildSettingItem2(title, subtitle, isBorderBottom, icon,color1) {
       children: <Widget>[
         Row(
           children: <Widget>[
-            Container(
-              width: 35,
-              height: 35,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(80.0),
-                color: color1,
-                // image: DecorationImage(
-                //   image: NetworkImage(provide.userEntity.avatar),
-                //   fit: BoxFit.cover,
-                // ),
-              ),
-              child: Icon(
-                icon,
-                //FontAwesomeIcons.chevronRight,
-                color: Colors.white,
-                size: 18.0,
-              ),
-            ),
+            // Container(
+            //   width: 35,
+            //   height: 35,
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(80.0),
+            //     color: color1,
+            //     // image: DecorationImage(
+            //     //   image: NetworkImage(provide.userEntity.avatar),
+            //     //   fit: BoxFit.cover,
+            //     // ),
+            //   ),
+            //   child: Icon(
+            //     icon,
+            //     //FontAwesomeIcons.chevronRight,
+            //     color: Colors.white,
+            //     size: 18.0,
+            //   ),
+            // ),
             SizedBox(width: 10.0),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -409,7 +527,7 @@ _buildSettingItem2(title, subtitle, isBorderBottom, icon,color1) {
   );
 }
 
-_buildSettingItem3(title, subtitle, isBorderBottom, icon2) {
+_buildSettingItem3(title, subtitle, isBorderBottom, icon2, color1) {
   return Container(
     margin: EdgeInsets.only(left: 16.0),
     padding: EdgeInsets.only(
@@ -472,7 +590,7 @@ _buildSettingItem3(title, subtitle, isBorderBottom, icon2) {
             Icon(
               icon2,
               // color: Colors.grey.shade300,
-              color: Colors.blue,
+              color: color1,
               size: 18.0,
             )
           ],

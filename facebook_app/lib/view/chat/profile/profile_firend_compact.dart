@@ -54,7 +54,7 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
 
   @override
   Widget build(BuildContext context) {
-    // height: MediaQuery.of(context).size.height * 0.9;
+    height: MediaQuery.of(context).size.height * 0.5;
     var friend = conservation.checkFriend(_provide.userEntity.id);
     return Scaffold(
       body: NotificationListener<OverscrollIndicatorNotification>(
@@ -93,17 +93,17 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Container(
-                                  width: MediaQuery.of(context).size.width - 30,
-                                  height: 200.0,
-                                  decoration: new BoxDecoration(
-                                      image: DecorationImage(
-                                          image: NetworkImage(
-                                              friend.coverImage),
-                                          fit: BoxFit.cover),
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10.0),
-                                          topRight: Radius.circular(10.0)))),
+                              // Container(
+                              //     width: MediaQuery.of(context).size.width - 30,
+                              //     height: 200.0,
+                              //     decoration: new BoxDecoration(
+                              //         image: DecorationImage(
+                              //             image: NetworkImage(
+                              //                 friend.coverImage),
+                              //             fit: BoxFit.cover),
+                              //         borderRadius: BorderRadius.only(
+                              //             topLeft: Radius.circular(10.0),
+                              //             topRight: Radius.circular(10.0)))),
                             ],
                           ),
                         ]),
@@ -152,13 +152,6 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
                                 friend.lastName,
                             style: TextStyle(
                                 fontSize: 24.0, fontWeight: FontWeight.bold)),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        Icon(
-                          Icons.check_circle,
-                          color: Colors.blueAccent,
-                        )
                       ],
                     ),
                     SizedBox(height: 15.0),
@@ -169,9 +162,8 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
 
 
                       Row(
-                        // crossAxisAlignment: CrossAxisAlignment.center,
-                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        // alignment: Alignment.centerRight,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
 
                           SizedBox(width: 10.0),
@@ -183,25 +175,43 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
                                 ),
                               ),
                               child: Center(
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 15.0, vertical: 10.0),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[300],
-                                    // borderRadius: BorderRadius.circular(30.0)),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Icon(Icons.toggle_off),
+                                child: Column(
+                                  children: [
+                                    Center(
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15.0, vertical: 10.0),
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Icon(FontAwesomeIcons.comment),
+                                      ),
+                                    ),
+
+                                    Center(
+                                      child: Text(
+                                        "Nhắn tin",
+                                        style: TextStyle(
+                                          color: Colors.grey.shade600,
+                                          fontSize: 14.0,
+                                        ),
+                                      ),
+
+                                    ),
+                                  ],
+
                                 ),
+
 
                               )
                           ),
                         ],
                       ),
-                      _buildSettingItem3('Chủ đề', '', false,FontAwesomeIcons.solidMoon,Icons.toggle_off,Colors.black),
-                      _buildSettingItem('Biểu tượng cảm xúc', '', false,FontAwesomeIcons.users,Colors.purpleAccent,Colors.white),
-                      _buildSettingItem('Tin nhắn chờ', '', false,FontAwesomeIcons.facebookMessenger,Colors.lightBlueAccent,Colors.white),
-                      _buildTitleSetting('Trang cá nhân'),
+                      // _buildSettingItem3('Chủ đề', '', false,FontAwesomeIcons.solidMoon,Icons.toggle_off,Colors.black),
+                      // _buildSettingItem('Biểu tượng cảm xúc', '', false,FontAwesomeIcons.users,Colors.purpleAccent,Colors.white),
+                      // _buildSettingItem('Tin nhắn chờ', '', false,FontAwesomeIcons.facebookMessenger,Colors.lightBlueAccent,Colors.white),
+                      _buildTitleSetting('Xem trang cá nhân trên Facebook'),
                       // _buildSettingItem2('Trang thái hoạt động', 'Bật', false,FontAwesomeIcons.userMinus,Colors.lightGreenAccent.shade400),
                       // // _buildSettingItem2('Tên người dùng', provide.userEntity.email, false,FontAwesomeIcons.userSecret,Colors.deepOrange),
                       // _buildTitleSetting('Tuỳ chọn'),
@@ -250,16 +260,16 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.only(left: 16.0),
-                child: InkWell(
-                  onTap: () {
-                    Routes.goBack(context);
-                  },
-                  child: Icon(
-                    FontAwesomeIcons.arrowLeft,
-                    size: 15.0,
-                    color: Colors.black,
-                  ),
-                ),
+                // child: InkWell(
+                //   onTap: () {
+                //     Routes.goBack(context);
+                //   },
+                //   child: Icon(
+                //     FontAwesomeIcons.arrowLeft,
+                //     size: 15.0,
+                //     color: Colors.black,
+                //   ),
+                // ),
               ),
               SizedBox(
                 width: 10.0,
@@ -278,15 +288,20 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
           Container(
             child: Row(
               children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(left: 20.0),
-                  child: Icon(
-                    Icons.close,
-                    color: Colors.black,
-                    size: 20.0,
-                  ),
-
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                padding: EdgeInsets.only(left: 20.0),
+                child: Icon(
+                  Icons.close,
+                  color: Colors.black,
+                  size: 20.0,
                 ),
+              ),
+            ),
+
               ],
             ),
           )
@@ -297,22 +312,30 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
 
   _buildTitleSetting(title) {
     return Container(
+
       padding: EdgeInsets.symmetric(
+
         horizontal: 16.0,
         vertical: 10.0,
       ),
+
       width: double.infinity,
       decoration: BoxDecoration(
+
           color: Colors.transparent,
           border: Border(
           )),
+      margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+
       child: Text(
+
         title,
         style: TextStyle(
           color: Colors.grey,
           fontSize: 14.0,
         ),
       ),
+
     );
   }
 

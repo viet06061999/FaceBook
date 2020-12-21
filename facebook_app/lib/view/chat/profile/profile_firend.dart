@@ -46,7 +46,7 @@ class Choice {
   static List<Choice> getChoices() {
     return <Choice>[
       Choice('Mở bong bóng chat'),
-      Choice('Thay đổi ảnh nhóm'),
+      Choice('Tạo lối tắt'),
       Choice('xóa cuộc trò chuyện'),
     ];
   }
@@ -168,11 +168,12 @@ class _ProfilePageFriendState extends State<ProfilePageFriendTmp>
                                 ),
 
 
-                              )),
+                              )
+                          ),
                         ],
                       ),
-                      _buildSettingItem3('Chủ đề', '', false, FontAwesomeIcons.arrowAltCircleUp),
-                      _buildSettingItem3('Biểu tượng cảm xúc', '', false, FontAwesomeIcons.arrowAltCircleUp),
+                      _buildSettingItem3('Chủ đề', '', false, FontAwesomeIcons.circle),
+                      _buildSettingItem3('Biểu tượng cảm xúc', '', false, FontAwesomeIcons.solidThumbsUp),
                       _buildTitleSetting('hành động khác'),
                       _buildSettingItem('Chặn', '', false,Colors.purpleAccent,Colors.white),
                       // _buildSettingItem2('Trang thái hoạt động', 'Bật', false,FontAwesomeIcons.userMinus,Colors.lightGreenAccent.shade400),
@@ -537,7 +538,8 @@ _buildSettingItem3(title, subtitle, isBorderBottom, icon2) {
             SizedBox(width: 10.0),
             Icon(
               icon2,
-              color: Colors.grey.shade300,
+              // color: Colors.grey.shade300,
+              color: Colors.blue,
               size: 18.0,
             )
           ],

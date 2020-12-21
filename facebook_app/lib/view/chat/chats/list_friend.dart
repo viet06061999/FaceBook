@@ -59,11 +59,9 @@ class _ListFriendState extends State<ListFriendTmp>
 
   @override
   Widget build(BuildContext context) {
+
     return Consumer<ChatProvide>(builder: (context, value, child){
       return  NotificationListener<OverscrollIndicatorNotification>(
-        // onNotification: (overscroll) {
-        //   overscroll.disallowGlow();
-        // },
         child: Container(
           decoration: BoxDecoration(color: Colors.white),
           child: Column(
@@ -85,7 +83,9 @@ class _ListFriendState extends State<ListFriendTmp>
         imageFile = camPicture;
       });
 
-      Navigator.of(context).pop();
+      onTap: () {
+        Navigator.pop(context);
+      };
     }
 
     Widget _imageView() {
@@ -96,6 +96,7 @@ class _ListFriendState extends State<ListFriendTmp>
       }
     }
     return  (MessengerAppBar(
+
         _provide,
         isScroll: _isScroll,
         title: 'Chat',
@@ -103,17 +104,12 @@ class _ListFriendState extends State<ListFriendTmp>
           Row (
             children: <Widget>[
               GestureDetector(
-                onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //       // builder: (context) => AccessCamera()),
-                  //     builder: (context) => DropDown()),
-                  // );
-                  // );
-                  // DropDown();
 
+                onTap: () {
+                  _openCamera(context);
                 },
+
+
                 child: Container(
                   margin: const EdgeInsets.only( right: 15.0),
                   width: 33.0,
@@ -128,11 +124,6 @@ class _ListFriendState extends State<ListFriendTmp>
                     size: 15.0,
                   ),
                 ),
-                // onPressed: () {
-                //   // _showDialog(context);
-                //   // _openCamera(context);
-                //   DropDownState();
-                // },
 
 
               ),
@@ -206,6 +197,7 @@ class _ListFriendState extends State<ListFriendTmp>
     );
   }
 }
+
 
 void test(int kiemtra) {
   print("hihihi $kiemtra");

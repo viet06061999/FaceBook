@@ -5,6 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:facebook_app/routes/routes.dart';
 import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/view/chat/profile/profile_firend_compactv1.dart';
+import 'package:facebook_app/view/chat/profile/profile_firend.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ProfilePageFriendV1 extends PageProvideNode<ChatProvide> {
   final UserEntity friend;
@@ -98,40 +100,58 @@ class _ProfilePageFriendV1State extends State<ProfilePageFriendV1Tmp>
                         height: 10.0,
                       ),
                       Row(
-                        // crossAxisAlignment: CrossAxisAlignment.center,
-                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        // alignment: Alignment.centerRight,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
 
                           SizedBox(width: 10.0),
                           GestureDetector(
-                              onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
+                              onTap: (){
+                                showMaterialModalBottomSheet(
+                                  context: context,
+                                  backgroundColor: Colors.transparent,
                                   builder: (context) => ProfilePageFriendCompactV1(friend),
-                                ),
-                              ),
-                            child: Center(
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 15.0, vertical: 10.0),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[300],
-                                  // borderRadius: BorderRadius.circular(30.0)),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(Icons.person),
-                              ),
+                                );
+                              },
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    Center(
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15.0, vertical: 10.0),
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Icon(Icons.person),
+                                      ),
+                                    ),
 
-                            )
+                                    Center(
+                                      child: Text(
+                                        "Trang cá nhân",
+                                        style: TextStyle(
+                                          color: Colors.grey.shade600,
+                                          fontSize: 14.0,
+                                        ),
+                                      ),
+
+                                    ),
+                                  ],
+
+                                ),
+
+
+                              )
                           ),
                         ],
                       ),
-                      _buildSettingItem3('Chủ đề', '', false,FontAwesomeIcons.solidMoon,Icons.toggle_off,Colors.black),
-                      _buildSettingItem('Biểu tượng cảm xúc', '', false,FontAwesomeIcons.users,Colors.purpleAccent,Colors.white),
-                      _buildSettingItem('Biệt danh', '', false, FontAwesomeIcons.facebookMessenger,Colors.lightBlueAccent,Colors.white),
-                      _buildTitleSetting('Trang cá nhân'),
-                      _buildSettingItem2('Trang thái hoạt động', 'Bật', false,FontAwesomeIcons.userMinus,Colors.lightGreenAccent.shade400),
+                    _buildSettingItem3('Chủ đề', '', false, FontAwesomeIcons.circle),
+                    _buildSettingItem3('Biểu tượng cảm xúc', '', false, FontAwesomeIcons.solidThumbsUp),
+                    _buildTitleSetting('hành động khác'),
+                    _buildSettingItem('Chặn', '', false,Colors.purpleAccent,Colors.white),
+
                       SizedBox(height: 16.0)
                     ],
                   ),
@@ -190,16 +210,27 @@ class _ProfilePageFriendV1State extends State<ProfilePageFriendV1Tmp>
           Container(
             child: Row(
               children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(left: 20.0),
-                  child: Icon(
-                    Icons.more_vert,
+                PopupMenuButton<Choice>(
 
-                    color: Colors.black,
-                    size: 20.0,
-                  ),
-
+                  itemBuilder: (BuildContext context) {
+                    return choices.map((Choice choice) {
+                      return PopupMenuItem<Choice>(
+                        value: choice,
+                        child: Text(choice.name),
+                      );
+                    }).toList();
+                  },
                 ),
+                // Container(
+                //   padding: EdgeInsets.only(left: 20.0),
+                //   child: Icon(
+                //     Icons.more_vert,
+                //
+                //     color: Colors.black,
+                //     size: 20.0,
+                //   ),
+                //
+                // ),
               ],
             ),
           )
@@ -210,6 +241,7 @@ class _ProfilePageFriendV1State extends State<ProfilePageFriendV1Tmp>
 
   _buildTitleSetting(title) {
     return Container(
+
       padding: EdgeInsets.symmetric(
         horizontal: 16.0,
         vertical: 10.0,
@@ -219,7 +251,9 @@ class _ProfilePageFriendV1State extends State<ProfilePageFriendV1Tmp>
           color: Colors.transparent,
           border: Border(
           )),
+
       child: Text(
+
         title,
         style: TextStyle(
           color: Colors.grey,
@@ -229,7 +263,7 @@ class _ProfilePageFriendV1State extends State<ProfilePageFriendV1Tmp>
     );
   }
 
-  _buildSettingItem(title, subtitle, isBorderBottom, icon,color1,color2) {
+  _buildSettingItem(title, subtitle, isBorderBottom,color1,color2) {
     return Container(
       margin: EdgeInsets.only(left: 16.0),
       padding: EdgeInsets.only(
@@ -250,24 +284,24 @@ class _ProfilePageFriendV1State extends State<ProfilePageFriendV1Tmp>
         children: <Widget>[
           Row(
             children: <Widget>[
-              Container(
-                width: 35,
-                height: 35,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(80.0),
-                  color: color1,
-                  // image: DecorationImage(
-                  //   image: NetworkImage(provide.userEntity.avatar),
-                  //   fit: BoxFit.cover,
-                  // ),
-                ),
-                child: Icon(
-                  icon,
-                  //FontAwesomeIcons.chevronRight,
-                  color: color2,
-                  size: 18.0,
-                ),
-              ),
+              // Container(
+              //   width: 35,
+              //   height: 35,
+              //   decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.circular(80.0),
+              // color: color1,
+              // image: DecorationImage(
+              //   image: NetworkImage(provide.userEntity.avatar),
+              //   fit: BoxFit.cover,
+              // ),
+              // ),
+              // child: Icon(
+              //   // icon,
+              //   //FontAwesomeIcons.chevronRight,
+              //   color: color2,
+              //   size: 18.0,
+              // ),
+              // ),
               // Icon(
               //   icon,
               //   //FontAwesomeIcons.chevronRight,
@@ -375,7 +409,7 @@ _buildSettingItem2(title, subtitle, isBorderBottom, icon,color1) {
   );
 }
 
-_buildSettingItem3(title, subtitle, isBorderBottom, icon1, icon2,color1) {
+_buildSettingItem3(title, subtitle, isBorderBottom, icon2) {
   return Container(
     margin: EdgeInsets.only(left: 16.0),
     padding: EdgeInsets.only(
@@ -396,20 +430,24 @@ _buildSettingItem3(title, subtitle, isBorderBottom, icon1, icon2,color1) {
       children: <Widget>[
         Row(
           children: <Widget>[
-            Container(
-              width: 35,
-              height: 35,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(80.0),
-                color: color1,
-              ),
-              child: Icon(
-                icon1,
-                //FontAwesomeIcons.chevronRight,
-                color: Colors.white,
-                size: 18.0,
-              ),
-            ),
+            // Container(
+            //   width: 35,
+            //   height: 35,
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(80.0),
+            // color: color1,
+            // image: DecorationImage(
+            //   image: NetworkImage(provide.userEntity.avatar),
+            //   fit: BoxFit.cover,
+            //     // ),
+            //   ),
+            // child: Icon(
+            //   icon1,
+            //   //FontAwesomeIcons.chevronRight,
+            //   color: Colors.white,
+            //   size: 18.0,
+            //   // ),
+            // ),
             SizedBox(width: 10.0),
             Text(
                 title,
@@ -433,8 +471,9 @@ _buildSettingItem3(title, subtitle, isBorderBottom, icon1, icon2,color1) {
             SizedBox(width: 10.0),
             Icon(
               icon2,
-              color: Colors.grey.shade300,
-              size: 50.0,
+              // color: Colors.grey.shade300,
+              color: Colors.blue,
+              size: 18.0,
             )
           ],
         )

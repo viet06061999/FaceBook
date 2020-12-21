@@ -1,7 +1,9 @@
 import 'dart:ui';
 import 'dart:math';
 
+import 'package:facebook_app/base/base.dart';
 import 'package:facebook_app/data/model/friend.dart';
+import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/data/repository/user_repository_impl.dart';
 import 'package:facebook_app/view/profile_friend.dart';
 import 'package:facebook_app/view/profile_me.dart';
@@ -12,29 +14,46 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:facebook_app/viewmodel/friend_profile_view_model.dart';
+import 'package:provider/provider.dart';
 
-class ListUserFriend extends StatefulWidget {
-  final HomeProvide provide;
-  final int maxFriends = 9999;
-  final List<Friend> friends;
-  final Function(int) onImageClicked;
-  final Function onExpandClicked;
-
-  // ListUserFriend(this.provide, this.friends, this.onImageClicked, this.onExpandClicked);
-  ListUserFriend({
-    @required this.provide,
-    @required this.friends,
-    @required this.onImageClicked,
-    @required this.onExpandClicked,
-    Key key,
-  }) : super(key: key);
+class ListUserFriend extends PageProvideNode<ProfileFriendProvide> {
+  ListUserFriend(UserEntity entity) : super(params: [entity]);
 
   @override
-  createState() => _ListUserFriendState();
+  Widget buildContent(BuildContext context) {
+    return ProfilePageTmp(mProvider);
+  }
 }
 
-@override
-class _ListUserFriendState extends State<ListUserFriend> {
+class ProfilePageTmp extends StatefulWidget {
+  final ProfileFriendProvide provide;
+  int maxFriends = 9999;
+  Function(int) onImageClicked = null;
+  Function onExpandClicked = null;
+
+  ProfilePageTmp(this.provide) {
+    provide.initChild();
+  }
+
+  @override
+  State<StatefulWidget> createState() => _ProfileFriend();
+}
+
+class _ProfileFriend extends State<ProfilePageTmp>
+    with SingleTickerProviderStateMixin {
+  ProfileFriendProvide provide;
+  UserEntity currentUser = UserRepositoryImpl.currentUser;
+  int status = 0;
+
+  _ProfileFriend();
+
+  @override
+  void initState() {
+    super.initState();
+    provide = widget.provide;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,21 +69,23 @@ class _ListUserFriendState extends State<ListUserFriend> {
         ),
 
         // var images = buildFriends();
-        body: SingleChildScrollView(
-            child: ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: widget.friends.length,
-                itemBuilder: (context, index) {
-                  return buildFriend(widget.friends[index]);
-                })));
+        body: SingleChildScrollView(child:
+            Consumer<ProfileFriendProvide>(builder: (context, value, child) {
+          return ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: provide.friends.length,
+              itemBuilder: (context, index) {
+                return buildFriend(provide.friends[index]);
+              });
+        })));
   }
 
   List<Widget> buildFriends() {
-    int numImages = widget.friends.length;
-    print(widget.friends.length);
+    int numImages = provide.friends.length;
+    print(provide.friends.length);
     return List<Widget>.generate(min(numImages, widget.maxFriends), (index) {
-      Friend friend = widget.friends[index];
+      Friend friend = provide.friends[index];
 
       // If its the last image
       if (index == widget.maxFriends - 1) {
@@ -213,25 +234,13 @@ class _ListUserFriendState extends State<ListUserFriend> {
                                                     " " +
                                                     friend.userSecond.lastName),
                                                 onTap: () {
-                                                  if (friend.userSecond.id ==
-                                                      UserRepositoryImpl
-                                                          .currentUser.id) {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              ProfileMe()),
-                                                    );
-                                                  } else {
-                                                    // Navigator.push(
-                                                    //   context,
-                                                    //   MaterialPageRoute(
-                                                    //       builder: (context) =>
-                                                    //           ListUserFriend(friends: ,
-                                                    //               onImageClicked: null,
-                                                    //               onExpandClicked: null)),
-                                                    // );
-                                                  }
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ListUserFriend(friend
+                                                                .userSecond)),
+                                                  );
                                                 },
                                               ),
                                               ListTile(

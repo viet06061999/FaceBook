@@ -8,6 +8,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:video_player/video_player.dart';
+import 'package:facebook_app/ultils/string_ext.dart';
+
+import 'infinite_scroll.dart';
 
 class CreatePostWidget extends StatefulWidget {
   final HomeProvide provide;
@@ -22,25 +25,27 @@ class CreatePostWidget extends StatefulWidget {
 
 class _CreatePostState extends State<CreatePostWidget> {
   String content = "";
+  var myController = TextEditingController();
+  String cont=" ";
   final HomeProvide provide;
   VideoPlayerController _controller;
   Future<void> _initializeVideoPlayerFuture;
 
   File videoFile;
 
-  // VideoPlayerController _videoPlayerController;
-  // File _video;
-  // final picker = ImagePicker();
-  // _pickVideo() async {
-  //   final video = await picker.getVideo(source: ImageSource.gallery);
-  //   _video = File(video.path) ;
-  //   _videoPlayerController = VideoPlayerController.file(_video)..initialize().then((_) {
-  //     setState((){
-  //
-  //     });
-  //     _videoPlayerController.play();
-  //   });
-  // }
+  VideoPlayerController _videoPlayerController;
+  File _video;
+  final picker = ImagePicker();
+  _pickVideo() async {
+    final video = await picker.getVideo(source: ImageSource.gallery);
+    _video = File(video.path) ;
+    _videoPlayerController = VideoPlayerController.file(_video)..initialize().then((_) {
+      setState((){
+
+      });
+      _videoPlayerController.play();
+    });
+  }
 
   _CreatePostState(this.provide);
 
@@ -99,10 +104,21 @@ class _CreatePostState extends State<CreatePostWidget> {
             maxLines: null,
             minLines: 4,
             textInputAction: TextInputAction.next,
-            style: TextStyle(fontSize: 18, color: Colors.black),
+            controller: myController,
             onChanged: (text) {
               setState(() {
-                content = text;
+                int n = myController.text.length;
+                if(n>=2&&myController.text[n-1]==" ") {
+                  cont = myController.text;
+                  cont = cont.getMyTextSpace();
+                  if(myController.text!=cont){
+                    myController.text=cont;
+                    myController.selection = TextSelection.fromPosition(
+                      TextPosition(offset: myController.text.length),
+                    );
+                  }
+                }
+                content = myController.text;
               });
             },
             decoration: InputDecoration(
@@ -267,3 +283,4 @@ class _CreatePostState extends State<CreatePostWidget> {
     });
   }
 }
+

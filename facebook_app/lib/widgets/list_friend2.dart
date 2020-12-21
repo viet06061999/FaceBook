@@ -13,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'list_friend.dart';
+
 class ListUserFriend2 extends StatefulWidget {
   // final ProfileProvide provide;
   final int maxFriends = 9999;
@@ -198,55 +200,80 @@ class _ListUserFriendState extends State<ListUserFriend2> {
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[
-                                              _createTile(
-                                                  context,
-                                                  'Xem bạn bè của ' +
-                                                      friend.firstName +
-                                                      " " +
-                                                      friend.lastName,
-                                                  Icon(
-                                                    Icons.people_outline,
-                                                    color: Colors.black,
-                                                  ),
-                                                  _action1,
-                                                  friend.id),
-                                              _createTile(
-                                                  context,
-                                                  'Xem trang cá nhân của ' +
-                                                      friend.firstName +
-                                                      " " +
-                                                      friend.lastName,
-                                                  Icon(
-                                                    Icons
-                                                        .account_circle_outlined,
-                                                    color: Colors.black,
-                                                  ),
-                                                  _action1,
-                                                  friend.id),
-                                              _createTile(
-                                                  context,
-                                                  'Chặn ' +
-                                                      friend.firstName +
-                                                      " " +
-                                                      friend.lastName,
-                                                  Icon(
-                                                    Icons.block,
-                                                    color: Colors.black,
-                                                  ),
-                                                  _action1,
-                                                  friend.id),
-                                              _createTile(
-                                                  context,
-                                                  'Hủy kết bạn ' +
-                                                      friend.firstName +
-                                                      " " +
-                                                      friend.lastName,
-                                                  Icon(
-                                                    Icons.cancel_outlined,
-                                                    color: Colors.black,
-                                                  ),
-                                                  _action1,
-                                                  friend.id),
+                                              ListTile(
+                                                leading: Icon(
+                                                  Icons.people_outline,
+                                                  color: Colors.black,
+                                                ),
+                                                title: Text('Xem bạn bè của ' +
+                                                    friend.firstName +
+                                                    " " +
+                                                    friend.lastName),
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ListUserFriend(
+                                                                friend)),
+                                                  );
+                                                },
+                                              ),
+                                              ListTile(
+                                                leading: Icon(
+                                                  Icons.account_circle_outlined,
+                                                  color: Colors.black,
+                                                ),
+                                                title: Text(
+                                                    'Xem trang cá nhân của ' +
+                                                        friend.firstName +
+                                                        " " +
+                                                        friend.lastName),
+                                                onTap: () {
+                                                  if (friend.id ==
+                                                      UserRepositoryImpl
+                                                          .currentUser.id) {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ProfileMe()),
+                                                    );
+                                                  } else {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ProfileFriend(friend
+                                                                  )),
+                                                    );
+                                                  }
+                                                },
+                                              ),
+                                              // _createTile(
+                                              //     context,
+                                              //     'Chặn ' +
+                                              //         friend.firstName +
+                                              //         " " +
+                                              //         friend.lastName,
+                                              //     Icon(
+                                              //       Icons.block,
+                                              //       color: Colors.black,
+                                              //     ),
+                                              //     _action1,
+                                              //     friend.id),
+                                              // _createTile(
+                                              //     context,
+                                              //     'Hủy kết bạn ' +
+                                              //         friend.firstName +
+                                              //         " " +
+                                              //         friend.lastName,
+                                              //     Icon(
+                                              //       Icons.cancel_outlined,
+                                              //       color: Colors.black,
+                                              //     ),
+                                              //     _action1,
+                                              //     friend.id),
                                             ],
                                           )),
                                     );

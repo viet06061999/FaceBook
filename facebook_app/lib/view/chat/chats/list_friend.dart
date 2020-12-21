@@ -10,6 +10,9 @@ import 'package:facebook_app/widgets/messenger_app_bar/messenger_app_bar.dart';
 import 'package:facebook_app/base/base.dart';
 import 'package:provider/provider.dart';
 import 'package:facebook_app/view/chat/chats/camera.dart';
+import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 class ListFriend extends PageProvideNode<ChatProvide> {
   @override
@@ -56,11 +59,9 @@ class _ListFriendState extends State<ListFriendTmp>
 
   @override
   Widget build(BuildContext context) {
+
     return Consumer<ChatProvide>(builder: (context, value, child){
       return  NotificationListener<OverscrollIndicatorNotification>(
-        // onNotification: (overscroll) {
-        //   overscroll.disallowGlow();
-        // },
         child: Container(
           decoration: BoxDecoration(color: Colors.white),
           child: Column(
@@ -75,7 +76,27 @@ class _ListFriendState extends State<ListFriendTmp>
   }
 
   _buildMessengerAppBar(_isScroll) {
+    File imageFile;
+    void _openCamera(BuildContext context) async {
+      var camPicture = await ImagePicker.pickImage(source: ImageSource.camera);
+      this.setState(() {
+        imageFile = camPicture;
+      });
+
+      onTap: () {
+        Navigator.pop(context);
+      };
+    }
+
+    Widget _imageView() {
+      if (imageFile == null) {
+        return Text("No Image Selected");
+      } else {
+        return Image.file(imageFile, width: 400, height: 400);
+      }
+    }
     return  (MessengerAppBar(
+
         _provide,
         isScroll: _isScroll,
         title: 'Chat',
@@ -83,13 +104,12 @@ class _ListFriendState extends State<ListFriendTmp>
           Row (
             children: <Widget>[
               GestureDetector(
+
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AccessCamera()),
-                  );
+                  _openCamera(context);
                 },
+
+
                 child: Container(
                   margin: const EdgeInsets.only( right: 15.0),
                   width: 33.0,
@@ -98,11 +118,14 @@ class _ListFriendState extends State<ListFriendTmp>
                     borderRadius: BorderRadius.circular(20),
                     color: Colors.grey.shade200,
                   ),
+
                   child: Icon(
                     FontAwesomeIcons.camera,
                     size: 15.0,
                   ),
                 ),
+
+
               ),
 
               GestureDetector(
@@ -174,6 +197,7 @@ class _ListFriendState extends State<ListFriendTmp>
     );
   }
 }
+
 
 void test(int kiemtra) {
   print("hihihi $kiemtra");

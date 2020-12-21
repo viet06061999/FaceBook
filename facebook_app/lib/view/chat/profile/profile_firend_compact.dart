@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:facebook_app/routes/routes.dart';
 import 'package:facebook_app/data/model/conservation.dart';
 import 'package:facebook_app/view/chat/chat_detail/chat_detailv3.dart';
+import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 
 class ProfilePageFriendCompact extends PageProvideNode<ChatProvide> {
   final Conservation conservation;
@@ -53,6 +54,7 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
 
   @override
   Widget build(BuildContext context) {
+    height: MediaQuery.of(context).size.height * 0.5;
     var friend = conservation.checkFriend(_provide.userEntity.id);
     return Scaffold(
       body: NotificationListener<OverscrollIndicatorNotification>(
@@ -69,59 +71,99 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
                   controller: _controller,
                   child: Column(
                     children: <Widget>[
-                      Center (
-                        child: Container (
-                            width: MediaQuery.of(context).size.width - 30,
-                            height: 200.0,
-                            decoration: new BoxDecoration(
-                                image: DecorationImage(
-                                    image: NetworkImage(friend.coverImage),
-                                    fit: BoxFit.cover),
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10.0),
-                                    topRight: Radius.circular(10.0))
-                            )
-                        )
-
-        ),
-                      SizedBox(height: 10.0),
-                      Center(
-                        child: Container(
-                            width: 200.0,
-                            height: 200.0,
-                            margin: EdgeInsets.only(top: 50.0),
-                            decoration: new BoxDecoration(
-                              border: Border.all(
-                                  width: 5,
-                                  color: Theme.of(context)
-                                      .scaffoldBackgroundColor),
-                              shape: BoxShape.circle,
-                              image: new DecorationImage(
-                                image:
-                                NetworkImage(friend.avatar),
-                                fit: BoxFit.cover,
-                              ),
-                            )
-                        ),
-                      ),
-                      SizedBox(height: 10.0),
-                      Center(
-                        child: Text(
-                          friend.firstName +" "+ friend.lastName,
-                          style: TextStyle(
-                            fontSize: 22.0,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
+        //               Center (
+        //                 child: Container (
+        //                     width: MediaQuery.of(context).size.width - 30,
+        //                     height: 200.0,
+        //                     decoration: new BoxDecoration(
+        //                         image: DecorationImage(
+        //                             image: NetworkImage(friend.coverImage),
+        //                             fit: BoxFit.cover),
+        //                         borderRadius: BorderRadius.only(
+        //                             topLeft: Radius.circular(10.0),
+        //                             topRight: Radius.circular(10.0))
+        //                     )
+        //                 )
+        //
+        // ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 15.0, left: 10, right: 10),
+                        child: new Stack(fit: StackFit.loose, children: <Widget>[
+                          new Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              // Container(
+                              //     width: MediaQuery.of(context).size.width - 30,
+                              //     height: 200.0,
+                              //     decoration: new BoxDecoration(
+                              //         image: DecorationImage(
+                              //             image: NetworkImage(
+                              //                 friend.coverImage),
+                              //             fit: BoxFit.cover),
+                              //         borderRadius: BorderRadius.only(
+                              //             topLeft: Radius.circular(10.0),
+                              //             topRight: Radius.circular(10.0)))),
+                            ],
                           ),
+                        ]),
+                      ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(top: 20.0),
+                      child:
+                      new Stack(fit: StackFit.loose, children: <Widget>[
+                        new Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            new GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                  width: 200.0,
+                                  height: 200.0,
+                                  margin: EdgeInsets.only(top: 50.0),
+                                  decoration: new BoxDecoration(
+                                    border: Border.all(
+                                        width: 5,
+                                        color: Theme.of(context)
+                                            .scaffoldBackgroundColor),
+                                    shape: BoxShape.circle,
+                                    image: new DecorationImage(
+                                      image: NetworkImage(
+                                          friend.avatar),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )),
+                            ),
+                          ],
                         ),
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
+                      ]),
+                    ),
+                    SizedBox(height: 20.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          friend.firstName +
+                                " " +
+                                friend.lastName,
+                            style: TextStyle(
+                                fontSize: 24.0, fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                    SizedBox(height: 15.0),
+          ],
+        ),
+
+
+
+
                       Row(
-                        // crossAxisAlignment: CrossAxisAlignment.center,
-                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        // alignment: Alignment.centerRight,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
 
                           SizedBox(width: 10.0),
@@ -133,43 +175,61 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
                                 ),
                               ),
                               child: Center(
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 15.0, vertical: 10.0),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[300],
-                                    // borderRadius: BorderRadius.circular(30.0)),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Icon(Icons.toggle_off),
+                                child: Column(
+                                  children: [
+                                    Center(
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15.0, vertical: 10.0),
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Icon(FontAwesomeIcons.comment),
+                                      ),
+                                    ),
+
+                                    Center(
+                                      child: Text(
+                                        "Nhắn tin",
+                                        style: TextStyle(
+                                          color: Colors.grey.shade600,
+                                          fontSize: 14.0,
+                                        ),
+                                      ),
+
+                                    ),
+                                  ],
+
                                 ),
+
 
                               )
                           ),
                         ],
                       ),
-                      _buildSettingItem3('Chủ đề', '', false,FontAwesomeIcons.solidMoon,Icons.toggle_off,Colors.black),
-                      _buildSettingItem('Biểu tượng cảm xúc', '', false,FontAwesomeIcons.users,Colors.purpleAccent,Colors.white),
-                      _buildSettingItem('Tin nhắn chờ', '', false,FontAwesomeIcons.facebookMessenger,Colors.lightBlueAccent,Colors.white),
-                      _buildTitleSetting('Trang cá nhân'),
-                      _buildSettingItem2('Trang thái hoạt động', 'Bật', false,FontAwesomeIcons.userMinus,Colors.lightGreenAccent.shade400),
-                      // _buildSettingItem2('Tên người dùng', provide.userEntity.email, false,FontAwesomeIcons.userSecret,Colors.deepOrange),
-                      _buildTitleSetting('Tuỳ chọn'),
-                      _buildSettingItem('Quyền riêng tư', '', false,FontAwesomeIcons.shieldAlt,Colors.lightBlueAccent,Colors.white),
-                      _buildSettingItem('Âm thanh & thông báo', '', false,FontAwesomeIcons.bell,Colors.purpleAccent,Colors.white),
-                      _buildSettingItem('Trình tiết kiệm dữ liệu', '', false,FontAwesomeIcons.shieldVirus,Colors.deepPurple,Colors.white),
-                      _buildSettingItem('Tin', '', false,FontAwesomeIcons.video,Colors.indigoAccent,Colors.white),
-                      _buildSettingItem('SMS', '', false,FontAwesomeIcons.comment,Colors.purpleAccent,Colors.white),
-                      _buildSettingItem('Danh bạ thư điện thoại', '', false,FontAwesomeIcons.userFriends,Colors.lightBlueAccent,Colors.white),
-                      _buildSettingItem('Ảnh & phương tiện', '', false,FontAwesomeIcons.image,Colors.purpleAccent,Colors.white),
-                      _buildSettingItem3('Bong bóng chat', '', false,FontAwesomeIcons.comments,Icons.toggle_off,
-                          Colors.lightGreenAccent),
-                      _buildSettingItem('Cập nhật ứng dụng', '', false,FontAwesomeIcons.mobile,Colors.deepPurple,Colors.white),
-                      _buildTitleSetting('Tài khoản'),
-                      _buildSettingItem('Cài đặt tài khoản', '', false,FontAwesomeIcons.cog,Colors.indigoAccent,Colors.white),
-                      _buildSettingItem('Báo cáo vấn đề kỹ thuật', '', false,FontAwesomeIcons.exclamation,Colors.deepOrangeAccent,Colors.white),
-                      _buildSettingItem('Trợ giúp', '', false,FontAwesomeIcons.questionCircle,Colors.lightBlueAccent,Colors.white),
-                      _buildSettingItem('Pháp lý và chính sách', '', false,FontAwesomeIcons.scroll,Colors.grey,Colors.white),
+                      // _buildSettingItem3('Chủ đề', '', false,FontAwesomeIcons.solidMoon,Icons.toggle_off,Colors.black),
+                      // _buildSettingItem('Biểu tượng cảm xúc', '', false,FontAwesomeIcons.users,Colors.purpleAccent,Colors.white),
+                      // _buildSettingItem('Tin nhắn chờ', '', false,FontAwesomeIcons.facebookMessenger,Colors.lightBlueAccent,Colors.white),
+                      _buildTitleSetting('Xem trang cá nhân trên Facebook'),
+                      // _buildSettingItem2('Trang thái hoạt động', 'Bật', false,FontAwesomeIcons.userMinus,Colors.lightGreenAccent.shade400),
+                      // // _buildSettingItem2('Tên người dùng', provide.userEntity.email, false,FontAwesomeIcons.userSecret,Colors.deepOrange),
+                      // _buildTitleSetting('Tuỳ chọn'),
+                      // _buildSettingItem('Quyền riêng tư', '', false,FontAwesomeIcons.shieldAlt,Colors.lightBlueAccent,Colors.white),
+                      // _buildSettingItem('Âm thanh & thông báo', '', false,FontAwesomeIcons.bell,Colors.purpleAccent,Colors.white),
+                      // _buildSettingItem('Trình tiết kiệm dữ liệu', '', false,FontAwesomeIcons.shieldVirus,Colors.deepPurple,Colors.white),
+                      // _buildSettingItem('Tin', '', false,FontAwesomeIcons.video,Colors.indigoAccent,Colors.white),
+                      // _buildSettingItem('SMS', '', false,FontAwesomeIcons.comment,Colors.purpleAccent,Colors.white),
+                      // _buildSettingItem('Danh bạ thư điện thoại', '', false,FontAwesomeIcons.userFriends,Colors.lightBlueAccent,Colors.white),
+                      // _buildSettingItem('Ảnh & phương tiện', '', false,FontAwesomeIcons.image,Colors.purpleAccent,Colors.white),
+                      // _buildSettingItem3('Bong bóng chat', '', false,FontAwesomeIcons.comments,Icons.toggle_off,
+                      //     Colors.lightGreenAccent),
+                      // _buildSettingItem('Cập nhật ứng dụng', '', false,FontAwesomeIcons.mobile,Colors.deepPurple,Colors.white),
+                      // _buildTitleSetting('Tài khoản'),
+                      // _buildSettingItem('Cài đặt tài khoản', '', false,FontAwesomeIcons.cog,Colors.indigoAccent,Colors.white),
+                      // _buildSettingItem('Báo cáo vấn đề kỹ thuật', '', false,FontAwesomeIcons.exclamation,Colors.deepOrangeAccent,Colors.white),
+                      // _buildSettingItem('Trợ giúp', '', false,FontAwesomeIcons.questionCircle,Colors.lightBlueAccent,Colors.white),
+                      // _buildSettingItem('Pháp lý và chính sách', '', false,FontAwesomeIcons.scroll,Colors.grey,Colors.white),
                       SizedBox(height: 16.0)
                     ],
                   ),
@@ -200,16 +260,16 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.only(left: 16.0),
-                child: InkWell(
-                  onTap: () {
-                    Routes.goBack(context);
-                  },
-                  child: Icon(
-                    FontAwesomeIcons.arrowLeft,
-                    size: 15.0,
-                    color: Colors.black,
-                  ),
-                ),
+                // child: InkWell(
+                //   onTap: () {
+                //     Routes.goBack(context);
+                //   },
+                //   child: Icon(
+                //     FontAwesomeIcons.arrowLeft,
+                //     size: 15.0,
+                //     color: Colors.black,
+                //   ),
+                // ),
               ),
               SizedBox(
                 width: 10.0,
@@ -228,16 +288,20 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
           Container(
             child: Row(
               children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(left: 20.0),
-                  child: Icon(
-                    Icons.more_vert,
-
-                    color: Colors.black,
-                    size: 20.0,
-                  ),
-
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                padding: EdgeInsets.only(left: 20.0),
+                child: Icon(
+                  Icons.close,
+                  color: Colors.black,
+                  size: 20.0,
                 ),
+              ),
+            ),
+
               ],
             ),
           )
@@ -248,22 +312,30 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
 
   _buildTitleSetting(title) {
     return Container(
+
       padding: EdgeInsets.symmetric(
+
         horizontal: 16.0,
         vertical: 10.0,
       ),
+
       width: double.infinity,
       decoration: BoxDecoration(
+
           color: Colors.transparent,
           border: Border(
           )),
+      margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+
       child: Text(
+
         title,
         style: TextStyle(
           color: Colors.grey,
           fontSize: 14.0,
         ),
       ),
+
     );
   }
 

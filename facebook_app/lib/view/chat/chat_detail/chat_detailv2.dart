@@ -175,7 +175,6 @@ class _ChatDetailState extends State<ChatDetailTmp>
   buildAppBar(UserEntity friend) {
     return MessengerAppBarAction(
       isScroll: true,
-      // isScroll: _isScroll,
       isBack: true,
       title: friend.firstName + " " + friend.lastName,
       imageUrl: friend.avatar,
@@ -215,29 +214,32 @@ class _ChatDetailState extends State<ChatDetailTmp>
         children: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8.0),
-            // child: Row(
-            //   children: <Widget>[
-            //     IconButton(
-            //       icon: Icon(
-            //         FontAwesomeIcons.camera,
-            //         size: 25.0,
-            //         color: Colors.lightBlue,
-            //       ),
-            //       onPressed: () {},
-            //
-            //     ),
-            //     IconButton(
-            //       icon: Icon(
-            //         FontAwesomeIcons.image,
-            //         size: 25.0,
-            //         color: Colors.lightBlue,
-            //       ),
-            //       onPressed: () {
-            //         loadAssets();
-            //       },
-            //     )
-            //   ],
-            // ),
+            child: Row(
+              children: <Widget>[
+                // IconButton(
+                //   icon: Icon(
+                //     FontAwesomeIcons.camera,
+                //     size: 25.0,
+                //     color: Colors.lightBlue,
+                //   ),
+                //   onPressed: () {
+                //     // _showDialog(context);
+                //     _openCamera(context);
+                //   },
+                //
+                // ),
+                // IconButton(
+                //   icon: Icon(
+                //     FontAwesomeIcons.image,
+                //     size: 25.0,
+                //     color: Colors.lightBlue,
+                //   ),
+                //   onPressed: () {
+                //     loadAssets();
+                //   },
+                // )
+              ],
+            ),
           ),
           Expanded(
             child: Container(

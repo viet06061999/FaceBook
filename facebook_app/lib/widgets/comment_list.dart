@@ -8,6 +8,8 @@ import 'package:facebook_app/ultils/string_ext.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'infinite_scroll.dart';
+
 class CommentWidget extends StatelessWidget {
   final Comment comment;
   final HomeProvide provide;
@@ -49,12 +51,15 @@ class CommentWidget extends StatelessWidget {
                 ),
                 SizedBox(width: 10.0),
                 Flexible(
+
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Row(
+
                         children: [
+                          // InfiniteScroll(),
                           GestureDetector(
                             onTap: () {
                               if (comment.user.id ==
@@ -81,6 +86,7 @@ class CommentWidget extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                     fontSize: 17.0)),
                           ),
+
                           SizedBox(
                             width: 5.0,
                           ),

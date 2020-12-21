@@ -5,6 +5,8 @@ import 'package:facebook_app/widgets/comment_list.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:facebook_app/ultils/string_ext.dart';
 
+import 'infinite_scroll.dart';
+
 class CreateCommentWidget extends StatefulWidget {
   final HomeProvide provide;
   final Post post;
@@ -24,7 +26,7 @@ class _CreateCommentState extends State<CreateCommentWidget> {
   final HomeProvide provide;
   final Post post;
   _CreateCommentState(this.post, this.provide);
-
+  ScrollController _scrollController = new ScrollController();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,6 +41,7 @@ class _CreateCommentState extends State<CreateCommentWidget> {
       ),
       // padding: EdgeInsets.all(20),
       child: SingleChildScrollView(
+
         child: Column(
           children: <Widget>[
             Container(
@@ -58,11 +61,13 @@ class _CreateCommentState extends State<CreateCommentWidget> {
             ),
             Divider(height: 10.0),
             Container(
+
               height: MediaQuery.of(context).size.height * 0.8,
               child: ListView.builder(
                   shrinkWrap: true,
                   itemCount: post.comments.length,
                   itemBuilder: (context, index) {
+                    InfiniteScroll();
                     return CommentWidget(
                       comment: post.comments[post.comments.length-index-1],
                       provide: provide,
@@ -117,6 +122,7 @@ class _CreateCommentState extends State<CreateCommentWidget> {
                               provide.addComment(post, content);
                               myController.text="";
                               content ="";
+
                             }
                           },
                           decoration: InputDecoration(

@@ -6,13 +6,16 @@ import 'package:facebook_app/viewmodel/friend_profile_view_model.dart';
 import 'package:facebook_app/viewmodel/home_view_model.dart';
 import 'package:facebook_app/viewmodel/profile_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:facebook_app/widgets/photo_grid.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'comment_widget.dart';
 import 'black_background_image.dart';
+import 'package:facebook_app/ultils/string_ext.dart';
 import 'post_detail.dart';
 
 class PostWidgetFriend extends StatelessWidget {
@@ -106,8 +109,19 @@ class PostWidgetFriend extends StatelessWidget {
                 child: Container(
                     alignment: Alignment.centerLeft,
                     child:
-                        Text(post.described, style: TextStyle(fontSize: 15.0))),
-              )),
+                    Linkify(
+                      onOpen: (link) async {
+                        if (await canLaunch(link.url)) {
+                          await launch(link.url);
+                        } else {
+                          throw 'Could not launch $link';
+                        }
+                      },
+                      text:post.described.getMyText(),
+                      //textAlign: TextAlign.left,
+                      linkStyle: TextStyle( fontSize: 15.0,color: Colors.black),
+                    ),)),
+              ),
           SizedBox(height: 10.0),
           buildImages(context),
           SizedBox(height: 10.0),

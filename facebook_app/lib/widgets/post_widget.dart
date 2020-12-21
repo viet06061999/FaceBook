@@ -92,9 +92,9 @@ class PostWidget extends StatelessWidget {
                           ),
                           Icon(
                             Icons.check_circle,
-                            size: 18,
+                            size: 15,
                             color: Colors.blueAccent,
-                          ),
+                          )
                         ],
                       ),
                     ),
@@ -134,7 +134,7 @@ class PostWidget extends StatelessWidget {
                 Row(
                   children: <Widget>[
                     Icon(FontAwesomeIcons.thumbsUp,
-                        size: 15.0, color: Colors.blue),
+                        size: 12.0, color: Colors.blue),
                     Text(' ${post.likes.length}'),
                   ],
                 ),
@@ -160,7 +160,7 @@ class PostWidget extends StatelessWidget {
               ],
             ),
           ),
-          Divider(height: 30.0),
+          Divider(height: 20.0),
           buildBottom(context, post),
         ],
       ),
@@ -306,7 +306,7 @@ class PostWidget extends StatelessWidget {
           ),
           Row(
             children: <Widget>[
-              Icon(FontAwesomeIcons.share, size: 20.0, color: Colors.grey),
+              Icon(FontAwesomeIcons.share, size: 15.0, color: Colors.grey),
               SizedBox(width: 5.0),
               Text('Share',
                   style: TextStyle(fontSize: 14.0, color: Colors.grey)),

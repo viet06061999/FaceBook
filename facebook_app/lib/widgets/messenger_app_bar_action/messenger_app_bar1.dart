@@ -2,6 +2,7 @@ import 'package:facebook_app/data/model/conservation.dart';
 import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/view/chat/profile/profileTao.dart';
 import 'package:facebook_app/view/chat/profile/profile_firend.dart';
+import 'package:facebook_app/view/chat/profile/profile_firendv1.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:facebook_app/routes/routes.dart';
@@ -16,26 +17,23 @@ class MessengerAppBarAction extends StatefulWidget {
   String subTitle;
   String imageUrl;
   final UserEntity friend;
-  final Conservation conservation;
   MessengerAppBarAction(
-      this.conservation,
       this.friend,{
-    this.actions,
-    this.title = '',
-    this.isScroll,
-    this.isBack,
-    this.subTitle,
-    this.imageUrl,
-  });
+        this.actions,
+        this.title = '',
+        this.isScroll,
+        this.isBack,
+        this.subTitle,
+        this.imageUrl,
+      });
 
   @override
-  _MessengerAppBarActionState createState() => _MessengerAppBarActionState(this.conservation,this.friend);
+  _MessengerAppBarActionState createState() => _MessengerAppBarActionState(this.friend);
 }
 
 class _MessengerAppBarActionState extends State<MessengerAppBarAction> {
-  final Conservation conservation;
   final UserEntity friend;
-  _MessengerAppBarActionState(this.conservation,this.friend);
+  _MessengerAppBarActionState(this.friend);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -70,19 +68,19 @@ class _MessengerAppBarActionState extends State<MessengerAppBarAction> {
                 width: 16.0,
               ),
               Row(
-                    children: <Widget>[
-                      InkWell(
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProfilePageFriend(conservation),
+                  children: <Widget>[
+                    InkWell(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfilePageFriendV1(friend),
+                        ),
                       ),
-                    ),
-                    child: AppBarNetworkRoundedImage(
-                      imageUrl: widget.imageUrl,
-                    ),
-                  )
-                      ]
+                      child: AppBarNetworkRoundedImage(
+                        imageUrl: widget.imageUrl,
+                      ),
+                    )
+                  ]
               ),
               SizedBox(
                 width: 10.0,
@@ -115,9 +113,9 @@ class _MessengerAppBarActionState extends State<MessengerAppBarAction> {
             child: Row(
               children: widget.actions
                   .map((c) => Container(
-                        padding: EdgeInsets.only(left: 20.0),
-                        child: c,
-                      ))
+                padding: EdgeInsets.only(left: 20.0),
+                child: c,
+              ))
                   .toList(),
             ),
           )

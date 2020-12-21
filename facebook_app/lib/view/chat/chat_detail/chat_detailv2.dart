@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:facebook_app/widgets/messenger_app_bar/app_bar_network_rounded_image.dart';
 import 'package:facebook_app/widgets/messenger_app_bar/AppBarNetworkRoundedImage2.dart';
-import 'package:facebook_app/widgets/messenger_app_bar_action/messenger_app_bar.dart';
+import 'package:facebook_app/widgets/messenger_app_bar_action/messenger_app_bar1.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
@@ -174,6 +174,7 @@ class _ChatDetailState extends State<ChatDetailTmp>
   }
   buildAppBar(UserEntity friend) {
     return MessengerAppBarAction(
+      friend,
       isScroll: true,
       isBack: true,
       title: friend.firstName + " " + friend.lastName,

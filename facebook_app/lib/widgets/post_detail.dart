@@ -135,7 +135,7 @@ class _PostDetail extends State<PostDetail> {
                 child: Column(
                   children: <Widget>[
                     Container(
-                      height: MediaQuery.of(context).size.height * 0.8,
+                      height: MediaQuery.of(context).size.height * 0.6,
                       child: ListView.builder(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,

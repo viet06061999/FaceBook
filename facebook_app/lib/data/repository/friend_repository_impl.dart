@@ -34,7 +34,7 @@ class FriendRepositoryImpl extends FriendRepository {
   createRequestFriend(
       UserEntity userFirst, String idUserSecond, Function onError) {
     _firFriend.createRequestFriend(userFirst.id, idUserSecond, onError);
-    _firNotification.createNotificationFriend(userFirst, idUserSecond);
+    _firNotification.createNotificationRequestFriend(userFirst, idUserSecond);
   }
 
   @override

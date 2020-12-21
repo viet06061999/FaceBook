@@ -7,13 +7,24 @@ class UserLocalDatasource {
 
   UserLocalDatasource(this._spUtil);
 
+  setSaveLogin() {
+    _spUtil.putBool(KEY_SAVE_LOGIN, true);
+  }
+
+  bool getSaveLogin() {
+    var check = _spUtil.getBool(KEY_SAVE_LOGIN);
+    _spUtil.getDynamic(KEY_SAVE_LOGIN);
+    if (check == null || !check) return false;
+    return check;
+  }
+
   UserEntity getCurrentUserLocal() {
     UserEntity userEntity;
     userEntity.birthday = _spUtil.getString(KEY_CURRENT_USER_BIRTHDAY);
     userEntity.email = _spUtil.getString(KEY_CURRENT_USER_EMAIL);
     userEntity.firstName = _spUtil.getString(KEY_CURRENT_USER_FIRST_NAME);
     userEntity.lastName = _spUtil.getString(KEY_CURRENT_USER_LAST_NAME);
-    userEntity.genre =_spUtil.getString(KEY_CURRENT_USER_GENRE);
+    userEntity.genre = _spUtil.getString(KEY_CURRENT_USER_GENRE);
     userEntity.id = _spUtil.getString(KEY_CURRENT_USER_ID);
     userEntity.password = _spUtil.getString(KEY_CURRENT_USER_PASSWORD);
     userEntity.avatar = _spUtil.getString(KEY_CURRENT_USER_AVATAR);
@@ -33,7 +44,7 @@ class UserLocalDatasource {
     return _spUtil.putString(KEY_CURRENT_USER_PHONE, userEntity.phone);
   }
 
-  void clearUser(){
+  void clearUser() {
     _spUtil.putString(KEY_CURRENT_USER_BIRTHDAY, "");
     _spUtil.putString(KEY_CURRENT_USER_EMAIL, "");
     _spUtil.putString(KEY_CURRENT_USER_FIRST_NAME, "");
@@ -43,5 +54,6 @@ class UserLocalDatasource {
     _spUtil.putString(KEY_CURRENT_USER_PASSWORD, "");
     _spUtil.putString(KEY_CURRENT_USER_AVATAR, "");
     _spUtil.putString(KEY_CURRENT_USER_PHONE, "");
+    _spUtil.putBool(KEY_SAVE_LOGIN, false);
   }
 }

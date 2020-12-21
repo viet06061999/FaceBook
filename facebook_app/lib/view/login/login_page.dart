@@ -29,7 +29,8 @@ class _LoginPageState extends State<LoginPageTmp>
     implements Presenter {
   LoginProvide _provide;
   static const ACTION_LOGIN = "login";
-
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passWordController = TextEditingController();
   bool _showPass = false;
   bool _visible = false;
 
@@ -129,6 +130,7 @@ class _LoginPageState extends State<LoginPageTmp>
       return Padding(
           padding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
           child: TextField(
+            controller: passWordController,
             onChanged: (text) {
               value.password = text;
               setState(() {
@@ -167,6 +169,7 @@ class _LoginPageState extends State<LoginPageTmp>
       return Padding(
         padding: const EdgeInsets.fromLTRB(30, 30, 30, 20),
         child: TextField(
+          controller: emailController,
           textInputAction: TextInputAction.next,
           style: TextStyle(fontSize: 18, color: Colors.black),
           decoration: InputDecoration(
@@ -208,13 +211,112 @@ class _LoginPageState extends State<LoginPageTmp>
   }
 
   void onSignInClicked(LoginProvide value) async {
+    Dialog saveLogin = Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      //this right here
+      child: Container(
+        height: 300.0,
+        width: 300.0,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(15.0),
+              child: Text(
+                'Lưu đăng nhập',
+                style: TextStyle(color: Colors.black, fontSize: 18),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: TextField(
+                controller: emailController,
+                textInputAction: TextInputAction.next,
+                style: TextStyle(fontSize: 18, color: Colors.black),
+                decoration: InputDecoration(
+                  labelText: "Số điện thoại hoặc email",
+                  // errorText: snapshot.hasError ? snapshot.error : null,
+                  prefixIcon: Icon(Icons.person, color: Color(0xff888888)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                  labelStyle: TextStyle(color: Color(0xff888888), fontSize: 15),
+                ),
+              ),
+            ),
+            Padding(
+                padding: const EdgeInsets.all(15),
+                child: TextField(
+                  controller: passWordController,
+                  onChanged: (text) {
+                    value.password = text;
+                    setState(() {
+                      _visible = text.isNotEmpty;
+                    });
+                  },
+                  style: TextStyle(fontSize: 18, color: Colors.black),
+                  obscureText: !_showPass,
+                  decoration: InputDecoration(
+                    prefixIcon:
+                        Icon(Icons.lock_outline, color: Color(0xff888888)),
+                    labelText: "Mật khẩu",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    labelStyle:
+                        TextStyle(color: Color(0xff888888), fontSize: 15),
+                    suffixIcon: Visibility(
+                      visible: _visible,
+                      child: new GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            print(value.password.isNotEmpty);
+                            _showPass = !_showPass;
+                          });
+                        },
+                        child: new Icon(_showPass
+                            ? Icons.visibility
+                            : Icons.visibility_off),
+                      ),
+                    ),
+                  ),
+                )),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                FlatButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => HomePage()));
+                    },
+                    child: Text(
+                      'Huỷ',
+                      style: TextStyle(color: Colors.grey, fontSize: 18.0),
+                    )),
+                FlatButton(
+                    onPressed: () {
+                      _provide.saveLogin();
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => HomePage()));
+                    },
+                    child: Text(
+                      'Lưu',
+                      style: TextStyle(color: Colors.blue, fontSize: 18.0),
+                    ))
+              ],
+            )
+          ],
+        ),
+      ),
+    );
     bool isAvailableConnect = await isAvailableInternet();
     if (isAvailableConnect) {
       if (value.isValidInfo()) {
         final s = value.login().doOnListen(() {}).doOnDone(() {}).listen(
           (_) {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => HomePage()));
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) => saveLogin);
           },
           onError: (e) => value.dispatchFailure(e),
         );

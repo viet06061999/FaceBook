@@ -32,11 +32,17 @@ class _RootPage extends State<RootPage> {
         inject<UserLocalDatasource>(),
         inject<FirUploadPhoto>(),
         inject<FirUserUpload>());
-    userRepo.getCurrentUser().then((value) {
-      setState(() {
-        status = value != null ? AuthStatus.signIn : AuthStatus.notSignedIn;
+    if (userRepo.getSaveLogin()) {
+      userRepo.getCurrentUser().then((value) {
+        setState(() {
+          status = value != null ? AuthStatus.signIn : AuthStatus.notSignedIn;
+        });
       });
-    });
+    }else{
+      setState(() {
+        status = AuthStatus.notSignedIn;
+      });
+    }
   }
 
   @override

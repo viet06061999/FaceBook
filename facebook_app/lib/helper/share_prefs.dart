@@ -57,7 +57,7 @@ class SpUtil {
   }
 
   bool getBool(String key) {
-    if (_beforCheck()) return null;
+    if (_beforCheck()) return false;
     return _spf.getBool(key);
   }
 

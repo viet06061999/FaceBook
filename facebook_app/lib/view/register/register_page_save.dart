@@ -32,6 +32,9 @@ class _RegisterPageSave extends State<RegisterPageSave> {
             children: [
               buildTextTop(),
               buildTextOfTop(),
+              Container(
+                height: MediaQuery.of(context).size.height / 1.5,
+              ),
               buildText()
             ],
           ),
@@ -79,6 +82,7 @@ class _RegisterPageSave extends State<RegisterPageSave> {
             onTap: () async {
               onContinueClick();
               inject<UserLocalDatasource>().setCurrentUser(_user);
+              inject<UserLocalDatasource>().setSaveLogin();
             },
             child: new Text(
               "Ok",
@@ -91,7 +95,7 @@ class _RegisterPageSave extends State<RegisterPageSave> {
   }
 
   onContinueClick() {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => HomePage()));
   }
 }

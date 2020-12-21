@@ -91,4 +91,14 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Stream<DocumentSnapshot> getCurrentUserRealTime(String userId) =>
       _firAuth.getUserRealTime(userId);
+
+  @override
+  bool getSaveLogin() {
+    return _localDatasource.getSaveLogin();
+  }
+
+  @override
+  setSaveLogin() {
+    _localDatasource.setSaveLogin();
+  }
 }

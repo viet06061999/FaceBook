@@ -7,6 +7,7 @@ import 'package:facebook_app/data/model/notification/accept_friend_notification.
 import 'package:facebook_app/data/model/notification/comment_post_notification.dart';
 import 'package:facebook_app/data/model/notification/like_post_notification.dart';
 import 'package:facebook_app/data/model/notification/notification_friend.dart';
+import 'package:facebook_app/data/model/notification/request_friend_notification.dart';
 import 'package:facebook_app/data/model/post.dart';
 import 'package:facebook_app/data/model/user.dart';
 import 'package:facebook_app/ultils/string_ext.dart';
@@ -20,6 +21,16 @@ class FirNotification {
       UserEntity userFirst, String idUserSecond) {
     var notification = NotificationAcceptFriend(
       _getRandString(6),
+        userFirst, DateTime.now().toString(), 0, [idUserSecond]);
+    return _firestore
+        .collection('notification')
+        .add(notification.toMap(_firestore.doc('users/' + userFirst.id)));
+  }
+
+  Future<void> createNotificationRequestFriend(
+      UserEntity userFirst, String idUserSecond) {
+    var notification = NotificationRequestFriend(
+        _getRandString(6),
         userFirst, DateTime.now().toString(), 0, [idUserSecond]);
     return _firestore
         .collection('notification')

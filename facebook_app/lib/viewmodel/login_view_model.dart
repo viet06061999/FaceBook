@@ -41,6 +41,10 @@ class LoginProvide extends BaseProvide {
       .doOnListen(() => loading = true)
       .doOnDone(() => loading = false);
 
+  saveLogin(){
+    _repository.setSaveLogin();
+  }
+
   void dispatchFailure(e) {
     print(e.code);
     switch (e.code) {

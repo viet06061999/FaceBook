@@ -39,6 +39,15 @@ class _PostDetail extends State<PostDetail> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.blue),
+          title: Text(
+            'Bài viết',
+            style: TextStyle(fontSize: 20, color: Colors.black),
+          ),
+          elevation: 0,
+        ),
         body: Container(
           color: Colors.white,
           height: MediaQuery.of(context).size.height * 0.97,
@@ -126,7 +135,7 @@ class _PostDetail extends State<PostDetail> {
                 child: Column(
                   children: <Widget>[
                     Container(
-                      height: MediaQuery.of(context).size.height * 0.5,
+                      height: MediaQuery.of(context).size.height * 0.8,
                       child: ListView.builder(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,

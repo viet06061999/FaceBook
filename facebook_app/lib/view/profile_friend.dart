@@ -44,7 +44,7 @@ class ProfilePageTmp extends StatefulWidget {
 
 class _ProfileFriend extends State<ProfilePageTmp>
     with SingleTickerProviderStateMixin {
-  ProfileProvide provide;
+  ProfileFriendProvide provide;
   UserEntity currentUser = UserRepositoryImpl.currentUser;
 
   _ProfileFriend();
@@ -401,6 +401,7 @@ class _ProfileFriend extends State<ProfilePageTmp>
   }
 
   bool checkRequestFriend() {
+    print('friend request user ${provide.friendRequest.length}');
     Friend fr = provide.friendRequest.firstWhere((element) {
       return (element.userSecond.id == currentUser.id);
     }, orElse: () => null);

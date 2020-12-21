@@ -27,6 +27,7 @@ abstract class UserRepository {
   Stream<QuerySnapshot> getAllUsers();
 
   Stream<DocumentSnapshot> getCurrentUserRealTime(String userId);
-
+  setSaveLogin();
+  bool getSaveLogin();
   void logOut();
 }

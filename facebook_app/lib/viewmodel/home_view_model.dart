@@ -140,9 +140,8 @@ class HomeProvide extends BaseProvide {
       // print('user Entity ${value.firstName}');
       _getListPost();
       getFriends(userEntity);
-      // getNotFriends(userEntity);
       getFriendsRequest(userEntity);
-      getFriendsWaitConfirm(userEntity);
+    //  getFriendsWaitConfirm(userEntity);
       getNotifications();
       getUsers();
     });
@@ -281,40 +280,6 @@ class HomeProvide extends BaseProvide {
     }, onError: (e) => {print("xu ly fail o day")});
   }
 
-  // getNotFriends(UserEntity entity) {
-  //   print('not friend');
-  //   _notFriends.clear();
-  //   friendRepository.getNotFriends(entity.id).listen((event) async {
-  //     event.docChanges.forEach((element) async {
-  //       DocumentReference documentReference = element.doc.data()['second_user'];
-  //       await documentReference.get().then((value) {
-  //         UserEntity second = UserEntity.fromJson(value.data());
-  //         Friend friend = Friend.fromJson(element.doc.data(), entity, second);
-  //         if (element.type == DocumentChangeType.added) {
-  //           print('add');
-  //           _notFriends.insert(0, friend);
-  //           print(_notFriends.length);
-  //         } else if (element.type == DocumentChangeType.modified) {
-  //           // print('modified');
-  //           int position = -1;
-  //           position = _notFriends.indexWhere(
-  //                   (element) => (element.userSecond == friend.userSecond));
-  //           if (position != -1)
-  //             _notFriends[position] = friend;
-  //           else
-  //             _notFriends.insert(0, friend);
-  //         } else if (element.type == DocumentChangeType.removed) {
-  //           _notFriends.removeWhere(
-  //                   (element) => element.userSecond == friend.userSecond);
-  //         }
-  //       });
-  //       if (event.docChanges.length != 0) {
-  //         notifyListeners();
-  //       }
-  //     });
-  //   }, onError: (e) => {print("xu ly fail o day")});
-  // }
-
   //lời mời kết bạn đã nhan
   getFriendsRequest(UserEntity entity) =>
       friendRepository.getRequestFriends(entity.id).listen((event) async {
@@ -350,13 +315,14 @@ class HomeProvide extends BaseProvide {
   //lời mời kết bạn đã gui
   getFriendsWaitConfirm(UserEntity entity) =>
       friendRepository.getRequestedFriends(entity.id).listen((event) async {
+        print('fiends cua ${entity.id}');
         event.docChanges.forEach((element) async {
           DocumentReference documentReference =
               element.doc.data()['second_user'];
           await documentReference.get().then((value) {
-            UserEntity firstUser = UserEntity.fromJson(value.data());
+            UserEntity secondUser = UserEntity.fromJson(value.data());
             Friend friend =
-                Friend.fromJson(element.doc.data(), firstUser, entity);
+                Friend.fromJson(element.doc.data(), entity, secondUser);
             if (element.type == DocumentChangeType.added) {
               _friendWaitConfirm.insert(0, friend);
             } else if (element.type == DocumentChangeType.modified) {
@@ -381,6 +347,7 @@ class HomeProvide extends BaseProvide {
       }, onError: (e) => {print("xu ly fail o day")});
 
   getNotifications() {
+    print('vao notification');
     notificationRepository.getNotifications(userEntity.id).listen(
         (event) async {
       event.docChanges.forEach((element) async {

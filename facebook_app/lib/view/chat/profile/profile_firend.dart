@@ -282,7 +282,7 @@ class _ProfilePageFriendState extends State<ProfilePageFriendTmp>
                           false, FontAwesomeIcons.search, Colors.black),
                       _buildSettingItem3('Đi đến cuộc trò chuyện bí mật', '',
                           false, FontAwesomeIcons.lock, Colors.black),
-                      _buildSettingItem3('Tạo nhóm với ' + friend.firstName, '',
+                      _buildSettingItem3('Tạo nhóm với ' + friend.lastName, '',
                           false, FontAwesomeIcons.users, Colors.black),
                       _buildTitleSetting('Quyền riên tư'),
                       _buildSettingItem2('Thông báo', 'Bật', false,
@@ -429,6 +429,7 @@ class _ProfilePageFriendState extends State<ProfilePageFriendTmp>
       ),
       width: double.infinity,
       decoration: BoxDecoration(color: Colors.transparent, border: Border()),
+      margin: const EdgeInsets.only( left: 13.0),
       child: Text(
         title,
         style: TextStyle(

@@ -28,19 +28,19 @@ class _CreatePostState extends State<CreatePostWidget> {
 
   File videoFile;
 
-  // VideoPlayerController _videoPlayerController;
-  // File _video;
-  // final picker = ImagePicker();
-  // _pickVideo() async {
-  //   final video = await picker.getVideo(source: ImageSource.gallery);
-  //   _video = File(video.path) ;
-  //   _videoPlayerController = VideoPlayerController.file(_video)..initialize().then((_) {
-  //     setState((){
-  //
-  //     });
-  //     _videoPlayerController.play();
-  //   });
-  // }
+  VideoPlayerController _videoPlayerController;
+  File _video;
+  final picker = ImagePicker();
+  _pickVideo() async {
+    final video = await picker.getVideo(source: ImageSource.gallery);
+    _video = File(video.path) ;
+    _videoPlayerController = VideoPlayerController.file(_video)..initialize().then((_) {
+      setState((){
+
+      });
+      _videoPlayerController.play();
+    });
+  }
 
   _CreatePostState(this.provide);
 

@@ -163,7 +163,7 @@ class _CreateCommentState extends State<CreateCommentWidget> {
                           // Navigator.pop(context);
                         },
                         icon: Icon(
-                          FontAwesomeIcons.chevronCircleRight,
+                          FontAwesomeIcons.paperPlane,
                           size: 25.0,
                           color: Colors.lightBlue,
                         ),

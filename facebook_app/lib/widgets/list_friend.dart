@@ -50,13 +50,14 @@ class _ListUserFriendState extends State<ListUserFriend> {
         ),
 
         // var images = buildFriends();
-        body: ListView.builder(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: widget.friends.length,
-            itemBuilder: (context, index) {
-              return buildFriend(widget.friends[index]);
-            }));
+        body: SingleChildScrollView(
+            child: ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: widget.friends.length,
+                itemBuilder: (context, index) {
+                  return buildFriend(widget.friends[index]);
+                })));
   }
 
   List<Widget> buildFriends() {
@@ -247,17 +248,21 @@ class _ListUserFriendState extends State<ListUserFriend> {
                                                             .lastName),
                                                 onTap: () {
                                                   if (friend.userSecond.id ==
-                                                      UserRepositoryImpl.currentUser.id) {
+                                                      UserRepositoryImpl
+                                                          .currentUser.id) {
                                                     Navigator.push(
                                                       context,
-                                                      MaterialPageRoute(builder: (context) => ProfileMe()),
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ProfileMe()),
                                                     );
                                                   } else {
                                                     Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (context) =>
-                                                              ProfileFriend(friend.userSecond)),
+                                                              ProfileFriend(friend
+                                                                  .userSecond)),
                                                     );
                                                   }
                                                 },

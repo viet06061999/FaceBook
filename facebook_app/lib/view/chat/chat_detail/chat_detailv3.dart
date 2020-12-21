@@ -190,6 +190,8 @@ class _ChatDetailState extends State<ChatDetailV3Tmp>
   buildAppBar(Conservation conservation) {
     var friend = conservation.checkFriend(_provide.userEntity.id);
     return MessengerAppBarAction(
+      conservation,
+      friend,
       isScroll: true,
       // isScroll: _isScroll,
       isBack: true,

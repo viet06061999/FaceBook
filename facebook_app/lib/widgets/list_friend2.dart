@@ -21,15 +21,13 @@ class ListUserFriend2 extends StatefulWidget {
   final Function onExpandClicked;
 
   // ListUserFriend(this.provide, this.friends, this.onImageClicked, this.onExpandClicked);
-  ListUserFriend2(
-      {
-        // @required this.provide,
-        @required this.friends,
-        @required this.onImageClicked,
-        @required this.onExpandClicked,
-        Key key,
-      })
-      : super(key: key);
+  ListUserFriend2({
+    // @required this.provide,
+    @required this.friends,
+    @required this.onImageClicked,
+    @required this.onExpandClicked,
+    Key key,
+  }) : super(key: key);
 
   @override
   createState() => _ListUserFriendState();
@@ -52,13 +50,14 @@ class _ListUserFriendState extends State<ListUserFriend2> {
         ),
 
         // var images = buildFriends();
-        body: ListView.builder(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: widget.friends.length,
-            itemBuilder: (context, index) {
-              return buildFriend(widget.friends[index]);
-            }));
+        body: SingleChildScrollView(
+            child: ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: widget.friends.length,
+                itemBuilder: (context, index) {
+                  return buildFriend(widget.friends[index]);
+                })));
   }
 
   List<Widget> buildFriends() {
@@ -125,8 +124,7 @@ class _ListUserFriendState extends State<ListUserFriend2> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          ProfileFriend(friend)),
+                      builder: (context) => ProfileFriend(friend)),
                 );
               }
             },
@@ -159,15 +157,12 @@ class _ListUserFriendState extends State<ListUserFriend2> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  ProfileFriend(friend)),
+                              builder: (context) => ProfileFriend(friend)),
                         );
                       }
                     },
                     child: Text(
-                      friend.firstName +
-                          " " +
-                          friend.lastName,
+                      friend.firstName + " " + friend.lastName,
                       style: TextStyle(
                           fontSize: 18,
                           color: Colors.black,
@@ -206,11 +201,9 @@ class _ListUserFriendState extends State<ListUserFriend2> {
                                               _createTile(
                                                   context,
                                                   'Xem bạn bè của ' +
-                                                      friend
-                                                          .firstName +
+                                                      friend.firstName +
                                                       " " +
-                                                      friend
-                                                          .lastName,
+                                                      friend.lastName,
                                                   Icon(
                                                     Icons.people_outline,
                                                     color: Colors.black,
@@ -220,11 +213,9 @@ class _ListUserFriendState extends State<ListUserFriend2> {
                                               _createTile(
                                                   context,
                                                   'Xem trang cá nhân của ' +
-                                                      friend
-                                                          .firstName +
+                                                      friend.firstName +
                                                       " " +
-                                                      friend
-                                                          .lastName,
+                                                      friend.lastName,
                                                   Icon(
                                                     Icons
                                                         .account_circle_outlined,
@@ -237,8 +228,7 @@ class _ListUserFriendState extends State<ListUserFriend2> {
                                                   'Chặn ' +
                                                       friend.firstName +
                                                       " " +
-                                                      friend
-                                                          .lastName,
+                                                      friend.lastName,
                                                   Icon(
                                                     Icons.block,
                                                     color: Colors.black,
@@ -248,11 +238,9 @@ class _ListUserFriendState extends State<ListUserFriend2> {
                                               _createTile(
                                                   context,
                                                   'Hủy kết bạn ' +
-                                                      friend
-                                                          .firstName +
+                                                      friend.firstName +
                                                       " " +
-                                                      friend
-                                                          .lastName,
+                                                      friend.lastName,
                                                   Icon(
                                                     Icons.cancel_outlined,
                                                     color: Colors.black,
@@ -297,8 +285,9 @@ class _ListUserFriendState extends State<ListUserFriend2> {
     print(userId);
   }
 }
+
 String getFriendChung() {
   var rng = new Random();
-  int a =1+ rng.nextInt(10);
+  int a = 1 + rng.nextInt(10);
   return "${a} bạn chung";
 }

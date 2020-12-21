@@ -9,7 +9,7 @@ import 'package:facebook_app/widgets/app_theme.dart';
 
 var routes = <String, WidgetBuilder>{
   "/": (BuildContext context) => HomeScreen(),
-  "/chatDetail": (BuildContext context) => ChatDetail(),
+  // "/chatDetail": (BuildContext context) => ChatDetail(),
   "/profile": (BuildContext context) => ProfilePage(),
 };
 

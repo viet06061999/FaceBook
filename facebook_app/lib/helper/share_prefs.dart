@@ -13,6 +13,8 @@ class SpUtil {
   SpUtil._();
 
   Future _init() async {
+    // ignore: invalid_use_of_visible_for_testing_member
+    SharedPreferences.setMockInitialValues({});
     _spf = await SharedPreferences.getInstance();
   }
 
@@ -20,7 +22,6 @@ class SpUtil {
     if (_instance == null) {
       _instance = new SpUtil._();
       await _instance._init();
-
     }
     return _instance;
   }

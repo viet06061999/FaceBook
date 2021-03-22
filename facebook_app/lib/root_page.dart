@@ -22,27 +22,27 @@ class RootPage extends StatefulWidget {
 enum AuthStatus { notSignedIn, signIn, none }
 
 class _RootPage extends State<RootPage> {
-  AuthStatus status = AuthStatus.none;
+  AuthStatus status = AuthStatus.notSignedIn;
 
   @override
   void initState() {
     super.initState();
-    var userRepo = UserRepositoryImpl(
-        inject<FirAuth>(),
-        inject<UserLocalDatasource>(),
-        inject<FirUploadPhoto>(),
-        inject<FirUserUpload>());
-    if (userRepo.getSaveLogin()) {
-      userRepo.getCurrentUser().then((value) {
-        setState(() {
-          status = value != null ? AuthStatus.signIn : AuthStatus.notSignedIn;
-        });
-      });
-    }else{
-      setState(() {
-        status = AuthStatus.notSignedIn;
-      });
-    }
+    // var userRepo = UserRepositoryImpl(
+    //     inject<FirAuth>(),
+    //     inject<UserLocalDatasource>(),
+    //     inject<FirUploadPhoto>(),
+    //     inject<FirUserUpload>());
+    // if (userRepo.getSaveLogin()) {
+    //   userRepo.getCurrentUser().then((value) {
+    //     setState(() {
+    //       status = value != null ? AuthStatus.signIn : AuthStatus.notSignedIn;
+    //     });
+    //   });
+    // }else{
+    //   setState(() {
+    //     status = AuthStatus.notSignedIn;
+    //   });
+    // }
   }
 
   @override

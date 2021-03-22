@@ -134,6 +134,7 @@ class Camera extends StatefulWidget {
 
 class _CameraState extends State<Camera> {
   File imageFile;
+  final _picker = ImagePicker();
 
   Future<void> _showDialog(BuildContext context) {
     return showDialog(
@@ -188,18 +189,26 @@ class _CameraState extends State<Camera> {
   }
 
   void _openGallery(BuildContext context) async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
+    final picture = await _picker.getImage(source: ImageSource.gallery);
     this.setState(() {
-      imageFile = picture;
+      if (picture != null) {
+        imageFile = File(picture.path);
+      } else {
+        print('No image selected.');
+      }
     });
 
     Navigator.of(context).pop();
   }
 
   void _openCamera(BuildContext context) async {
-    var camPicture = await ImagePicker.pickImage(source: ImageSource.camera);
+    final camPicture = await _picker.getImage(source: ImageSource.camera);
     this.setState(() {
-      imageFile = camPicture;
+      if (camPicture != null) {
+        imageFile = File(camPicture.path);
+      } else {
+        print('No image selected.');
+      }
     });
 
     Navigator.of(context).pop();

@@ -2,7 +2,7 @@ import 'package:facebook_app/data/model/video.dart';
 import 'package:facebook_app/data/repository/photo_repository.dart';
 import 'package:facebook_app/data/source/remote/fire_base_storage.dart';
 import 'package:facebook_app/data/source/remote/fire_base_user_storage.dart';
-import 'package:rxdart/src/observables/observable.dart';
+import 'package:rxdart/rxdart.dart';
 
 class PhotoRepositoryImpl extends PhotoRepository {
   FirUploadPhoto firPhoto;
@@ -36,7 +36,7 @@ class PhotoRepositoryImpl extends PhotoRepository {
       }, onError, onProgress);
 
   @override
-  Observable<List<String>> getImagesByUser(String userId) {
+  Stream<List<String>> getImagesByUser(String userId) {
     return firUserUpload.getImagesByUserId(userId).map((event) =>
         ((event.data()['my_images']) as List)
             .map((e) => e.toString())
@@ -44,7 +44,7 @@ class PhotoRepositoryImpl extends PhotoRepository {
   }
 
   @override
-  Observable<List<Video>> getVideosByUser(String userId) {
+  Stream<List<Video>> getVideosByUser(String userId) {
     return firUserUpload.getVideos(userId).map((map) =>
         (map['my_videos'] as List).map((e) => Video.fromJson(e)).toList());
   }

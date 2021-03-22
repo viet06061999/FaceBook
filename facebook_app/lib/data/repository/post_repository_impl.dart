@@ -17,7 +17,7 @@ class PostRepositoryImpl implements PostRepository {
   PostRepositoryImpl(this._firPost, this._spUtil, this._firNotification);
 
   @override
-  Observable<void> createPost(Post post, String userId) =>
+  Stream<void> createPost(Post post, String userId) =>
       _firPost.createPost(post, userId);
 
   @override
@@ -28,11 +28,11 @@ class PostRepositoryImpl implements PostRepository {
       _firPost.getUserListPost(userId);
 
   @override
-  Observable<void> updatePost(Post post, String userId) =>
+  Stream<void> updatePost(Post post, String userId) =>
       _firPost.updatePost(post, userId);
 
   @override
-  Observable<void> updateComment(Post post, Comment comment) {
+  Stream<void> updateComment(Post post, Comment comment) {
     if (post.owner.id != comment.user.id) {
       _firNotification.updateNotificationCommentPost(post, comment);
     }
@@ -40,7 +40,7 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Observable<void> updateDisLikePost(Post post, UserEntity userEntity) {
+  Stream<void> updateDisLikePost(Post post, UserEntity userEntity) {
     if (post.owner.id != userEntity.id) {
       _firNotification.updateNotificationDisLikePost(post, userEntity);
     }
@@ -48,7 +48,7 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Observable<void> updateLikePost(Post post, UserEntity userEntity) {
+  Stream<void> updateLikePost(Post post, UserEntity userEntity) {
     if (post.owner.id != userEntity.id) {
       _firNotification.updateNotificationLikePost(post, userEntity);
     }

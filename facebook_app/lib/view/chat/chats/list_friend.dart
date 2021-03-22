@@ -35,6 +35,7 @@ class _ListFriendState extends State<ListFriendTmp>
     with SingleTickerProviderStateMixin{
   ChatProvide _provide;
   _ListFriendState(this._provide);
+  final picker = ImagePicker();
 
   ScrollController _controller;
   bool _isScroll = false;
@@ -78,9 +79,13 @@ class _ListFriendState extends State<ListFriendTmp>
   _buildMessengerAppBar(_isScroll) {
     File imageFile;
     void _openCamera(BuildContext context) async {
-      var camPicture = await ImagePicker.pickImage(source: ImageSource.camera);
+      final camPicture = await picker.getImage(source: ImageSource.camera);
       this.setState(() {
-        imageFile = camPicture;
+        if (camPicture != null) {
+          imageFile = File(camPicture.path);
+        } else {
+          print('No image selected.');
+        }
       });
 
       onTap: () {

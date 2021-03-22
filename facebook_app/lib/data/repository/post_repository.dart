@@ -5,15 +5,15 @@ import 'package:facebook_app/data/model/user.dart';
 import 'package:rxdart/rxdart.dart';
 
 abstract class PostRepository {
-  Observable<void> createPost(Post post, String userId);
+  Stream<void> createPost(Post post, String userId);
 
-  Observable<void> updatePost(Post post, String userId);
+  Stream<void> updatePost(Post post, String userId);
 
-  Observable<void> updateLikePost(Post post, UserEntity userEntity);
+  Stream<void> updateLikePost(Post post, UserEntity userEntity);
 
-  Observable<void> updateDisLikePost(Post post, UserEntity userEntity);
+  Stream<void> updateDisLikePost(Post post, UserEntity userEntity);
 
-  Observable<void> updateComment(Post post, Comment comment);
+  Stream<void> updateComment(Post post, Comment comment);
 
   Stream<QuerySnapshot> getListPost();
 

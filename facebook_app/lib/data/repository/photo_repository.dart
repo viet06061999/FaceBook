@@ -8,7 +8,7 @@ abstract class PhotoRepository{
   Future<void> uploadVideo(String idOwner, String filePath,
       Function(String) onSuccess, Function onError, Function(double) onProgress);
 
-  Observable<List<String>> getImagesByUser(String userId);
+  Stream<List<String>> getImagesByUser(String userId);
 
-  Observable<List<Video>> getVideosByUser(String userId);
+  Stream<List<Video>> getVideosByUser(String userId);
 }

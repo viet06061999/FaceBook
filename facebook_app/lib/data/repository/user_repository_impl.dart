@@ -27,7 +27,7 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Observable<UserCredential> signIn(String email, String password) {
+  Stream<UserCredential> signIn(String email, String password) {
     return _firAuth.signIn(email, password);
   }
 
@@ -75,12 +75,12 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Observable<void> updateUser(UserEntity userEntity) {
+  Stream<void> updateUser(UserEntity userEntity) {
     _firAuth.updateUser(userEntity);
   }
 
   @override
-  Observable<void> updateDescriptionUser(
+  Stream<void> updateDescriptionUser(
       UserEntity userEntity, String description) {
     _firAuth.updateDescriptionUser(userEntity, description);
   }

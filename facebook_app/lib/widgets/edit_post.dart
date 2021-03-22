@@ -13,6 +13,7 @@ import 'package:video_player/video_player.dart';
 
 class EditPostWidget extends StatefulWidget {
   final HomeProvide provide;
+
   Post post;
 
   EditPostWidget({this.provide, this.post});
@@ -25,6 +26,7 @@ class EditPostWidget extends StatefulWidget {
 
 class _EditPostState extends State<EditPostWidget> {
   String content = "";
+  final _picker = ImagePicker();
   final Post post;
   final HomeProvide provide;
   VideoPlayerController _controller;
@@ -151,7 +153,7 @@ class _EditPostState extends State<EditPostWidget> {
           Divider(height: 30.0),
           GestureDetector(
               onTap: () {
-                getVideo();
+                // getVideo();
               },
               child: Container(
                   height: 20.0,
@@ -270,18 +272,18 @@ class _EditPostState extends State<EditPostWidget> {
     if (!mounted) return;
   }
 
-  Future getVideo() async {
-    Future<File> _videoFile =
-        ImagePicker.pickVideo(source: ImageSource.gallery);
-    _videoFile.then((file) async {
-      print("path video=======" + file.path);
-      pathVideo = file.path;
-      setState(() {
-        videoFile = file;
-        _controller = VideoPlayerController.file(videoFile);
-        _initializeVideoPlayerFuture = _controller.initialize();
-        _controller.setLooping(true);
-      });
-    });
-  }
+  // Future getVideo() async {
+  //   Future<PickedFile> _videoFile =
+  //   _picker.getVideo(source: ImageSource.gallery);
+  //   _videoFile.then((file) async {
+  //     print("path video=======" + file.path);
+  //     pathVideo = file.path;
+  //     setState(() {
+  //       videoFile = file;
+  //       _controller = VideoPlayerController.file(videoFile);
+  //       _initializeVideoPlayerFuture = _controller.initialize();
+  //       _controller.setLooping(true);
+  //     });
+  //   });
+  // }
 }

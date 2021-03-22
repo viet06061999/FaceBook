@@ -9,27 +9,33 @@ import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 
 class ProfilePageFriendCompact extends PageProvideNode<ChatProvide> {
   final Conservation conservation;
+
   ProfilePageFriendCompact(this.conservation);
+
   @override
   Widget buildContent(BuildContext context) {
     return ProfilePageFriendCompactTmp(mProvider, conservation);
   }
 }
+
 class ProfilePageFriendCompactTmp extends StatefulWidget {
   final Conservation conservation;
   final ChatProvide provide;
+
   const ProfilePageFriendCompactTmp(this.provide, this.conservation);
 
   @override
-  State<StatefulWidget> createState() => _ProfilePageFriendCompactState(conservation);
+  State<StatefulWidget> createState() =>
+      _ProfilePageFriendCompactState(conservation);
 }
-
 
 class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
     with SingleTickerProviderStateMixin {
   ChatProvide _provide;
   final Conservation conservation;
+
   _ProfilePageFriendCompactState(this.conservation);
+
   bool _isScroll = false;
   ScrollController _controller;
 
@@ -54,7 +60,8 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
 
   @override
   Widget build(BuildContext context) {
-    height: MediaQuery.of(context).size.height * 0.5;
+    height:
+    MediaQuery.of(context).size.height * 0.5;
     var friend = conservation.checkFriend(_provide.userEntity.id);
     return Scaffold(
       body: NotificationListener<OverscrollIndicatorNotification>(
@@ -71,24 +78,26 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
                   controller: _controller,
                   child: Column(
                     children: <Widget>[
-        //               Center (
-        //                 child: Container (
-        //                     width: MediaQuery.of(context).size.width - 30,
-        //                     height: 200.0,
-        //                     decoration: new BoxDecoration(
-        //                         image: DecorationImage(
-        //                             image: NetworkImage(friend.coverImage),
-        //                             fit: BoxFit.cover),
-        //                         borderRadius: BorderRadius.only(
-        //                             topLeft: Radius.circular(10.0),
-        //                             topRight: Radius.circular(10.0))
-        //                     )
-        //                 )
-        //
-        // ),
+                      //               Center (
+                      //                 child: Container (
+                      //                     width: MediaQuery.of(context).size.width - 30,
+                      //                     height: 200.0,
+                      //                     decoration: new BoxDecoration(
+                      //                         image: DecorationImage(
+                      //                             image: NetworkImage(friend.coverImage),
+                      //                             fit: BoxFit.cover),
+                      //                         borderRadius: BorderRadius.only(
+                      //                             topLeft: Radius.circular(10.0),
+                      //                             topRight: Radius.circular(10.0))
+                      //                     )
+                      //                 )
+                      //
+                      // ),
                       Padding(
-                        padding: EdgeInsets.only(top: 15.0, left: 10, right: 10),
-                        child: new Stack(fit: StackFit.loose, children: <Widget>[
+                        padding:
+                            EdgeInsets.only(top: 15.0, left: 10, right: 10),
+                        child:
+                            new Stack(fit: StackFit.loose, children: <Widget>[
                           new Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -108,77 +117,76 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
                           ),
                         ]),
                       ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.0),
-                      child:
-                      new Stack(fit: StackFit.loose, children: <Widget>[
-                        new Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            new GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                  width: 200.0,
-                                  height: 200.0,
-                                  margin: EdgeInsets.only(top: 50.0),
-                                  decoration: new BoxDecoration(
-                                    border: Border.all(
-                                        width: 5,
-                                        color: Theme.of(context)
-                                            .scaffoldBackgroundColor),
-                                    shape: BoxShape.circle,
-                                    image: new DecorationImage(
-                                      image: NetworkImage(
-                                          friend.avatar),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )),
-                            ),
-                          ],
-                        ),
-                      ]),
-                    ),
-                    SizedBox(height: 20.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          friend.firstName +
-                                " " +
-                                friend.lastName,
-                            style: TextStyle(
-                                fontSize: 24.0, fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                    SizedBox(height: 15.0),
-          ],
-        ),
-
-
-
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(top: 20.0),
+                            child: new Stack(
+                                fit: StackFit.loose,
+                                children: <Widget>[
+                                  new Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      new GestureDetector(
+                                        onTap: () {},
+                                        child: Container(
+                                            width: 200.0,
+                                            height: 200.0,
+                                            margin: EdgeInsets.only(top: 50.0),
+                                            decoration: new BoxDecoration(
+                                              border: Border.all(
+                                                  width: 5,
+                                                  color: Theme.of(context)
+                                                      .scaffoldBackgroundColor),
+                                              shape: BoxShape.circle,
+                                              image: new DecorationImage(
+                                                image:
+                                                    NetworkImage(friend.avatar),
+                                                fit: BoxFit.cover,
+                                              ),
+                                            )),
+                                      ),
+                                    ],
+                                  ),
+                                ]),
+                          ),
+                          SizedBox(height: 20.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(friend.firstName + " " + friend.lastName,
+                                  style: TextStyle(
+                                      fontSize: 24.0,
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                          SizedBox(height: 15.0),
+                        ],
+                      ),
 
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-
                           SizedBox(width: 10.0),
                           GestureDetector(
                               onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ChatDetailV3(conservation,friend),
-                                ),
-                              ),
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ChatDetailV3(conservation, friend),
+                                    ),
+                                  ),
                               child: Center(
                                 child: Column(
                                   children: [
                                     Center(
                                       child: Container(
+                                        margin: const EdgeInsets.only(
+                                            top: 20.0, left: 20.0, right: 10.0),
                                         padding: EdgeInsets.symmetric(
                                             horizontal: 15.0, vertical: 10.0),
                                         decoration: BoxDecoration(
@@ -188,7 +196,6 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
                                         child: Icon(FontAwesomeIcons.comment),
                                       ),
                                     ),
-
                                     Center(
                                       child: Text(
                                         "Nhắn tin",
@@ -197,15 +204,68 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
                                           fontSize: 14.0,
                                         ),
                                       ),
-
                                     ),
                                   ],
-
                                 ),
-
-
-                              )
-                          ),
+                              )),
+                          GestureDetector(
+                              child: Center(
+                            child: Column(
+                              children: [
+                                Center(
+                                  child: Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 20.0, left: 10.0, right: 10.0),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 15.0, vertical: 10.0),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[300],
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(FontAwesomeIcons.phoneAlt),
+                                  ),
+                                ),
+                                Center(
+                                  child: Text(
+                                    "Gọi thoại",
+                                    style: TextStyle(
+                                      color: Colors.grey.shade600,
+                                      fontSize: 14.0,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
+                          GestureDetector(
+                              child: Center(
+                            child: Column(
+                              children: [
+                                Center(
+                                  child: Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 20.0, left: 10.0, right: 20.0),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 15.0, vertical: 10.0),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[300],
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(FontAwesomeIcons.video),
+                                  ),
+                                ),
+                                Center(
+                                  child: Text(
+                                    "Gọi video",
+                                    style: TextStyle(
+                                      color: Colors.grey.shade600,
+                                      fontSize: 14.0,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ))
                         ],
                       ),
                       // _buildSettingItem3('Chủ đề', '', false,FontAwesomeIcons.solidMoon,Icons.toggle_off,Colors.black),
@@ -288,20 +348,19 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
           Container(
             child: Row(
               children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Container(
-                padding: EdgeInsets.only(left: 20.0),
-                child: Icon(
-                  Icons.close,
-                  color: Colors.black,
-                  size: 20.0,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.only(left: 20.0),
+                    child: Icon(
+                      Icons.close,
+                      color: Colors.black,
+                      size: 20.0,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-
               ],
             ),
           )
@@ -312,34 +371,26 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
 
   _buildTitleSetting(title) {
     return Container(
-
       padding: EdgeInsets.symmetric(
-
         horizontal: 16.0,
         vertical: 10.0,
       ),
-
       width: double.infinity,
-      decoration: BoxDecoration(
-
-          color: Colors.transparent,
-          border: Border(
-          )),
-      margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-
+      decoration: BoxDecoration(color: Colors.transparent, border: Border()),
+      margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 30.0),
       child: Text(
-
         title,
+        textAlign: TextAlign.center,
         style: TextStyle(
-          color: Colors.grey,
+          // backgroundColor: Colors.grey.shade600,
+          color: Colors.black,
           fontSize: 14.0,
         ),
       ),
-
     );
   }
 
-  _buildSettingItem(title, subtitle, isBorderBottom, icon,color1,color2) {
+  _buildSettingItem(title, subtitle, isBorderBottom, icon, color1, color2) {
     return Container(
       margin: EdgeInsets.only(left: 16.0),
       padding: EdgeInsets.only(
@@ -349,11 +400,11 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
       ),
       decoration: BoxDecoration(
           border: Border(
-            bottom: BorderSide(
-              width: isBorderBottom ? 0.5 : 0.0,
-              color: isBorderBottom ? Colors.grey.shade300 : Colors.transparent,
-            ),
-          )),
+        bottom: BorderSide(
+          width: isBorderBottom ? 0.5 : 0.0,
+          color: isBorderBottom ? Colors.grey.shade300 : Colors.transparent,
+        ),
+      )),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -385,13 +436,11 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
               //   size: 18.0,
               // ),
               SizedBox(width: 10.0),
-              Text(
-                  title,
+              Text(title,
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 16.0,
-                  )
-              ),
+                  )),
             ],
           ),
           Row(
@@ -418,7 +467,7 @@ class _ProfilePageFriendCompactState extends State<ProfilePageFriendCompactTmp>
   }
 }
 
-_buildSettingItem2(title, subtitle, isBorderBottom, icon,color1) {
+_buildSettingItem2(title, subtitle, isBorderBottom, icon, color1) {
   return Container(
     margin: EdgeInsets.only(left: 16.0),
     padding: EdgeInsets.only(
@@ -428,11 +477,11 @@ _buildSettingItem2(title, subtitle, isBorderBottom, icon,color1) {
     ),
     decoration: BoxDecoration(
         border: Border(
-          bottom: BorderSide(
-            width: isBorderBottom ? 0.5 : 0.0,
-            color: isBorderBottom ? Colors.grey.shade300 : Colors.transparent,
-          ),
-        )),
+      bottom: BorderSide(
+        width: isBorderBottom ? 0.5 : 0.0,
+        color: isBorderBottom ? Colors.grey.shade300 : Colors.transparent,
+      ),
+    )),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -461,13 +510,11 @@ _buildSettingItem2(title, subtitle, isBorderBottom, icon,color1) {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
-                    title,
+                Text(title,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 16.0,
-                    )
-                ),
+                    )),
                 SizedBox(width: 10.0),
                 Text(
                   subtitle,
@@ -485,7 +532,7 @@ _buildSettingItem2(title, subtitle, isBorderBottom, icon,color1) {
   );
 }
 
-_buildSettingItem3(title, subtitle, isBorderBottom, icon1, icon2,color1) {
+_buildSettingItem3(title, subtitle, isBorderBottom, icon1, icon2, color1) {
   return Container(
     margin: EdgeInsets.only(left: 16.0),
     padding: EdgeInsets.only(
@@ -495,11 +542,11 @@ _buildSettingItem3(title, subtitle, isBorderBottom, icon1, icon2,color1) {
     ),
     decoration: BoxDecoration(
         border: Border(
-          bottom: BorderSide(
-            width: isBorderBottom ? 0.5 : 0.0,
-            color: isBorderBottom ? Colors.grey.shade300 : Colors.transparent,
-          ),
-        )),
+      bottom: BorderSide(
+        width: isBorderBottom ? 0.5 : 0.0,
+        color: isBorderBottom ? Colors.grey.shade300 : Colors.transparent,
+      ),
+    )),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -525,13 +572,11 @@ _buildSettingItem3(title, subtitle, isBorderBottom, icon1, icon2,color1) {
               ),
             ),
             SizedBox(width: 10.0),
-            Text(
-                title,
+            Text(title,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 16.0,
-                )
-            ),
+                )),
           ],
         ),
         Row(

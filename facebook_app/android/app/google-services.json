@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "544818489701",
-    "project_id": "facebook-2a7eb",
-    "storage_bucket": "facebook-2a7eb.appspot.com"
+    "project_number": "201953739482",
+    "project_id": "vietnb99-3f667",
+    "storage_bucket": "vietnb99-3f667.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:544818489701:android:4eec072e46c45f046d598c",
+        "mobilesdk_app_id": "1:201953739482:android:4c490d978f5ffac5a05be3",
         "android_client_info": {
           "package_name": "com.example.facebook_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "544818489701-a1m5jvl5brnqfbvf2uvkn38pimpaub31.apps.googleusercontent.com",
+          "client_id": "201953739482-qg8ne84v4nc1i9rs20456vagi540uegd.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAG2AfnSjlPun_sSYa3tVn8ku6Bf4hObvc"
+          "current_key": "AIzaSyDB3oKvtaGIkfyqin7jt3zP-FOUuYfZIB8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "544818489701-a1m5jvl5brnqfbvf2uvkn38pimpaub31.apps.googleusercontent.com",
+              "client_id": "201953739482-qg8ne84v4nc1i9rs20456vagi540uegd.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

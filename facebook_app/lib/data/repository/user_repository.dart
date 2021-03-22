@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rxdart/rxdart.dart';
 
 abstract class UserRepository {
-  Observable<UserCredential> signIn(String email, String password);
+  Stream<UserCredential> signIn(String email, String password);
 
   void signUp(
       UserEntity user, Function onSuccess, Function(String code) onError);
@@ -19,9 +19,9 @@ abstract class UserRepository {
   Future<void> updateCoverImage(
       String pathCover, UserEntity userEntity, Function onError);
 
-  Observable<void> updateUser(UserEntity userEntity);
+  Stream<void> updateUser(UserEntity userEntity);
 
-  Observable<void> updateDescriptionUser(
+  Stream<void> updateDescriptionUser(
       UserEntity userEntity, String description);
 
   Stream<QuerySnapshot> getAllUsers();

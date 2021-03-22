@@ -9,8 +9,8 @@ class FirAuth {
 
   FirAuth(this._firebaseAuth);
 
-  Observable<UserCredential> signIn(String email, String password) {
-    return Observable.fromFuture(_firebaseAuth.signInWithEmailAndPassword(
+  Stream<UserCredential> signIn(String email, String password) {
+    return Stream.fromFuture(_firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password));
   }
 
@@ -48,22 +48,22 @@ class FirAuth {
     });
   }
 
-   Observable<void> updateUser(UserEntity userEntity) {
+   Stream<void> updateUser(UserEntity userEntity) {
     Future<void> future = FirebaseFirestore.instance
         .collection("users")
         .doc(userEntity.id)
         .update(userEntity.userToMap());
-    return Observable.fromFuture(future);
+    return Stream.fromFuture(future);
   }
 
-  Observable<void> updateDescriptionUser(UserEntity userEntity, String description) {
+  Stream<void> updateDescriptionUser(UserEntity userEntity, String description) {
     Future<void> future = FirebaseFirestore.instance
         .collection("users")
         .doc(userEntity.id)
         .update({
       'description': description
     });
-    return Observable.fromFuture(future);
+    return Stream.fromFuture(future);
   }
 
   Future<UserEntity> curentUser() async {
@@ -92,6 +92,8 @@ class FirAuth {
           .snapshots(includeMetadataChanges: true);
 
   _createUser(UserEntity user, String document, Function onSuccess) {
+    user.avatar = "https://1.bp.blogspot.com/-A7UYXuVWb_Q/XncdHaYbcOI/AAAAAAAAZhM/hYOevjRkrJEZhcXPnfP42nL3ZMu4PvIhgCLcBGAsYHQ/s1600/Trend-Avatar-Facebook%2B%25281%2529.jpg";
+    user.coverImage ="https://www.gocbao.com/wp-content/uploads/2020/04/anh-bia-phong-canh-dep-25.jpg";
     var db = FirebaseFirestore.instance;
     db
         .collection("users")

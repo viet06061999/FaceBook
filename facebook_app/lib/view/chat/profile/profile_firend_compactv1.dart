@@ -126,7 +126,8 @@ class _ProfilePageFriendCompactV1State extends State<ProfilePageFriendCompactV1T
                               onTap: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ChatDetail(friend),
+                                  builder: (context) =>
+                                      ChatDetail(friend),
                                 ),
                               ),
                               child: Center(
@@ -134,6 +135,8 @@ class _ProfilePageFriendCompactV1State extends State<ProfilePageFriendCompactV1T
                                   children: [
                                     Center(
                                       child: Container(
+                                        margin: const EdgeInsets.only(
+                                            top: 20.0, left: 20.0, right: 10.0),
                                         padding: EdgeInsets.symmetric(
                                             horizontal: 15.0, vertical: 10.0),
                                         decoration: BoxDecoration(
@@ -155,6 +158,64 @@ class _ProfilePageFriendCompactV1State extends State<ProfilePageFriendCompactV1T
                                   ],
                                 ),
                               )),
+                          GestureDetector(
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    Center(
+                                      child: Container(
+                                        margin: const EdgeInsets.only(
+                                            top: 20.0, left: 10.0, right: 10.0),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15.0, vertical: 10.0),
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Icon(FontAwesomeIcons.phoneAlt),
+                                      ),
+                                    ),
+                                    Center(
+                                      child: Text(
+                                        "Gọi thoại",
+                                        style: TextStyle(
+                                          color: Colors.grey.shade600,
+                                          fontSize: 14.0,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )),
+                          GestureDetector(
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    Center(
+                                      child: Container(
+                                        margin: const EdgeInsets.only(
+                                            top: 20.0, left: 10.0, right: 20.0),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15.0, vertical: 10.0),
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Icon(FontAwesomeIcons.video),
+                                      ),
+                                    ),
+                                    Center(
+                                      child: Text(
+                                        "Gọi video",
+                                        style: TextStyle(
+                                          color: Colors.grey.shade600,
+                                          fontSize: 14.0,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ))
                         ],
                       ),
                       _buildTitleSetting('Xem trang cá nhân trên Facebook'),
@@ -248,10 +309,13 @@ class _ProfilePageFriendCompactV1State extends State<ProfilePageFriendCompactV1T
           color: Colors.transparent,
           border: Border(
           )),
+      margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 30.0),
       child: Text(
         title,
+        textAlign: TextAlign.center,
         style: TextStyle(
-          color: Colors.grey,
+
+          color: Colors.black,
           fontSize: 14.0,
         ),
       ),

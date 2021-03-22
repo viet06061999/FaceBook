@@ -147,12 +147,12 @@ class HomeProvide extends BaseProvide {
     });
   }
 
-  Observable<void> _createPost(Post post) => repository
+  Stream<void> _createPost(Post post) => repository
       .createPost(post, userEntity.id)
       .doOnListen(() => loading = true)
       .doOnDone(() => loading = false);
 
-  Observable<void> _updatePost(Post post) => repository
+  Stream<void> _updatePost(Post post) => repository
       .updatePost(post, userEntity.id)
       .doOnListen(() => loading = true)
       .doOnDone(() => loading = false);

@@ -36,7 +36,7 @@ class LoginProvide extends BaseProvide {
 
   LoginProvide(this._repository);
 
-  Observable<UserCredential> login() => _repository
+  Stream <UserCredential> login() => _repository
       .signIn(email, password.toSha256())
       .doOnListen(() => loading = true)
       .doOnDone(() => loading = false);

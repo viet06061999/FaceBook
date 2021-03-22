@@ -497,10 +497,7 @@ class _ProfilePageState extends State<ProfilePageTmp>
                       context,
                       MaterialPageRoute(
                           builder: (context) => ListUserFriend(
-                              // provide: value,
-                              friends: value.friends,
-                              onImageClicked: null,
-                              onExpandClicked: null)),
+                             value.userEntity)),
                     );
                   },
                   child: Container(

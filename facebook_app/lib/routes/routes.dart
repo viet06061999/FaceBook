@@ -14,6 +14,6 @@ class Routes {
   }
 
   static void goBack(BuildContext context) {
-    Navigator.pop(context);
+  Navigator.pop(context);
   }
 }

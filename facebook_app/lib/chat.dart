@@ -1,11 +1,12 @@
 import 'dart:io';
-import 'package:facebook_app/viewmodel/home_view_model.dart';
+import 'package:facebook_app/src/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:facebook_app/view/chat/chat_detail/chat_detail.dart';
-import 'package:facebook_app/view/chat/home/home.dart';
-import 'package:facebook_app/view/chat/profile/profile.dart';
-import 'package:facebook_app/widgets/app_theme.dart';
+import 'package:facebook_app/src/view/chat/chat_detail/chat_detail.dart';
+import 'package:facebook_app/src/view/chat/home/home.dart';
+import 'package:facebook_app/src/view/chat/profile/profile.dart';
+
+import 'src/ultils/app_theme.dart';
 
 var routes = <String, WidgetBuilder>{
   "/": (BuildContext context) => HomeScreen(),

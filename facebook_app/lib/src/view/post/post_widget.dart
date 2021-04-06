@@ -38,111 +38,111 @@ class PostWidget extends StatelessWidget {
             height: 11.0,
           ),
           Container(
-            padding: EdgeInsets.all(15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        if (post.owner.id == UserRepositoryImpl.currentUser.id) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => ProfileMe()),
-                          );
-                        } else {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProfileFriend(post.owner)),
-                          );
-                        }
-                      },
-                      child: CircleAvatar(
-                        backgroundImage: NetworkImage(post.owner.avatar),
-                        radius: 20.0,
-                      ),
-                    ),
-                    SizedBox(width: 7.0),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: () {
-                            if (post.owner.id ==
-                                UserRepositoryImpl.currentUser.id) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ProfileMe()),
-                              );
-                            } else {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        ProfileFriend(post.owner)),
-                              );
-                            }
-                          },
-                          child: Row(
-                            children: [
-                              Text(
-                                  post.owner.firstName + ' ' + post.owner.lastName,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold, fontSize: 17.0)),
-                              SizedBox(
-                                width: 5.0,
-                              ),
-                              Icon(
-                                Icons.check_circle,
-                                size: 15,
-                                color: Colors.blueAccent,
-                              )
-                            ],
-                          ),
+              padding: EdgeInsets.all(15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          if (post.owner.id == UserRepositoryImpl.currentUser.id) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => ProfileMe()),
+                            );
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ProfileFriend(post.owner)),
+                            );
+                          }
+                        },
+                        child: CircleAvatar(
+                          backgroundImage: NetworkImage(post.owner.avatar),
+                          radius: 20.0,
                         ),
-                        SizedBox(height: 5.0),
-                        Text(fix(post.modified))
-                      ],
-                    ),
-                  ],
-                ),
-                buildMenu(context),
-              ],
-            )
+                      ),
+                      SizedBox(width: 7.0),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () {
+                              if (post.owner.id ==
+                                  UserRepositoryImpl.currentUser.id) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ProfileMe()),
+                                );
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ProfileFriend(post.owner)),
+                                );
+                              }
+                            },
+                            child: Row(
+                              children: [
+                                Text(
+                                    post.owner.firstName + ' ' + post.owner.lastName,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold, fontSize: 17.0)),
+                                SizedBox(
+                                  width: 5.0,
+                                ),
+                                Icon(
+                                  Icons.check_circle,
+                                  size: 15,
+                                  color: Colors.blueAccent,
+                                )
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 5.0),
+                          Text(fix(post.modified))
+                        ],
+                      ),
+                    ],
+                  ),
+                  buildMenu(context),
+                ],
+              )
           ),
           SizedBox(height: 5.0),
           GestureDetector(
-              onTap: () {
-                showMaterialModalBottomSheet(
-                    context: context,
-                    builder: (context) => CreateCommentWidget(
-                          provide: provide,
-                          post: post,
-                        ));
-              },
-              child: Padding(
+            onTap: () {
+              showMaterialModalBottomSheet(
+                  context: context,
+                  builder: (context) => CreateCommentWidget(
+                    provide: provide,
+                    post: post,
+                  ));
+            },
+            child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: Container(
-                    alignment: Alignment.centerLeft,
-                    child: Linkify(
-                      onOpen: (link) async {
-                        if (await canLaunch(link.url)) {
-                          await launch(link.url);
-                        } else {
-                          throw 'Could not launch $link';
-                        }
-                      },
-                      text:post.described.getMyText(),
-                      //textAlign: TextAlign.left,
-                      linkStyle: TextStyle( fontSize: 15.0,color: Colors.black),
-                    ),
-                        //Text(post.described.getMyText(), style: TextStyle(fontSize: 15.0)
-                        )),
-              ),
+                  alignment: Alignment.centerLeft,
+                  child: Linkify(
+                    onOpen: (link) async {
+                      if (await canLaunch(link.url)) {
+                        await launch(link.url);
+                      } else {
+                        throw 'Could not launch $link';
+                      }
+                    },
+                    text:post.described.getMyText(),
+                    //textAlign: TextAlign.left,
+                    linkStyle: TextStyle( fontSize: 15.0,color: Colors.black),
+                  ),
+                  //Text(post.described.getMyText(), style: TextStyle(fontSize: 15.0)
+                )),
+          ),
           SizedBox(height: 10.0),
           buildImages(context),
           buildVideos(context),
@@ -439,16 +439,16 @@ class PostWidget extends StatelessWidget {
     );
   }
   Visibility buildMenu(BuildContext context){
-  return  Visibility(
-    visible: post.owner.id == UserRepositoryImpl.currentUser.id,
+    return  Visibility(
+      visible: post.owner.id == UserRepositoryImpl.currentUser.id,
       child: PopupMenuButton<String>(
         onSelected: (String value) {
           showMaterialModalBottomSheet(
             context: context,
             backgroundColor: Colors.transparent,
             builder: (context) => EditPostWidget(
-              provide: provide,
-              post: post
+                provide: provide,
+                post: post
             ),
           );
         },
